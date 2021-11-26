@@ -1,5 +1,7 @@
 var widthChart = document.getElementById("chart").offsetWidth;
 
+let svg, g, xScale;
+
 var margin = {top: 60, right: 50, bottom: 30, left: 20},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
@@ -17,6 +19,9 @@ var lineHeight = 12;
 var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white']
 
 var state = {
+  raceEth1: 'Black',
+  raceEth2: 'white',
+  metric: 'percent_adq_couns',
   height: null
 }
 
@@ -35,20 +40,18 @@ d3.selection.prototype.moveToBack = function() {
     });
 };
 
-function initChart(filteredData, metric) {
+function initChart(filteredData) {
 
-  raceEth1 = 'Black'
-  raceEth2 = 'white'
   color1 = "#1696d2"
   color2 = "#fdbf11"
   state.height = filteredData.length * lineHeight;
 
-  var svg = d3.select("#chart").append("svg")
+  svg = d3.select("#chart").append("svg")
     .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
     .attr("width", width + margin.left + margin.right)
     .attr("height", state.height + margin.bottom);
 
-  var xScale = d3.scaleLinear()
+  xScale = d3.scaleLinear()
     .domain([0, 1])
     .range([margin.left, width])
 
@@ -56,7 +59,7 @@ function initChart(filteredData, metric) {
     .domain([0, filteredData.length])
     .rangeRound([margin.top + lineHeight/2, state.height])
 
-  const g = svg.append("g")
+  g = svg.append("g")
       .style("font", "10px sans-serif")
 
   var gs = g.selectAll("g")
@@ -68,16 +71,17 @@ function initChart(filteredData, metric) {
       });
 
   gs.append("line")
+    .attr("class", "line")
     .attr("stroke", function(d,i){
-       if (d[metric + "_" + raceEth1] > d[metric + "_" + raceEth2]) {
+       if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
          return color1;
        } else {
          return color2;
        }
     })
     .attr("stroke-width", 1.0)
-    .attr("x1", d => xScale(d[metric + "_" + raceEth1]))
-    .attr("x2", d => xScale(d[metric + "_" + raceEth2]));
+    .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+    .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
 
   gs.append("g")
     .selectAll(".raceeth")
@@ -86,7 +90,7 @@ function initChart(filteredData, metric) {
     // }))
     .data(function(d){
       return raceEths.map(function(r){
-        return d[metric + "_" + r];
+        return d[state.metric + "_" + r];
       })
     })
     .join("circle")
@@ -96,9 +100,9 @@ function initChart(filteredData, metric) {
         return xScale(d)
       })
       .attr("fill", function(d,i){
-        if (raceEths[i] === raceEth1) {
+        if (raceEths[i] === state.raceEth1) {
           return color1
-        } else if (raceEths[i] === raceEth2) {
+        } else if (raceEths[i] === state.raceEth2) {
           return color2
         } else {
           return "#d2d2d2"
@@ -116,6 +120,36 @@ function initChart(filteredData, metric) {
       return d['STUSPS']
     })
 
+}
+
+function updateChart(){
+  svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", state.height + margin.bottom);
+
+  var gDivisions = g.selectAll(".division");
+
+  gDivisions.selectAll(".line")
+    .attr("stroke", function(d,i){
+       if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+         return color1;
+       } else {
+         return color2;
+       }
+    })
+    .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+    .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+
+  gDivisions.selectAll(".raceeth")
+    .attr("fill", function(d,i){
+      if (raceEths[i] === state.raceEth1) {
+        return color1
+      } else if (raceEths[i] === state.raceEth2) {
+        return color2
+      } else {
+        return "#d2d2d2"
+      }
+    });
 }
 
 function drawChart(states, districts) {
@@ -264,6 +298,26 @@ function getUniquesMenu(df, thisVariable) {
   return uniqueList;
 }
 
+function addOptions(id, values) {
+  var element = d3.select("#"+id);
+  var options = element.selectAll("option").data(values);
+
+  options.enter().append("option")
+    .html(function(d){
+      return d;
+    });
+
+  options.exit().remove();
+
+  element.selectAll("option").each(function(d, i){
+    if (d === state[id]) {
+      document.getElementById(id).selectedIndex = i;
+    }
+  });
+
+  return element;
+}
+
 
 Promise.all([
   d3.csv('data/early_state_draft.csv'),
@@ -272,14 +326,37 @@ Promise.all([
   var states = data[0];
   var districts = data[1];
 
-  console.log(states, districts);
+  let newRaceEthValue;
+  let raceEthOp1 = addOptions("raceEth1", raceEths);
+  raceEthOp1.on("change", function(d){
+    newRaceEthValue = d3.select(this).node().value;
+    if (newRaceEthValue !== state.raceEth2) {
+      state.raceEth1 = d3.select(this).node().value;
+      // filterData();
+      // updatePlot();
+      updateChart();
+    }
+    console.log(state)
+  })
 
-  metric = 'percent_adq_couns'
+  let raceEthOp2 = addOptions("raceEth2", raceEths);
+  raceEthOp2.on("change", function(d){
+    newRaceEthValue = d3.select(this).node().value;
+    if (newRaceEthValue !== state.raceEth1) {
+      state.raceEth2 = d3.select(this).node().value;
+      // filterData();
+      // updatePlot();
+      updateChart();
+    }
+    console.log(state)
+  })
+
+  console.log(states, districts);
 
   var statesMenu = getUniquesMenu(states, "STUSPS");
   console.log(statesMenu)
 
-  initChart(states, metric)
+  initChart(states)
 
   // drawChart(states, districts)
   //
