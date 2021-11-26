@@ -1,6 +1,6 @@
 var widthChart = document.getElementById("chart").offsetWidth;
 
-let svg, g, xScale;
+let svg, g, xScale, yScale;
 
 var margin = {top: 60, right: 50, bottom: 30, left: 20},
     width = widthChart - margin.left - margin.right,
@@ -55,7 +55,7 @@ function initChart(filteredData) {
     .domain([0, 1])
     .range([margin.left, width])
 
-  var yScale = d3.scaleLinear()
+  yScale = d3.scaleLinear()
     .domain([0, filteredData.length])
     .rangeRound([margin.top + lineHeight/2, state.height])
 
@@ -119,6 +119,22 @@ function initChart(filteredData) {
     .text(function(d){
       return d['STUSPS']
     })
+
+  svg.on("touchmove mousemove", function(event) {
+    let thisX = d3.pointer(event, this)[0],
+        thisY = d3.pointer(event, this)[1],
+        index = Math.floor(yScale.invert(thisY + lineHeight/2));
+    let gDivisions = g.selectAll(".division");
+    if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(filteredData.length) - lineHeight/2 &&
+        margin.left < thisX  && thisX < width + 25){
+      gDivisions.classed("hidden", function(d, i){
+        return i !== index;
+      })
+
+    } else {
+      gDivisions.classed("hidden", false)
+    }
+  });
 
 }
 

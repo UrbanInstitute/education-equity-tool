@@ -27,3 +27,7 @@ svg {
 .xAxis > .tick > text {
   font-size: 14px;
 }
+
+.hidden {
+  opacity: 0.1;
+}
