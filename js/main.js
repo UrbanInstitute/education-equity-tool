@@ -2,7 +2,7 @@ var widthChart = document.getElementById("chart").offsetWidth;
 
 let svg, g, xScale, yScale;
 
-var margin = {top: 60, right: 50, bottom: 30, left: 20},
+var margin = {top: 60, right: 50, bottom: 30, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -110,7 +110,46 @@ function initChart(filteredData) {
       })
       .attr("r", 3.5)
 
+
+    gs.append("g")
+      .attr("class", "number-labels")
+      .style("opacity", 0)
+      .selectAll(".number-label")
+      // .data(raceEths.filter(function(d){
+      //   return  // FILTER VALID VALUES
+      // }))
+      .data(function(d){
+        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        return [d1, d2];
+      })
+      .join("text")
+        .attr("class", "number-label")
+        .attr("x", function(d, i){
+          console.log(d)
+          if (i === 0){
+            return xScale(d) - 25;
+          } else {
+            return xScale(d) + 5;
+          }
+        })
+        .style("text-anchor", function(d, i){
+          if (i === 0){
+            return "right";
+          } else {
+            return "left";
+          }
+        })
+        .style("vertical-align", "middle")
+        .attr("y", lineHeight/4)
+        .attr("fill", "black")
+        // .attr("opacity", 0)
+        .text(function(d){
+          return d.toFixed(2);
+        })
+
   gs.append('text')
+    .attr("class", "division-name")
     .attr("x", 0)
     .attr("y", lineHeight/4)
     .style("text-anchor", "right")
@@ -125,14 +164,25 @@ function initChart(filteredData) {
         thisY = d3.pointer(event, this)[1],
         index = Math.floor(yScale.invert(thisY + lineHeight/2));
     let gDivisions = g.selectAll(".division");
+    let thisG = gDivisions.filter(function(d,i){
+      return i === index;
+    });
+    let notThisG = gDivisions.filter(function(d,i){
+      return i !== index;
+    });
     if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(filteredData.length) - lineHeight/2 &&
         margin.left < thisX  && thisX < width + 25){
       gDivisions.classed("hidden", function(d, i){
         return i !== index;
       })
-
+      thisG.selectAll(".number-labels")
+        .style("opacity", 1)
+      notThisG.selectAll(".number-labels")
+        .style("opacity", 0);
     } else {
       gDivisions.classed("hidden", false)
+      gDivisions.selectAll(".number-labels")
+        .style("opacity", 0);
     }
   });
 
