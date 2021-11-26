@@ -1,13 +1,29 @@
 var widthChart = document.getElementById("chart").offsetWidth;
 
-var margin = { top: 60, right: 50, bottom: 30, left: 0},
-width = widthChart - margin.left - margin.right,
-height = 550 - margin.top - margin.bottom;
+var margin = {top: 60, right: 50, bottom: 30, left: 20},
+    width = widthChart - margin.left - margin.right,
+    height = 550 - margin.top - margin.bottom;
+
+var lineHeight = 12;
+// var margin, lineHeight;
+// if (mobile) {
+//   lineHeight = 10;
+//   margin = {top: 30, right: 20, bottom: 20, left: 100};
+// } else {
+//   lineHeight = 12;
+//   margin = {top: 60, right: 20, bottom: 80, left: 180};
+// }
+
+var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white']
+
+var state = {
+  height: null
+}
 
 d3.selection.prototype.moveToFront = function() {
-return this.each(function(){
-  this.parentNode.appendChild(this);
-});
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
 };
 
 d3.selection.prototype.moveToBack = function() {
@@ -18,6 +34,89 @@ d3.selection.prototype.moveToBack = function() {
         }
     });
 };
+
+function initChart(filteredData, metric) {
+
+  raceEth1 = 'Black'
+  raceEth2 = 'white'
+  color1 = "#1696d2"
+  color2 = "#fdbf11"
+  state.height = filteredData.length * lineHeight;
+
+  var svg = d3.select("#chart").append("svg")
+    .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", state.height + margin.bottom);
+
+  var xScale = d3.scaleLinear()
+    .domain([0, 1])
+    .range([margin.left, width])
+
+  var yScale = d3.scaleLinear()
+    .domain([0, filteredData.length])
+    .rangeRound([margin.top + lineHeight/2, state.height])
+
+  const g = svg.append("g")
+      .style("font", "10px sans-serif")
+
+  var gs = g.selectAll("g")
+    .data(filteredData)
+    .join("g")
+      .attr("class", "division")
+      .attr("transform", function (d, i) {
+        return "translate(0," + yScale(i) + ")";
+      });
+
+  gs.append("line")
+    .attr("stroke", function(d,i){
+       if (d[metric + "_" + raceEth1] > d[metric + "_" + raceEth2]) {
+         return color1;
+       } else {
+         return color2;
+       }
+    })
+    .attr("stroke-width", 1.0)
+    .attr("x1", d => xScale(d[metric + "_" + raceEth1]))
+    .attr("x2", d => xScale(d[metric + "_" + raceEth2]));
+
+  gs.append("g")
+    .selectAll(".raceeth")
+    // .data(raceEths.filter(function(d){
+    //   return  // FILTER VALID VALUES
+    // }))
+    .data(function(d){
+      return raceEths.map(function(r){
+        return d[metric + "_" + r];
+      })
+    })
+    .join("circle")
+      .attr("class", "raceeth")
+      .attr("opacity", 1.0)
+      .attr("cx", function(d){
+        return xScale(d)
+      })
+      .attr("fill", function(d,i){
+        if (raceEths[i] === raceEth1) {
+          return color1
+        } else if (raceEths[i] === raceEth2) {
+          return color2
+        } else {
+          return "#d2d2d2"
+        }
+      })
+      .attr("r", 3.5)
+
+  gs.append('text')
+    .attr("x", 0)
+    .attr("y", lineHeight/4)
+    .style("text-anchor", "right")
+    .style("vertical-align", "middle")
+    .attr('fill', 'black')
+    .text(function(d){
+      return d['STUSPS']
+    })
+
+}
 
 function drawChart(states, districts) {
 
@@ -30,6 +129,8 @@ function drawChart(states, districts) {
     return d.metrics
   })
   .entries(states)
+
+  console.log(nestedData)
 
   var xScale = d3.scaleLinear()
   .domain([0, 100])
@@ -149,37 +250,44 @@ function getUniquesMenu(df, thisVariable) {
 
   var thisList = df.map(function(o) {
     return o[thisVariable]
-    })
+  })
 
-    // uniq() found here https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
-    function uniq(a) {
-        return a.filter(function(item, pos, ary) {
-            return !pos || item != ary[pos - 1];
-        });
-    }
+  // uniq() found here https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+  function uniq(a) {
+      return a.sort().filter(function(item, pos, ary) {
+          return !pos || item != ary[pos - 1];
+      });
+  }
 
-    var uniqueList = uniq(thisList);
+  var uniqueList = uniq(thisList);
 
-    return uniqueList;
+  return uniqueList;
 }
 
 
 Promise.all([
-  d3.csv('data/EDP-preliminary-by-state.csv'),
+  d3.csv('data/early_state_draft.csv'),
   d3.csv('data/EDP-preliminary-by-district.csv')
 ]).then(function(data) {
-  var states = data[0]
-  var districts = data[1]
+  var states = data[0];
+  var districts = data[1];
+
+  console.log(states, districts);
+
+  metric = 'percent_adq_couns'
 
   var statesMenu = getUniquesMenu(states, "STUSPS");
+  console.log(statesMenu)
 
-  drawChart(states, districts)
+  initChart(states, metric)
 
-  $("#menuState").autocomplete({
-  source: statesMenu,
-  select: function(event, ui) {
-    var selectedState  = ui.item.value;
-    highlightStates(selectedState)
-  }
-});
+  // drawChart(states, districts)
+  //
+  // $("#menuState").autocomplete({
+  //   source: statesMenu,
+  //   select: function(event, ui) {
+  //     var selectedState  = ui.item.value;
+  //     highlightStates(selectedState)
+  //   }
+  // });
 })
