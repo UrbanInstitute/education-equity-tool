@@ -31,3 +31,7 @@ svg {
 .hidden {
   opacity: 0.1;
 }
+
+span.chosen {
+  text-decoration: underline;
+}

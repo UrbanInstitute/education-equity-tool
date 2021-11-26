@@ -1,6 +1,7 @@
 var widthChart = document.getElementById("chart").offsetWidth;
 
 let svg, g, xScale, yScale;
+const transitionTime = 500;
 
 var margin = {top: 60, right: 50, bottom: 30, left: 40},
     width = widthChart - margin.left - margin.right,
@@ -16,12 +17,13 @@ var lineHeight = 12;
 //   margin = {top: 60, right: 20, bottom: 80, left: 180};
 // }
 
-var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white']
+var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white'];
+var metrics = ['Teachers', 'Classes', 'Counselors'];
 
 var state = {
   raceEth1: 'Black',
   raceEth2: 'white',
-  metric: 'percent_adq_couns',
+  metric: 'avg_exp_year_perc',
   height: null
 }
 
@@ -126,7 +128,6 @@ function initChart(filteredData) {
       .join("text")
         .attr("class", "number-label")
         .attr("x", function(d, i){
-          console.log(d)
           if (i === 0){
             return xScale(d) - 25;
           } else {
@@ -196,6 +197,7 @@ function updateChart(){
   var gDivisions = g.selectAll(".division");
 
   gDivisions.selectAll(".line")
+    .transition().duration(transitionTime)
     .attr("stroke", function(d,i){
        if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
          return color1;
@@ -207,15 +209,25 @@ function updateChart(){
     .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
 
   gDivisions.selectAll(".raceeth")
-    .attr("fill", function(d,i){
-      if (raceEths[i] === state.raceEth1) {
-        return color1
-      } else if (raceEths[i] === state.raceEth2) {
-        return color2
-      } else {
-        return "#d2d2d2"
-      }
-    });
+    .data(function(d){
+      return raceEths.map(function(r){
+        return d[state.metric + "_" + r];
+      })
+    })
+    .join("circle")
+      .transition().duration(transitionTime)
+      .attr("cx", function(d){
+        return xScale(d)
+      })
+      .attr("fill", function(d,i){
+        if (raceEths[i] === state.raceEth1) {
+          return color1
+        } else if (raceEths[i] === state.raceEth2) {
+          return color2
+        } else {
+          return "#d2d2d2"
+        }
+      });
 }
 
 function drawChart(states, districts) {
@@ -399,10 +411,8 @@ Promise.all([
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
       // filterData();
-      // updatePlot();
       updateChart();
     }
-    console.log(state)
   })
 
   let raceEthOp2 = addOptions("raceEth2", raceEths);
@@ -411,11 +421,36 @@ Promise.all([
     if (newRaceEthValue !== state.raceEth1) {
       state.raceEth2 = d3.select(this).node().value;
       // filterData();
-      // updatePlot();
       updateChart();
     }
-    console.log(state)
   })
+
+  let spans = d3.select("#metrics")
+    .selectAll("span")
+    .data(metrics);
+
+  spans.enter().append("span")
+    .attr("class", "metric")
+    .on("click", function(event, d){
+      d3.selectAll(".metric")
+        .classed("chosen", function(e){
+          return e === d;
+        })
+      if (d === 'Teachers'){
+        state.metric = 'avg_exp_year_perc';
+      } else if (d === 'Classes'){
+        state.metric = 'perc_ap_stem';
+      } else if (d === 'Counselors'){
+        state.metric = 'percent_adq_couns';
+      }
+      updateChart();
+    })
+    .classed("chosen", function(d){
+      return d === 'Teachers';
+    })
+    .html(function(d){
+      return d;
+    })
 
   console.log(states, districts);
 
