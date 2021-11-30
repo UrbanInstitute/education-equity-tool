@@ -228,6 +228,39 @@ function updateChart(){
           return "#d2d2d2"
         }
       });
+
+  gDivisions.selectAll(".number-label")
+    // .data(raceEths.filter(function(d){
+    //   return  // FILTER VALID VALUES
+    // }))
+    .data(function(d){
+      let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+      let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+      return [d1, d2];
+    })
+    .join("text")
+      .attr("class", "number-label")
+      .attr("x", function(d, i){
+        if (i === 0){
+          return xScale(d) - 25;
+        } else {
+          return xScale(d) + 5;
+        }
+      })
+      .style("text-anchor", function(d, i){
+        if (i === 0){
+          return "right";
+        } else {
+          return "left";
+        }
+      })
+      .style("vertical-align", "middle")
+      .attr("y", lineHeight/4)
+      .attr("fill", "black")
+      // .attr("opacity", 0)
+      .text(function(d){
+        return d.toFixed(2);
+      })
 }
 
 function drawChart(states, districts) {
