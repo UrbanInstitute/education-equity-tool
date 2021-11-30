@@ -35,3 +35,8 @@ svg {
 span.chosen {
   text-decoration: underline;
 }
+
+.show-districts {
+  text-decoration: underline;
+  cursor: pointer;
+}

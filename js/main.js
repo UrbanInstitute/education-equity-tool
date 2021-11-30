@@ -160,6 +160,22 @@ function initChart(filteredData) {
       return d['STUSPS']
     })
 
+
+  gs.append('text')
+    .attr("class", "show-districts")
+    .style("opacity", 0)
+    .attr("x", width)
+    .attr("y", lineHeight/4)
+    .style("text-anchor", "left")
+    .style("vertical-align", "middle")
+    .attr('fill', 'steelblue')
+    .text(function(d) {
+      return "Show me districts in State " + d['STUSPS'];
+    })
+    .on("click", function(d){
+      console.log("show me districts")
+    })
+
   svg.on("touchmove mousemove", function(event) {
     let thisX = d3.pointer(event, this)[0],
         thisY = d3.pointer(event, this)[1],
@@ -180,9 +196,15 @@ function initChart(filteredData) {
         .style("opacity", 1)
       notThisG.selectAll(".number-labels")
         .style("opacity", 0);
+      thisG.selectAll(".show-districts")
+        .style("opacity", 1)
+      notThisG.selectAll(".show-districts")
+        .style("opacity", 0);
     } else {
       gDivisions.classed("hidden", false)
       gDivisions.selectAll(".number-labels")
+        .style("opacity", 0);
+      gDivisions.selectAll(".show-districts")
         .style("opacity", 0);
     }
   });
