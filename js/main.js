@@ -232,7 +232,8 @@ Promise.all([
       // filterData();
       updateChart(state.data);
     } else {
-      document.getElementById("raceEth1").selectedIndex = i;
+      let idx = raceEths.indexOf(state.raceEth1);
+      document.getElementById("raceEth1").selectedIndex = idx;
     }
   })
 
@@ -244,7 +245,8 @@ Promise.all([
       // filterData();
       updateChart(state.data);
     } else {
-      document.getElementById("raceEth2").selectedIndex = i;
+      let idx = raceEths.indexOf(state.raceEth2);
+      document.getElementById("raceEth2").selectedIndex = idx;
     }
   })
 
