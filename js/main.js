@@ -24,7 +24,9 @@ var state = {
   raceEth1: 'Black',
   raceEth2: 'white',
   metric: 'avg_exp_year_perc',
-  height: null
+  height: null,
+  data: null,
+  name: null,
 }
 
 d3.selection.prototype.moveToFront = function() {
@@ -217,6 +219,9 @@ Promise.all([
   var states = data[0];
   var districts = data[1];
 
+  state.data = states;
+  state.name = "STUSPS"
+
   let newRaceEthValue;
   let raceEthOp1 = addOptions("raceEth1", raceEths);
   raceEthOp1.on("change", function(d, i){
@@ -224,7 +229,7 @@ Promise.all([
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
       // filterData();
-      updateChart();
+      updateChart(state.data);
     } else {
       document.getElementById("raceEth1").selectedIndex = i;
     }
@@ -236,7 +241,7 @@ Promise.all([
     if (newRaceEthValue !== state.raceEth1) {
       state.raceEth2 = d3.select(this).node().value;
       // filterData();
-      updateChart();
+      updateChart(state.data);
     } else {
       document.getElementById("raceEth2").selectedIndex = i;
     }
@@ -260,7 +265,7 @@ Promise.all([
       } else if (d === 'Counselors'){
         state.metric = 'percent_adq_couns';
       }
-      updateChart();
+      updateChart(state.data);
     })
     .classed("chosen", function(d){
       return d === 'Teachers';
@@ -389,7 +394,7 @@ Promise.all([
       .style("vertical-align", "middle")
       .attr('fill', 'black')
       .text(function(d){
-        return d['STUSPS']
+        return d[state.name]
       })
 
     gs.append('text')
@@ -401,7 +406,7 @@ Promise.all([
       .style("vertical-align", "middle")
       .attr('fill', 'steelblue')
       .text(function(d) {
-        return "Show me districts in State " + d['STUSPS'];
+        return "Show me districts in State " + d[state.name];
       })
       .on("click", function(d){
         console.log("show me districts")
@@ -442,12 +447,25 @@ Promise.all([
 
   }
 
-  function updateChart(){
+  function updateChart(chartData){
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.bottom);
 
-    var gDivisions = g.selectAll(".division");
+    var gDivisions = g.selectAll(".division").data(chartData);
+
+    gDivisions.attr("class", "division")
+        .attr("transform", function (d, i) {
+          return "translate(0," + yScale(i) + ")";
+        });
+
+    gDivisions.enter().append("g")
+        .attr("class", "division")
+        .attr("transform", function (d, i) {
+          return "translate(0," + yScale(i) + ")";
+        });
+
+    gDivisions.exit().remove();
 
     gDivisions.selectAll(".line")
       .transition().duration(transitionTime)
