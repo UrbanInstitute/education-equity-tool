@@ -42,248 +42,6 @@ d3.selection.prototype.moveToBack = function() {
     });
 };
 
-function initChart(filteredData) {
-
-  color1 = "#1696d2"
-  color2 = "#fdbf11"
-  state.height = filteredData.length * lineHeight;
-
-  svg = d3.select("#chart").append("svg")
-    .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", state.height + margin.bottom);
-
-  xScale = d3.scaleLinear()
-    .domain([0, 1])
-    .range([margin.left, width])
-
-  yScale = d3.scaleLinear()
-    .domain([0, filteredData.length])
-    .rangeRound([margin.top + lineHeight/2, state.height])
-
-  g = svg.append("g")
-      .style("font", "10px sans-serif")
-
-  var gs = g.selectAll("g")
-    .data(filteredData)
-    .join("g")
-      .attr("class", "division")
-      .attr("transform", function (d, i) {
-        return "translate(0," + yScale(i) + ")";
-      });
-
-  gs.append("line")
-    .attr("class", "line")
-    .attr("stroke", function(d,i){
-       if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-         return color1;
-       } else {
-         return color2;
-       }
-    })
-    .attr("stroke-width", 1.0)
-    .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-    .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
-
-  gs.append("g")
-    .selectAll(".raceeth")
-    // .data(raceEths.filter(function(d){
-    //   return  // FILTER VALID VALUES
-    // }))
-    .data(function(d){
-      return raceEths.map(function(r){
-        return d[state.metric + "_" + r];
-      })
-    })
-    .join("circle")
-      .attr("class", "raceeth")
-      .attr("opacity", 1.0)
-      .attr("cx", function(d){
-        return xScale(d)
-      })
-      .attr("fill", function(d,i){
-        if (raceEths[i] === state.raceEth1) {
-          return color1
-        } else if (raceEths[i] === state.raceEth2) {
-          return color2
-        } else {
-          return "#d2d2d2"
-        }
-      })
-      .attr("r", 3.5)
-
-
-    gs.append("g")
-      .attr("class", "number-labels")
-      .style("opacity", 0)
-      .selectAll(".number-label")
-      // .data(raceEths.filter(function(d){
-      //   return  // FILTER VALID VALUES
-      // }))
-      .data(function(d){
-        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-        return [d1, d2];
-      })
-      .join("text")
-        .attr("class", "number-label")
-        .attr("x", function(d, i){
-          if (i === 0){
-            return xScale(d) - 25;
-          } else {
-            return xScale(d) + 5;
-          }
-        })
-        .style("text-anchor", function(d, i){
-          if (i === 0){
-            return "right";
-          } else {
-            return "left";
-          }
-        })
-        .style("vertical-align", "middle")
-        .attr("y", lineHeight/4)
-        .attr("fill", "black")
-        // .attr("opacity", 0)
-        .text(function(d){
-          return d.toFixed(2);
-        })
-
-  gs.append('text')
-    .attr("class", "division-name")
-    .attr("x", 0)
-    .attr("y", lineHeight/4)
-    .style("text-anchor", "right")
-    .style("vertical-align", "middle")
-    .attr('fill', 'black')
-    .text(function(d){
-      return d['STUSPS']
-    })
-
-
-  gs.append('text')
-    .attr("class", "show-districts")
-    .style("opacity", 0)
-    .attr("x", width)
-    .attr("y", lineHeight/4)
-    .style("text-anchor", "left")
-    .style("vertical-align", "middle")
-    .attr('fill', 'steelblue')
-    .text(function(d) {
-      return "Show me districts in State " + d['STUSPS'];
-    })
-    .on("click", function(d){
-      console.log("show me districts")
-    })
-
-  svg.on("touchmove mousemove", function(event) {
-    let thisX = d3.pointer(event, this)[0],
-        thisY = d3.pointer(event, this)[1],
-        index = Math.floor(yScale.invert(thisY + lineHeight/2));
-    let gDivisions = g.selectAll(".division");
-    let thisG = gDivisions.filter(function(d,i){
-      return i === index;
-    });
-    let notThisG = gDivisions.filter(function(d,i){
-      return i !== index;
-    });
-    if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(filteredData.length) - lineHeight/2 &&
-        margin.left < thisX  && thisX < width + 25){
-      gDivisions.classed("hidden", function(d, i){
-        return i !== index;
-      })
-      thisG.selectAll(".number-labels")
-        .style("opacity", 1)
-      notThisG.selectAll(".number-labels")
-        .style("opacity", 0);
-      thisG.selectAll(".show-districts")
-        .style("opacity", 1)
-      notThisG.selectAll(".show-districts")
-        .style("opacity", 0);
-    } else {
-      gDivisions.classed("hidden", false)
-      gDivisions.selectAll(".number-labels")
-        .style("opacity", 0);
-      gDivisions.selectAll(".show-districts")
-        .style("opacity", 0);
-    }
-  });
-
-}
-
-function updateChart(){
-  svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", state.height + margin.bottom);
-
-  var gDivisions = g.selectAll(".division");
-
-  gDivisions.selectAll(".line")
-    .transition().duration(transitionTime)
-    .attr("stroke", function(d,i){
-       if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-         return color1;
-       } else {
-         return color2;
-       }
-    })
-    .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-    .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
-
-  gDivisions.selectAll(".raceeth")
-    .data(function(d){
-      return raceEths.map(function(r){
-        return d[state.metric + "_" + r];
-      })
-    })
-    .join("circle")
-      .transition().duration(transitionTime)
-      .attr("cx", function(d){
-        return xScale(d)
-      })
-      .attr("fill", function(d,i){
-        if (raceEths[i] === state.raceEth1) {
-          return color1
-        } else if (raceEths[i] === state.raceEth2) {
-          return color2
-        } else {
-          return "#d2d2d2"
-        }
-      });
-
-  gDivisions.selectAll(".number-label")
-    // .data(raceEths.filter(function(d){
-    //   return  // FILTER VALID VALUES
-    // }))
-    .data(function(d){
-      let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-      let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-      return [d1, d2];
-    })
-    .join("text")
-      .attr("class", "number-label")
-      .attr("x", function(d, i){
-        if (i === 0){
-          return xScale(d) - 25;
-        } else {
-          return xScale(d) + 5;
-        }
-      })
-      .style("text-anchor", function(d, i){
-        if (i === 0){
-          return "right";
-        } else {
-          return "left";
-        }
-      })
-      .style("vertical-align", "middle")
-      .attr("y", lineHeight/4)
-      .attr("fill", "black")
-      // .attr("opacity", 0)
-      .text(function(d){
-        return d.toFixed(2);
-      })
-}
 
 function drawChart(states, districts) {
 
@@ -515,6 +273,248 @@ Promise.all([
 
   var statesMenu = getUniquesMenu(states, "STUSPS");
   console.log(statesMenu)
+
+  function initChart(filteredData) {
+
+    color1 = "#1696d2"
+    color2 = "#fdbf11"
+    state.height = filteredData.length * lineHeight;
+
+    svg = d3.select("#chart").append("svg")
+      .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", state.height + margin.bottom);
+
+    xScale = d3.scaleLinear()
+      .domain([0, 1])
+      .range([margin.left, width])
+
+    yScale = d3.scaleLinear()
+      .domain([0, filteredData.length])
+      .rangeRound([margin.top + lineHeight/2, state.height])
+
+    g = svg.append("g")
+        .style("font", "10px sans-serif")
+
+    var gs = g.selectAll("g")
+      .data(filteredData)
+      .join("g")
+        .attr("class", "division")
+        .attr("transform", function (d, i) {
+          return "translate(0," + yScale(i) + ")";
+        });
+
+    gs.append("line")
+      .attr("class", "line")
+      .attr("stroke", function(d,i){
+         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+           return color1;
+         } else {
+           return color2;
+         }
+      })
+      .attr("stroke-width", 1.0)
+      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+
+    gs.append("g")
+      .selectAll(".raceeth")
+      // .data(raceEths.filter(function(d){
+      //   return  // FILTER VALID VALUES
+      // }))
+      .data(function(d){
+        return raceEths.map(function(r){
+          return d[state.metric + "_" + r];
+        })
+      })
+      .join("circle")
+        .attr("class", "raceeth")
+        .attr("opacity", 1.0)
+        .attr("cx", function(d){
+          return xScale(d)
+        })
+        .attr("fill", function(d,i){
+          if (raceEths[i] === state.raceEth1) {
+            return color1
+          } else if (raceEths[i] === state.raceEth2) {
+            return color2
+          } else {
+            return "#d2d2d2"
+          }
+        })
+        .attr("r", 3.5)
+
+
+      gs.append("g")
+        .attr("class", "number-labels")
+        .style("opacity", 0)
+        .selectAll(".number-label")
+        // .data(raceEths.filter(function(d){
+        //   return  // FILTER VALID VALUES
+        // }))
+        .data(function(d){
+          let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+          let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+          return [d1, d2];
+        })
+        .join("text")
+          .attr("class", "number-label")
+          .attr("x", function(d, i){
+            if (i === 0){
+              return xScale(d) - 25;
+            } else {
+              return xScale(d) + 5;
+            }
+          })
+          .style("text-anchor", function(d, i){
+            if (i === 0){
+              return "right";
+            } else {
+              return "left";
+            }
+          })
+          .style("vertical-align", "middle")
+          .attr("y", lineHeight/4)
+          .attr("fill", "black")
+          // .attr("opacity", 0)
+          .text(function(d){
+            return d.toFixed(2);
+          })
+
+    gs.append('text')
+      .attr("class", "division-name")
+      .attr("x", 0)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "right")
+      .style("vertical-align", "middle")
+      .attr('fill', 'black')
+      .text(function(d){
+        return d['STUSPS']
+      })
+
+    gs.append('text')
+      .attr("class", "show-districts")
+      .style("opacity", 0)
+      .attr("x", width)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "left")
+      .style("vertical-align", "middle")
+      .attr('fill', 'steelblue')
+      .text(function(d) {
+        return "Show me districts in State " + d['STUSPS'];
+      })
+      .on("click", function(d){
+        console.log("show me districts")
+      })
+
+    svg.on("touchmove mousemove", function(event) {
+      let thisX = d3.pointer(event, this)[0],
+          thisY = d3.pointer(event, this)[1],
+          index = Math.floor(yScale.invert(thisY + lineHeight/2));
+      let gDivisions = g.selectAll(".division");
+      let thisG = gDivisions.filter(function(d,i){
+        return i === index;
+      });
+      let notThisG = gDivisions.filter(function(d,i){
+        return i !== index;
+      });
+      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(filteredData.length) - lineHeight/2 &&
+          margin.left < thisX  && thisX < width + 25){
+        gDivisions.classed("hidden", function(d, i){
+          return i !== index;
+        })
+        thisG.selectAll(".number-labels")
+          .style("opacity", 1)
+        notThisG.selectAll(".number-labels")
+          .style("opacity", 0);
+        thisG.selectAll(".show-districts")
+          .style("opacity", 1)
+        notThisG.selectAll(".show-districts")
+          .style("opacity", 0);
+      } else {
+        gDivisions.classed("hidden", false)
+        gDivisions.selectAll(".number-labels")
+          .style("opacity", 0);
+        gDivisions.selectAll(".show-districts")
+          .style("opacity", 0);
+      }
+    });
+
+  }
+
+  function updateChart(){
+    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", state.height + margin.bottom);
+
+    var gDivisions = g.selectAll(".division");
+
+    gDivisions.selectAll(".line")
+      .transition().duration(transitionTime)
+      .attr("stroke", function(d,i){
+         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+           return color1;
+         } else {
+           return color2;
+         }
+      })
+      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+
+    gDivisions.selectAll(".raceeth")
+      .data(function(d){
+        return raceEths.map(function(r){
+          return d[state.metric + "_" + r];
+        })
+      })
+      .join("circle")
+        .transition().duration(transitionTime)
+        .attr("cx", function(d){
+          return xScale(d)
+        })
+        .attr("fill", function(d,i){
+          if (raceEths[i] === state.raceEth1) {
+            return color1
+          } else if (raceEths[i] === state.raceEth2) {
+            return color2
+          } else {
+            return "#d2d2d2"
+          }
+        });
+
+    gDivisions.selectAll(".number-label")
+      // .data(raceEths.filter(function(d){
+      //   return  // FILTER VALID VALUES
+      // }))
+      .data(function(d){
+        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        return [d1, d2];
+      })
+      .join("text")
+        .attr("class", "number-label")
+        .attr("x", function(d, i){
+          if (i === 0){
+            return xScale(d) - 25;
+          } else {
+            return xScale(d) + 5;
+          }
+        })
+        .style("text-anchor", function(d, i){
+          if (i === 0){
+            return "right";
+          } else {
+            return "left";
+          }
+        })
+        .style("vertical-align", "middle")
+        .attr("y", lineHeight/4)
+        .attr("fill", "black")
+        // .attr("opacity", 0)
+        .text(function(d){
+          return d.toFixed(2);
+        })
+  }
 
   initChart(states)
 
