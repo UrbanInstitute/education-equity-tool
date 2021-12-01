@@ -280,7 +280,6 @@ Promise.all([
   console.log(states, districts);
 
   var statesMenu = getUniquesMenu(states, "STUSPS");
-  console.log(statesMenu)
 
   function initChart(filteredData) {
 
@@ -303,8 +302,6 @@ Promise.all([
 
     g = svg.append("g")
         .style("font", "10px sans-serif")
-
-    console.log(filteredData)
 
     var gs = g.selectAll("g")
       .data(filteredData)
@@ -443,7 +440,6 @@ Promise.all([
             state.showing = 'states';
           }
           updateChart();
-          console.log("show me districts")
         })
 
     svg.on("touchmove mousemove", function(event) {
@@ -482,8 +478,6 @@ Promise.all([
   }
 
   function updateChart(){
-    console.log(state.data)
-
     // state.height = state.data.length * lineHeight;
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
@@ -501,7 +495,6 @@ Promise.all([
 
     gDivisions.attr("class", "division")
       .attr("transform", function (d, i) {
-        console.log(d)
         return "translate(0," + yScale(i) + ")";
       });
 
@@ -521,7 +514,6 @@ Promise.all([
       .style("vertical-align", "middle")
       .attr('fill', 'black')
       .text(function(d){
-        console.log(d, state.name, d[state.name])
         return d[state.name]
       });
 
@@ -533,7 +525,6 @@ Promise.all([
       .style("vertical-align", "middle")
       .attr('fill', 'black')
       .text(function(d){
-        console.log(d, state.name, d[state.name])
         return d[state.name]
       })
 
@@ -708,7 +699,6 @@ Promise.all([
           state.showing = 'states';
         }
         updateChart();
-        console.log("show me districts")
       })
 
     divisionChange
@@ -739,7 +729,6 @@ Promise.all([
           state.showing = 'states';
         }
         updateChart();
-        console.log("show me districts")
       })
 
     divisionChange.exit().remove();
