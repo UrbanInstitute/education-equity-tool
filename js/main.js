@@ -461,12 +461,14 @@ Promise.all([
 
   let newRaceEthValue;
   let raceEthOp1 = addOptions("raceEth1", raceEths);
-  raceEthOp1.on("change", function(d){
+  raceEthOp1.on("change", function(d, i){
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
       // filterData();
       updateChart();
+    } else {
+      document.getElementById("raceEth1").selectedIndex = i;
     }
   })
 
@@ -477,6 +479,8 @@ Promise.all([
       state.raceEth2 = d3.select(this).node().value;
       // filterData();
       updateChart();
+    } else {
+      document.getElementById("raceEth2").selectedIndex = i;
     }
   })
 
