@@ -27,6 +27,7 @@ var state = {
   height: null,
   data: null,
   name: null,
+  showing: 'states',
 }
 
 d3.selection.prototype.moveToFront = function() {
@@ -214,13 +215,13 @@ function addOptions(id, values) {
 
 Promise.all([
   d3.csv('data/early_state_draft.csv'),
-  d3.csv('data/EDP-preliminary-by-district.csv')
+  d3.csv('data/early_district_draft.csv')
 ]).then(function(data) {
   var states = data[0];
   var districts = data[1];
 
   state.data = states;
-  state.name = "STUSPS"
+  state.name = "STUSPS";
 
   let newRaceEthValue;
   let raceEthOp1 = addOptions("raceEth1", raceEths);
@@ -301,6 +302,8 @@ Promise.all([
     g = svg.append("g")
         .style("font", "10px sans-serif")
 
+    console.log(filteredData)
+
     var gs = g.selectAll("g")
       .data(filteredData)
       .join("g")
@@ -309,20 +312,24 @@ Promise.all([
           return "translate(0," + yScale(i) + ")";
         });
 
-    gs.append("line")
-      .attr("class", "line")
-      .attr("stroke", function(d,i){
-         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-           return color1;
-         } else {
-           return color2;
-         }
+    gs.selectAll(".line")
+      .data(function(d){
+        return [d];
       })
-      .attr("stroke-width", 1.0)
-      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+      .join("line")
+        .attr("class", "line")
+        .attr("stroke", function(d,i){
+           if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+             return color1;
+           } else {
+             return color2;
+           }
+        })
+        .attr("stroke-width", 1.0)
+        .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+        .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
 
-    gs.append("g")
+    gs//.append("g")
       .selectAll(".raceeth")
       // .data(raceEths.filter(function(d){
       //   return  // FILTER VALID VALUES
@@ -350,9 +357,9 @@ Promise.all([
         .attr("r", 3.5)
 
 
-      gs.append("g")
-        .attr("class", "number-labels")
-        .style("opacity", 0)
+      gs//.append("g")
+        //.attr("class", "number-labels")
+        //.style("opacity", 0)
         .selectAll(".number-label")
         // .data(raceEths.filter(function(d){
         //   return  // FILTER VALID VALUES
@@ -379,6 +386,7 @@ Promise.all([
             }
           })
           .style("vertical-align", "middle")
+          .style("opacity", 0)
           .attr("y", lineHeight/4)
           .attr("fill", "black")
           // .attr("opacity", 0)
@@ -386,31 +394,55 @@ Promise.all([
             return d.toFixed(2);
           })
 
-    gs.append('text')
-      .attr("class", "division-name")
-      .attr("x", 0)
-      .attr("y", lineHeight/4)
-      .style("text-anchor", "right")
-      .style("vertical-align", "middle")
-      .attr('fill', 'black')
-      .text(function(d){
-        return d[state.name]
+    gs.selectAll(".division-name")
+      .data(function(d){
+        return [d];
       })
+      .join('text')
+        .attr("class", "division-name")
+        .attr("x", 0)
+        .attr("y", lineHeight/4)
+        .style("text-anchor", "right")
+        .style("vertical-align", "middle")
+        .attr('fill', 'black')
+        .text(function(d){
+          return d[state.name]
+        })
 
-    gs.append('text')
-      .attr("class", "show-districts")
-      .style("opacity", 0)
-      .attr("x", width)
-      .attr("y", lineHeight/4)
-      .style("text-anchor", "left")
-      .style("vertical-align", "middle")
-      .attr('fill', 'steelblue')
-      .text(function(d) {
-        return "Show me districts in State " + d[state.name];
+    gs.selectAll(".show-districts")
+      .data(function(d){
+        return [d];
       })
-      .on("click", function(d){
-        console.log("show me districts")
-      })
+      .join('text')
+        .attr("class", "show-districts")
+        .style("opacity", 0)
+        .attr("x", width)
+        .attr("y", lineHeight/4)
+        .style("text-anchor", "left")
+        .style("vertical-align", "middle")
+        .attr('fill', 'steelblue')
+        .text(function(d) {
+          if (state.showing === 'states') {
+            return "Show me districts in State " + d[state.name];
+          } else {
+            return "Take me back to the state view"
+          }
+        })
+        .on("click", function(event, d){
+          if (state.showing === 'states') {
+            state.data = districts.filter(function(e){
+              return e["STUSPS"] === d["STUSPS"];
+            });
+            state.name = "leaid";
+            state.showing = 'districts';
+          } else {
+            state.data = states;
+            state.name = "STUSPS";
+            state.showing = 'states';
+          }
+          updateChart();
+          console.log("show me districts")
+        })
 
     svg.on("touchmove mousemove", function(event) {
       let thisX = d3.pointer(event, this)[0],
@@ -423,14 +455,14 @@ Promise.all([
       let notThisG = gDivisions.filter(function(d,i){
         return i !== index;
       });
-      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(filteredData.length) - lineHeight/2 &&
+      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
           margin.left < thisX  && thisX < width + 25){
         gDivisions.classed("hidden", function(d, i){
           return i !== index;
         })
-        thisG.selectAll(".number-labels")
+        thisG.selectAll(".number-label")
           .style("opacity", 1)
-        notThisG.selectAll(".number-labels")
+        notThisG.selectAll(".number-label")
           .style("opacity", 0);
         thisG.selectAll(".show-districts")
           .style("opacity", 1)
@@ -438,7 +470,7 @@ Promise.all([
           .style("opacity", 0);
       } else {
         gDivisions.classed("hidden", false)
-        gDivisions.selectAll(".number-labels")
+        gDivisions.selectAll(".number-label")
           .style("opacity", 0);
         gDivisions.selectAll(".show-districts")
           .style("opacity", 0);
@@ -447,28 +479,84 @@ Promise.all([
 
   }
 
-  function updateChart(chartData){
+  function updateChart(){
+    console.log(state.data)
+
+    // state.height = state.data.length * lineHeight;
+
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.bottom);
 
-    var gDivisions = g.selectAll(".division").data(chartData);
-
-    gDivisions.attr("class", "division")
-        .attr("transform", function (d, i) {
-          return "translate(0," + yScale(i) + ")";
-        });
+    // Division groups
+    var gDivisions = g.selectAll(".division").data(state.data);
 
     gDivisions.enter().append("g")
-        .attr("class", "division")
-        .attr("transform", function (d, i) {
-          return "translate(0," + yScale(i) + ")";
-        });
+      .attr("class", "division")
+      .attr("transform", function (d, i) {
+        return "translate(0," + yScale(i) + ")";
+      });;
+
+    gDivisions.attr("class", "division")
+      .attr("transform", function (d, i) {
+        console.log(d)
+        return "translate(0," + yScale(i) + ")";
+      });
 
     gDivisions.exit().remove();
 
-    gDivisions.selectAll(".line")
-      .transition().duration(transitionTime)
+    // Division names
+    let divisionNames = g.selectAll(".division").selectAll(".division-name")
+      .data(function(d){
+        return [d];
+      });
+
+    divisionNames.enter().append("text")
+      .attr("class", "division-name")
+      .attr("x", 0)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "right")
+      .style("vertical-align", "middle")
+      .attr('fill', 'black')
+      .text(function(d){
+        console.log(d, state.name, d[state.name])
+        return d[state.name]
+      });
+
+    divisionNames
+      .attr("class", "division-name")
+      .attr("x", 0)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "right")
+      .style("vertical-align", "middle")
+      .attr('fill', 'black')
+      .text(function(d){
+        console.log(d, state.name, d[state.name])
+        return d[state.name]
+      })
+
+    divisionNames.exit().remove();
+
+    // Division lines
+    let divisionLines =  g.selectAll(".division").selectAll(".line")
+      .data(function(d){
+        return [d];
+      });
+
+    divisionLines.enter().append("line")
+      .attr("class", "line")
+      .attr("stroke", function(d,i){
+         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+           return color1;
+         } else {
+           return color2;
+         }
+      })
+      .attr("stroke-width", 1.0)
+      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
+      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+
+    divisionLines.transition().duration(transitionTime)
       .attr("stroke", function(d,i){
          if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
            return color1;
@@ -479,14 +567,17 @@ Promise.all([
       .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
       .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
 
-    gDivisions.selectAll(".raceeth")
+    let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
         return raceEths.map(function(r){
           return d[state.metric + "_" + r];
         })
-      })
-      .join("circle")
+      });
+
+    divisionCircles.enter().append("circle")
         .transition().duration(transitionTime)
+        .attr("class", "raceeth")
+        .attr("opacity", 1.0)
         .attr("cx", function(d){
           return xScale(d)
         })
@@ -498,9 +589,28 @@ Promise.all([
           } else {
             return "#d2d2d2"
           }
-        });
+        })
+        .attr("r", 3.5)
 
-    gDivisions.selectAll(".number-label")
+    divisionCircles
+      .transition().duration(transitionTime)
+      .attr("cx", function(d){
+        return xScale(d)
+      })
+      .attr("fill", function(d,i){
+        if (raceEths[i] === state.raceEth1) {
+          return color1
+        } else if (raceEths[i] === state.raceEth2) {
+          return color2
+        } else {
+          return "#d2d2d2"
+        }
+      });
+
+    divisionCircles.exit().remove();
+
+    // Division numer labels
+    let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
       // .data(raceEths.filter(function(d){
       //   return  // FILTER VALID VALUES
       // }))
@@ -509,7 +619,8 @@ Promise.all([
         let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
         return [d1, d2];
       })
-      .join("text")
+
+    divisionNumberLabels.enter().append("text")
         .attr("class", "number-label")
         .attr("x", function(d, i){
           if (i === 0){
@@ -526,15 +637,117 @@ Promise.all([
           }
         })
         .style("vertical-align", "middle")
+        .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
         // .attr("opacity", 0)
         .text(function(d){
           return d.toFixed(2);
         })
+
+    divisionNumberLabels
+        .attr("class", "number-label")
+        .attr("x", function(d, i){
+          if (i === 0){
+            return xScale(d) - 25;
+          } else {
+            return xScale(d) + 5;
+          }
+        })
+        .style("text-anchor", function(d, i){
+          if (i === 0){
+            return "right";
+          } else {
+            return "left";
+          }
+        })
+        .style("vertical-align", "middle")
+        .style("opacity", 0)
+        .attr("y", lineHeight/4)
+        .attr("fill", "black")
+        // .attr("opacity", 0)
+        .text(function(d){
+          return d.toFixed(2);
+        })
+
+    divisionNumberLabels.exit().remove();
+
+    // Division change division
+    let divisionChange = g.selectAll(".division").selectAll(".show-districts")
+      .data(function(d){
+        return [d];
+      })
+
+    divisionChange.enter().append("text")
+      .attr("class", "show-districts")
+      .style("opacity", 0)
+      .attr("x", width)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "left")
+      .style("vertical-align", "middle")
+      .attr('fill', 'steelblue')
+      .text(function(d) {
+        if (state.showing === 'states') {
+          return "Show me districts in State " + d[state.name];
+        } else {
+          return "Take me back to the state view"
+        }
+      })
+      .on("click", function(event, d){
+        if (state.showing === 'states') {
+          state.data = districts.filter(function(e){
+            return e["STUSPS"] === d["STUSPS"];
+          });
+          state.name = "leaid";
+          state.showing = 'districts';
+        } else {
+          state.data = states;
+          state.name = "STUSPS";
+          state.showing = 'states';
+        }
+        updateChart();
+        console.log("show me districts")
+      })
+
+    divisionChange
+      .attr("class", "show-districts")
+      .style("opacity", 0)
+      .attr("x", width)
+      .attr("y", lineHeight/4)
+      .style("text-anchor", "left")
+      .style("vertical-align", "middle")
+      .attr('fill', 'steelblue')
+      .text(function(d) {
+        if (state.showing === 'states') {
+          return "Show me districts in State " + d[state.name];
+        } else {
+          return "Take me back to the state view"
+        }
+      })
+      .on("click", function(event, d){
+        if (state.showing === 'states') {
+          state.data = districts.filter(function(e){
+            return e["STUSPS"] === d["STUSPS"];
+          });
+          state.name = "leaid";
+          state.showing = 'districts';
+        } else {
+          state.data = states;
+          state.name = "STUSPS";
+          state.showing = 'states';
+        }
+        updateChart();
+        console.log("show me districts")
+      })
+
+    divisionChange.exit().remove();
   }
 
-  initChart(states)
+  // state.data = districts.filter(function(d){
+  //   return d["STUSPS"] === 'AK';
+  // });
+  // state.name = "leaid";
+  initChart(state.data);
 
   // drawChart(states, districts)
   //
