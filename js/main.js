@@ -250,6 +250,27 @@ Promise.all([
     }
   })
 
+  let statesMenu = getUniquesMenu(states, "STUSPS");
+  let stateOp = addOptions("state-menu", statesMenu);
+  stateOp.style("display", function(d){
+      if (state.showing === 'states') {
+        return "none";
+      } else {
+        return "block";
+      }
+    })
+    .on("change", function(d){
+      newStateValue = d3.select(this).node().value;
+      if (state.showing === 'districts') {
+        state.data = districts.filter(function(e){
+          return e["STUSPS"] === newStateValue;
+        });
+        state.name = "leaid";
+        state.showing = 'districts';
+      }
+      updateChart();
+    })
+
   let spans = d3.select("#metrics")
     .selectAll("span")
     .data(metrics);
@@ -278,8 +299,6 @@ Promise.all([
     })
 
   console.log(states, districts);
-
-  var statesMenu = getUniquesMenu(states, "STUSPS");
 
   function initChart(filteredData) {
 
@@ -434,10 +453,14 @@ Promise.all([
             });
             state.name = "leaid";
             state.showing = 'districts';
+            let idx = statesMenu.indexOf(d["STUSPS"]);
+            document.getElementById("state-menu").selectedIndex = idx;
+            d3.select("#state-menu").style("display", "block");
           } else {
             state.data = states;
             state.name = "STUSPS";
             state.showing = 'states';
+            d3.select("#state-menu").style("display", "none");
           }
           updateChart();
         })
@@ -693,10 +716,14 @@ Promise.all([
           });
           state.name = "leaid";
           state.showing = 'districts';
+          let idx = statesMenu.indexOf(d["STUSPS"]);
+          document.getElementById("state-menu").selectedIndex = idx;
+          d3.select("#state-menu").style("display", "block");
         } else {
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
+          d3.select("#state-menu").style("display", "none");
         }
         updateChart();
       })
@@ -723,10 +750,14 @@ Promise.all([
           });
           state.name = "leaid";
           state.showing = 'districts';
+          let idx = statesMenu.indexOf(d["STUSPS"]);
+          document.getElementById("state-menu").selectedIndex = idx;
+          d3.select("#state-menu").style("display", "block");
         } else {
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
+          d3.select("#state-menu").style("display", "none");
         }
         updateChart();
       })
