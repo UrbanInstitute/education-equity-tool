@@ -289,7 +289,7 @@ Promise.all([
       } else if (d === 'Counselors'){
         state.metric = 'percent_adq_couns';
       }
-      updateChart(state.data);
+      updateChart();
     })
     .classed("chosen", function(d){
       return d === 'Teachers';
@@ -297,6 +297,43 @@ Promise.all([
     .html(function(d){
       return d;
     })
+
+    let districtViews = ['largest', 'myown']
+    let viewSpans = d3.select("#districts-views")
+      .selectAll("span")
+      .data(districtViews);
+
+    viewSpans.enter().append("span")
+      .style("display", "none")
+      .attr("class", "district-view")
+      .on("click", function(event, d){
+        d3.selectAll(".district-view")
+          .classed("chosen", function(e){
+            return e === d;
+          })
+        if (d === 'largest'){
+          let selectedState = d3.select("#state-menu").node().value;
+          state.data = districts.filter(function(e){
+            return e["STUSPS"] === selectedState;
+          });
+          state.name = "leaid";
+          state.showing = 'districts';
+          // let idx = statesMenu.indexOf(d["STUSPS"]);
+          // document.getElementById("state-menu").selectedIndex = idx;
+          d3.select("#state-menu").style("display", "block");
+        } else {
+          state.data = [];
+          state.name = "leaid";
+          state.showing = 'districts';
+        }
+        updateChart(state.data);
+      })
+      // .classed("chosen", function(d){
+      //   return d === 'Teachers';
+      // })
+      .html(function(d){
+        return d;
+      })
 
   console.log(states, districts);
 
@@ -456,11 +493,13 @@ Promise.all([
             let idx = statesMenu.indexOf(d["STUSPS"]);
             document.getElementById("state-menu").selectedIndex = idx;
             d3.select("#state-menu").style("display", "block");
+            d3.selectAll(".district-view").style("display", "block");
           } else {
             state.data = states;
             state.name = "STUSPS";
             state.showing = 'states';
             d3.select("#state-menu").style("display", "none");
+            d3.selectAll(".district-view").style("display", "none");
           }
           updateChart();
         })
@@ -719,11 +758,13 @@ Promise.all([
           let idx = statesMenu.indexOf(d["STUSPS"]);
           document.getElementById("state-menu").selectedIndex = idx;
           d3.select("#state-menu").style("display", "block");
+          d3.selectAll(".district-view").style("display", "block");
         } else {
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
           d3.select("#state-menu").style("display", "none");
+          d3.selectAll(".district-view").style("display", "none");
         }
         updateChart();
       })
@@ -753,11 +794,13 @@ Promise.all([
           let idx = statesMenu.indexOf(d["STUSPS"]);
           document.getElementById("state-menu").selectedIndex = idx;
           d3.select("#state-menu").style("display", "block");
+          d3.selectAll(".district-view").style("display", "block");
         } else {
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
           d3.select("#state-menu").style("display", "none");
+          d3.selectAll(".district-view").style("display", "none");
         }
         updateChart();
       })
