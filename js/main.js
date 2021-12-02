@@ -414,7 +414,7 @@ Promise.all([
       })
       .join('text')
         .attr("class", "show-districts")
-        .style("opacity", 0)
+        .style("display", "none")
         .attr("x", width)
         .attr("y", lineHeight/4)
         .style("text-anchor", "left")
@@ -463,15 +463,15 @@ Promise.all([
         notThisG.selectAll(".number-label")
           .style("opacity", 0);
         thisG.selectAll(".show-districts")
-          .style("opacity", 1)
+          .style("display", "block")
         notThisG.selectAll(".show-districts")
-          .style("opacity", 0);
+          .style("display", "none");
       } else {
         gDivisions.classed("hidden", false)
         gDivisions.selectAll(".number-label")
           .style("opacity", 0);
         gDivisions.selectAll(".show-districts")
-          .style("opacity", 0);
+          .style("display", "none");
       }
     });
 
@@ -673,7 +673,7 @@ Promise.all([
 
     divisionChange.enter().append("text")
       .attr("class", "show-districts")
-      .style("opacity", 0)
+      .style("display", "none")
       .attr("x", width)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
@@ -703,7 +703,7 @@ Promise.all([
 
     divisionChange
       .attr("class", "show-districts")
-      .style("opacity", 0)
+      .style("display", "none")
       .attr("x", width)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
