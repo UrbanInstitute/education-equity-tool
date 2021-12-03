@@ -29,7 +29,15 @@ body {
 }
 
 .hidden {
-  opacity: 0.1;
+  opacity: 0;
+}
+
+.fixed {
+  opacity: 1.0;
+}
+
+.fixed text {
+  opacity: 1.0;
 }
 
 #metrics {

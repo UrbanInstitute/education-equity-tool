@@ -327,7 +327,7 @@ function moveToFront(){
         return [d1, d2];
       })
       .join("text")
-        .attr("class", "number-label")
+        .attr("class", "number-label hidden")
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - 25;
@@ -343,7 +343,7 @@ function moveToFront(){
           }
         })
         .style("vertical-align", "middle")
-        .style("opacity", 0)
+        // .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
         .text(function(d){
@@ -425,24 +425,60 @@ function moveToFront(){
       });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
           margin.left < thisX  && thisX < width + 25){
-        gDivisions.classed("hidden", function(d, i){
-          return i !== index;
-        })
+        // gDivisions.classed("hidden", function(d, i){
+        //   return i !== index;
+        // })
         thisG.selectAll(".number-label")
-          .style("opacity", 1)
+          .classed("hidden", false);
+          // .style("opacity", 1)
         notThisG.selectAll(".number-label")
-          .style("opacity", 0);
+          .classed("hidden", true);
+          // .style("opacity", 0);
         thisG.selectAll(".show-districts")
           .style("display", "block")
         notThisG.selectAll(".show-districts")
           .style("display", "none");
       } else {
-        gDivisions.classed("hidden", false)
+        // gDivisions.classed("hidden", false)
         gDivisions.selectAll(".number-label")
-          .style("opacity", 0);
+          .classed("hidden", true)
+          // .style("opacity", 0);
         gDivisions.selectAll(".show-districts")
           .style("display", "none");
       }
+    })
+    .on("click", function(event){
+      let thisX = d3.pointer(event, this)[0],
+          thisY = d3.pointer(event, this)[1],
+          index = Math.floor(yScale.invert(thisY + lineHeight/2));
+      let gDivisions = g.selectAll(".division");
+      let thisG = gDivisions.filter(function(d,i){
+        return i === index;
+      });
+      // let notThisG = gDivisions.filter(function(d,i){
+      //   return i !== index;
+      // });
+      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
+          margin.left < thisX  && thisX < width + 25){
+        gDivisions.classed("fixed", function(d, i){
+          return i === index;
+        })
+        thisG.selectAll(".number-label")
+          .style("opacity", 1)
+        // notThisG.selectAll(".number-label")
+        //   .style("opacity", 0);
+        thisG.selectAll(".show-districts")
+          .style("display", "block")
+        // notThisG.selectAll(".show-districts")
+        //   .style("display", "none");
+      }
+      // else {
+      //   gDivisions.classed("hidden", false)
+      //   gDivisions.selectAll(".number-label")
+      //     .style("opacity", 0);
+      //   gDivisions.selectAll(".show-districts")
+      //     .style("display", "none");
+      // }
     });
 
   }
@@ -583,7 +619,7 @@ function moveToFront(){
       })
 
     divisionNumberLabels.enter().append("text")
-        .attr("class", "number-label")
+        .attr("class", "number-label hidden")
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - 25;
@@ -599,7 +635,7 @@ function moveToFront(){
           }
         })
         .style("vertical-align", "middle")
-        .style("opacity", 0)
+        // .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
         .text(function(d){
@@ -607,7 +643,7 @@ function moveToFront(){
         })
 
     divisionNumberLabels
-        .attr("class", "number-label")
+        .attr("class", "number-label hidden")
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - 25;
@@ -623,7 +659,7 @@ function moveToFront(){
           }
         })
         .style("vertical-align", "middle")
-        .style("opacity", 0)
+        // .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
         .text(function(d){
