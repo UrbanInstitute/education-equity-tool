@@ -30,7 +30,9 @@ var state = {
   name: null,
   currentState: null,
   showing: 'states',
+  // districtView: null,
   myown: [],
+  sortByGap: false,
 }
 
 d3.selection.prototype.moveToFront = function() {
@@ -86,6 +88,28 @@ function addOptions(id, values) {
   return element;
 }
 
+function sortData(data) {
+  let sortedData;
+  if (state.sortByGap) {
+    sortedData = data.sort(function(a,b){
+      let gap1 = a[state.metric + "_" + state.raceEth1] - a[state.metric + "_" + state.raceEth2];
+      let gap2 = b[state.metric + "_" + state.raceEth1] - b[state.metric + "_" + state.raceEth2];
+      return gap1 - gap2;
+    })
+  } else {
+    sortedData = data.sort(function(a,b){
+      let name1 = a[state.name];
+      let name2 = b[state.name];
+      if (name1 < name2) //sort string ascending
+        return -1;
+      if (name1 > name2)
+        return 1;
+      return 0;
+    })
+  }
+  return sortedData;
+}
+
 
 Promise.all([
   d3.csv('data/early_state_draft.csv'),
@@ -103,7 +127,7 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
-      updateChart(state.data);
+      updateChart();
     } else {
       let idx = raceEths.indexOf(state.raceEth1);
       document.getElementById("raceEth1").selectedIndex = idx;
@@ -203,6 +227,13 @@ Promise.all([
     .html(function(d){
       return d;
     })
+
+  let toggle = d3.select(".slider");
+  toggle.on("click", function(event, d){
+    state.sortByGap = !state.sortByGap;
+    state.data = sortData(state.data);
+    updateChart();
+  })
 
   let searchBox = d3.select("#search-box");
   let searchList = d3.select("#search-list")
@@ -507,6 +538,8 @@ Promise.all([
   }
 
   function updateChart(){
+
+    state.data = sortData(state.data);
     state.height = state.data.length * lineHeight;
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
