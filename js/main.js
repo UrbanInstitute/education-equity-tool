@@ -168,41 +168,41 @@ Promise.all([
       return d;
     })
 
-let districtViews = ['largest', 'myown']
-let viewSpans = d3.select("#districts-views")
-  .selectAll("span")
-  .data(districtViews);
+  let districtViews = ['largest', 'myown']
+  let viewSpans = d3.select("#districts-views")
+    .selectAll("span")
+    .data(districtViews);
 
-viewSpans.enter().append("span")
-  .style("display", "none")
-  .attr("class", "district-view")
-  .on("click", function(event, d){
-    d3.selectAll(".district-view")
-      .classed("chosen", function(e){
-        return e === d;
-      })
-    if (d === 'largest'){
-      state.data = districts.filter(function(e){
-        return e["STUSPS"] === state.currentState;
-      });
-      state.name = "leaid";
-      state.showing = 'districts';
-      d3.select("#state-div").style("display", "inline-block");
-      d3.select("#search").style("display", "none");
-    } else {
-      d3.select("#search").style("display", "block");
-      state.data = districts.filter(function(e){
-        return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
-      })
-      state.name = "leaid";
-      state.showing = 'districts';
-      updateSearchBox();
-    }
-    updateChart();
-  })
-  .html(function(d){
-    return d;
-  })
+  viewSpans.enter().append("span")
+    .style("display", "none")
+    .attr("class", "district-view")
+    .on("click", function(event, d){
+      d3.selectAll(".district-view")
+        .classed("chosen", function(e){
+          return e === d;
+        })
+      if (d === 'largest'){
+        state.data = districts.filter(function(e){
+          return e["STUSPS"] === state.currentState;
+        });
+        state.name = "leaid";
+        state.showing = 'districts';
+        d3.select("#state-div").style("display", "inline-block");
+        d3.select("#search").style("display", "none");
+      } else {
+        d3.select("#search").style("display", "block");
+        state.data = districts.filter(function(e){
+          return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
+        })
+        state.name = "leaid";
+        state.showing = 'districts';
+        updateSearchBox();
+      }
+      updateChart();
+    })
+    .html(function(d){
+      return d;
+    })
 
   let searchBox = d3.select("#search-box");
   let searchList = d3.select("#search-list")
@@ -240,7 +240,8 @@ viewSpans.enter().append("span")
         }
       })
   }
-function moveToFront(){
+
+  function moveToFront(){
     gs.selectAll(".line").moveToFront();
     gs.selectAll(".raceeth").filter(function (d,i){
       return (raceEths[i] === state.raceEth1) || (raceEths[i] === state.raceEth2)
