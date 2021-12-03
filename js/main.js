@@ -47,135 +47,6 @@ d3.selection.prototype.moveToBack = function() {
     });
 };
 
-
-function drawChart(states, districts) {
-
-  states.forEach(function(d) {
-    d.pct = +d.pct
-  })
-
-  var nestedData = d3.nest()
-  .key(function(d) {
-    return d.metrics
-  })
-  .entries(states)
-
-  console.log(nestedData)
-
-  var xScale = d3.scaleLinear()
-  .domain([0, 100])
-  .range([0, width])
-
-  var yScale = d3.scalePoint()
-    .domain(states.map(function(d) {
-      return d.race_eth
-    }))
-    .range([15, height])
-    .padding(0.55)
-
-  var svgs = d3.select("#chart")
-  .selectAll("svg")
-  .data(nestedData)
-
-  svgs.exit()
-  .remove()
-
-  enterSvgs = svgs.enter()
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height)
-  .attr("transform", "translate(" + margin.left + ", " + margin.top + ")")
-
-  svgs = enterSvgs.merge(svgs)
-  .attr("id", function(d) {
-    return d.key;
-  })
-
-  var dots = svgs.selectAll("dots")
-    .data(function(d, i) {
-      var min = d3.min(d.values, function(d) {
-        return d.pct;
-      })
-      var max = d3.max(d.values, function(d) {
-        return d.pct;
-      })
-
-    return d.values
-    })
-  .enter()
-  .append("circle")
-  .attr("r", 5)
-  .attr("cy", function(d) {
-    return yScale(d.race_eth)
-  })
-  .attr("cx", function(d) {
-    return xScale(d.pct)
-  })
-  .attr("class", function(d) {
-    return d.STUSPS
-  })
-  .attr("fill", "#d2d2d2")
-  .attr("stroke", "black")
-  .attr("pointer-events", "all")
-  .style("opacity", 0.5)
-
-
-  // axis
-
-  var axisLeft = d3.axisLeft()
-  .scale(yScale)
-
-  var yAxis = svgs.selectAll("g.yAxis")
-    .data([nestedData])
-
-    yAxis
-    .enter()
-    .append("g")
-    .attr("class", "yAxis")
-    .call(axisLeft)
-    .call(function(t) {
-      t.selectAll("text")
-      .attr("x", 0)
-      .attr("dy", "-17")
-      .style("text-anchor", "start")
-      t.select(".domain").remove()
-      t.selectAll("line")
-        .attr("x2", width)
-        .attr("stroke-opacity", 0.1)
-    })
-
-    var axisBottom = d3.axisBottom()
-    .scale(xScale)
-
-    var xAxis = svgs.selectAll("g.xAxis")
-      .data([nestedData])
-
-      xAxis
-      .enter()
-      .append("g")
-      .attr("class", "xAxis")
-      .attr("transform", "translate(0," + (height - (margin.bottom + 3))+ ")")
-      .call(axisBottom)
-      .call(function(t) {
-        t.select(".domain").remove()
-        t.selectAll("line")
-          .attr("dy", "-15")
-      })
-
-} //drawChart ends here
-
-function highlightStates(thisState) {
-  var allSvg = d3.selectAll("svg");
-  var thisDots = "circle." + thisState;
-  var dotsState = allSvg.selectAll(thisDots)
-
-  dotsState
-  .attr("fill", "blue")
-  .attr("r", 10)
-
-  dotsState.moveToFront();
-}
-
 function getUniquesMenu(df, thisVariable) {
 
   var thisList = df.map(function(o) {
@@ -231,7 +102,6 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
-      // filterData();
       updateChart(state.data);
     } else {
       let idx = raceEths.indexOf(state.raceEth1);
@@ -244,7 +114,6 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth1) {
       state.raceEth2 = d3.select(this).node().value;
-      // filterData();
       updateChart(state.data);
     } else {
       let idx = raceEths.indexOf(state.raceEth2);
@@ -324,13 +193,10 @@ viewSpans.enter().append("span")
       });
       state.name = "leaid";
       state.showing = 'districts';
-      // let idx = statesMenu.indexOf(d["STUSPS"]);
-      // document.getElementById("state-menu").selectedIndex = idx;
       d3.select("#state-menu").style("display", "block");
       d3.select("#search").style("display", "none");
     } else {
       d3.select("#search").style("display", "block");
-      // state.data = [];
       state.data = districts.filter(function(e){
         return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
       })
@@ -340,15 +206,11 @@ viewSpans.enter().append("span")
     }
     updateChart();
   })
-  // .classed("chosen", function(d){
-  //   return d === 'Teachers';
-  // })
   .html(function(d){
     return d;
   })
 
   let searchBox = d3.select("#search-box");
-  // let labelSearch = d3.select("#search-label");
   let searchList = d3.select("#search-list")
 
   function updateSearchBox() {
@@ -384,8 +246,6 @@ viewSpans.enter().append("span")
         }
       })
   }
-
-  // console.log(states, districts);
 
   function initChart(filteredData) {
 
@@ -434,11 +294,7 @@ viewSpans.enter().append("span")
         .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
         .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
 
-    gs//.append("g")
-      .selectAll(".raceeth")
-      // .data(raceEths.filter(function(d){
-      //   return  // FILTER VALID VALUES
-      // }))
+    gs.selectAll(".raceeth")
       .data(function(d){
         return raceEths.map(function(r){
           return d[state.metric + "_" + r];
@@ -462,13 +318,7 @@ viewSpans.enter().append("span")
         .attr("r", 3.5)
 
 
-      gs//.append("g")
-        //.attr("class", "number-labels")
-        //.style("opacity", 0)
-        .selectAll(".number-label")
-        // .data(raceEths.filter(function(d){
-        //   return  // FILTER VALID VALUES
-        // }))
+      gs.selectAll(".number-label")
         .data(function(d){
           let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
           let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
@@ -494,7 +344,6 @@ viewSpans.enter().append("span")
           .style("opacity", 0)
           .attr("y", lineHeight/4)
           .attr("fill", "black")
-          // .attr("opacity", 0)
           .text(function(d){
             return d.toFixed(2);
           })
@@ -723,9 +572,6 @@ viewSpans.enter().append("span")
 
     // Division numer labels
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
-      // .data(raceEths.filter(function(d){
-      //   return  // FILTER VALID VALUES
-      // }))
       .data(function(d){
         let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
         let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
@@ -752,7 +598,6 @@ viewSpans.enter().append("span")
         .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
-        // .attr("opacity", 0)
         .text(function(d){
           return d.toFixed(2);
         })
@@ -777,7 +622,6 @@ viewSpans.enter().append("span")
         .style("opacity", 0)
         .attr("y", lineHeight/4)
         .attr("fill", "black")
-        // .attr("opacity", 0)
         .text(function(d){
           return d.toFixed(2);
         })
@@ -881,10 +725,6 @@ viewSpans.enter().append("span")
     divisionChange.exit().remove();
   }
 
-  // state.data = districts.filter(function(d){
-  //   return d["STUSPS"] === 'AK';
-  // });
-  // state.name = "leaid";
   initChart(state.data);
 
   // drawChart(states, districts)
