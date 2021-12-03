@@ -92,6 +92,10 @@ body {
   cursor: pointer;
 }
 
+.state-average .division-name {
+  font-weight: bold;
+}
+
 /* Toggle */
 .switch {
   position: relative;

@@ -26,7 +26,8 @@ var state = {
   raceEth2: 'white',
   metric: 'avg_exp_year_perc',
   height: null,
-  data: null,
+  sourceData: null,
+  dataToPlot: null,
   name: null,
   currentState: null,
   showing: 'states',
@@ -118,7 +119,8 @@ Promise.all([
   var states = data[0];
   var districts = data[1];
 
-  state.data = states;
+  state.sourceData = states;
+  state.dataToPlot = states;
   state.name = "STUSPS";
 
   let newRaceEthValue;
@@ -139,7 +141,7 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth1) {
       state.raceEth2 = d3.select(this).node().value;
-      updateChart(state.data);
+      updateChart();
     } else {
       let idx = raceEths.indexOf(state.raceEth2);
       document.getElementById("raceEth2").selectedIndex = idx;
@@ -155,7 +157,7 @@ Promise.all([
           state.currentState = newStateValue;
           state.myown = [];
         }
-        state.data = districts.filter(function(e){
+        state.sourceData = districts.filter(function(e){
           return e["STUSPS"] === state.currentState;
         });
         state.name = "leaid";
@@ -206,7 +208,7 @@ Promise.all([
           return e === d;
         })
       if (d === 'largest'){
-        state.data = districts.filter(function(e){
+        state.sourceData = districts.filter(function(e){
           return e["STUSPS"] === state.currentState;
         });
         state.name = "leaid";
@@ -215,7 +217,7 @@ Promise.all([
         d3.select("#search").style("display", "none");
       } else {
         d3.select("#search").style("display", "block");
-        state.data = districts.filter(function(e){
+        state.sourceData = districts.filter(function(e){
           return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
         })
         state.name = "leaid";
@@ -231,7 +233,6 @@ Promise.all([
   let toggle = d3.select(".slider");
   toggle.on("click", function(event, d){
     state.sortByGap = !state.sortByGap;
-    state.data = sortData(state.data);
     updateChart();
   })
 
@@ -263,7 +264,7 @@ Promise.all([
         if ((idxLabel >= 0) && (nSelected < 10) && (!isSelected)) {
           state.myown.push(theseDistricts[idxLabel]);
           searchLabel.node().value = "";
-          state.data = districts.filter(function(e){
+          state.sourceData = districts.filter(function(e){
             return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
           })
           updateChart();
@@ -434,7 +435,7 @@ Promise.all([
               state.currentState = d["STUSPS"];
               state.myown = [];
             }
-            state.data = districts.filter(function(e){
+            state.sourceData = districts.filter(function(e){
               return e["STUSPS"] === state.currentState;
             });
             state.name = "leaid";
@@ -447,7 +448,7 @@ Promise.all([
                 return e === 'largest';
               });
           } else {
-            state.data = states;
+            state.sourceData = states;
             state.name = "STUSPS";
             state.showing = 'states';
             d3.select("#state-div").style("display", "none");
@@ -467,7 +468,7 @@ Promise.all([
       let notThisG = gDivisions.filter(function(d,i){
         return i !== index;
       });
-      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
+      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
           margin.left < thisX  && thisX < width + margin.right){
         // gDivisions.classed("hidden", function(d, i){
         //   return i !== index;
@@ -508,7 +509,7 @@ Promise.all([
       // let notThisG = gDivisions.filter(function(d,i){
       //   return i !== index;
       // });
-      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
+      if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
           margin.left < thisX  && thisX < width){
         gDivisions.classed("fixed", function(d, i){
           return i === index;
@@ -539,23 +540,39 @@ Promise.all([
 
   function updateChart(){
 
-    state.data = sortData(state.data);
-    state.height = state.data.length * lineHeight;
+    let sortedData = sortData(state.sourceData);
+    if (state.showing === 'states') {
+      state.dataToPlot = sortedData;
+    } else {
+      // add state average
+      let thisState = states.filter(function(d){
+        return d['STUSPS'] === state.currentState;
+      })
+      thisState[0].leaid = thisState[0]['STUSPS'] + ' avg';
+      state.dataToPlot = [thisState[0], ...sortedData];
+    }
+    state.height = state.dataToPlot.length * lineHeight;
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom);
 
     // Division groups
-    var gDivisions = g.selectAll(".division").data(state.data);
+    var gDivisions = g.selectAll(".division").data(state.dataToPlot);
 
     gDivisions.enter().append("g")
       .attr("class", "division")
+      .classed("state-average", function(d, i){
+        return (state.showing === 'districts') && (i === 0);
+      })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
       });;
 
     gDivisions.attr("class", "division")
+      .classed("state-average", function(d, i){
+        return (state.showing === 'districts') && (i === 0);
+      })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
       });
@@ -777,7 +794,7 @@ Promise.all([
             state.currentState = d["STUSPS"];
             state.myown = [];
           }
-          state.data = districts.filter(function(e){
+          state.sourceData = districts.filter(function(e){
             return e["STUSPS"] === state.currentState;
           });
           state.name = "leaid";
@@ -790,7 +807,7 @@ Promise.all([
               return e === 'largest';
             });
         } else {
-          state.data = states;
+          state.sourceData = states;
           state.name = "STUSPS";
           state.showing = 'states';
           d3.select("#state-div").style("display", "none");
@@ -821,7 +838,7 @@ Promise.all([
             state.currentState = d["STUSPS"];
             state.myown = [];
           }
-          state.data = districts.filter(function(e){
+          state.sourceData = districts.filter(function(e){
             return e["STUSPS"] === state.currentState;
           });
           state.name = "leaid";
@@ -834,7 +851,7 @@ Promise.all([
               return e === 'largest';
             });
         } else {
-          state.data = states;
+          state.sourceData = states;
           state.name = "STUSPS";
           state.showing = 'states';
           d3.select("#state-div").style("display", "none");
@@ -847,7 +864,7 @@ Promise.all([
     divisionChange.exit().remove();
   }
 
-  initChart(state.data);
+  initChart(state.dataToPlot);
 
   // drawChart(states, districts)
   //
