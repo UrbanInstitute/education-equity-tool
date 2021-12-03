@@ -277,6 +277,18 @@ function moveToFront(){
           return "translate(0," + yScale(i) + ")";
         });
 
+    gs.selectAll(".rect")
+      .data(function(d){
+        return [d];
+      })
+      .join("rect")
+        .attr("class", "rect hidden")
+        .attr("fill", "#f5f5f5")
+        .attr("x", 0)
+        .attr("y", -lineHeight/2)
+        .attr("width", width)
+        .attr("height", lineHeight)
+
     gs.selectAll(".line")
       .data(function(d){
         return [d];
@@ -428,6 +440,10 @@ function moveToFront(){
         // gDivisions.classed("hidden", function(d, i){
         //   return i !== index;
         // })
+        thisG.selectAll(".rect")
+          .classed("hidden", false);
+        notThisG.selectAll(".rect")
+          .classed("hidden", true);
         thisG.selectAll(".number-label")
           .classed("hidden", false);
           // .style("opacity", 1)
@@ -441,6 +457,8 @@ function moveToFront(){
       } else {
         // gDivisions.classed("hidden", false)
         gDivisions.selectAll(".number-label")
+          .classed("hidden", true)
+        gDivisions.selectAll(".rect")
           .classed("hidden", true)
           // .style("opacity", 0);
         gDivisions.selectAll(".show-districts")
@@ -464,6 +482,10 @@ function moveToFront(){
           return i === index;
         })
         thisG.selectAll(".number-label")
+          // .classed("hidden", false)
+          .style("opacity", 1)
+        thisG.selectAll(".rect")
+          // .classed("hidden", false)
           .style("opacity", 1)
         // notThisG.selectAll(".number-label")
         //   .style("opacity", 0);
