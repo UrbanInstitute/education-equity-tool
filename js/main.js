@@ -330,12 +330,15 @@ viewSpans.enter().append("span")
       d3.select("#search").style("display", "none");
     } else {
       d3.select("#search").style("display", "block");
-      state.data = [];
+      // state.data = [];
+      state.data = districts.filter(function(e){
+        return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
+      })
       state.name = "leaid";
       state.showing = 'districts';
       updateSearchBox();
     }
-    updateChart(state.data);
+    updateChart();
   })
   // .classed("chosen", function(d){
   //   return d === 'Teachers';
@@ -544,7 +547,10 @@ viewSpans.enter().append("span")
             let idx = statesMenu.indexOf(state.currentState);
             document.getElementById("state-menu").selectedIndex = idx;
             d3.select("#state-menu").style("display", "block");
-            d3.selectAll(".district-view").style("display", "block");
+            d3.selectAll(".district-view").style("display", "block")
+              .classed("chosen", function(e){
+                return e === 'largest';
+              });
           } else {
             state.data = states;
             state.name = "STUSPS";
@@ -813,7 +819,10 @@ viewSpans.enter().append("span")
           let idx = statesMenu.indexOf(state.currentState);
           document.getElementById("state-menu").selectedIndex = idx;
           d3.select("#state-menu").style("display", "block");
-          d3.selectAll(".district-view").style("display", "block");
+          d3.selectAll(".district-view").style("display", "block")
+            .classed("chosen", function(e){
+              return e === 'largest';
+            });
         } else {
           state.data = states;
           state.name = "STUSPS";
@@ -854,7 +863,10 @@ viewSpans.enter().append("span")
           let idx = statesMenu.indexOf(state.currentState);
           document.getElementById("state-menu").selectedIndex = idx;
           d3.select("#state-menu").style("display", "block");
-          d3.selectAll(".district-view").style("display", "block");
+          d3.selectAll(".district-view").style("display", "block")
+            .classed("chosen", function(e){
+              return e === 'largest';
+            });
         } else {
           state.data = states;
           state.name = "STUSPS";
