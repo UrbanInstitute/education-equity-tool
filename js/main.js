@@ -287,7 +287,7 @@ function moveToFront(){
         .attr("x", 0)
         .attr("y", -lineHeight/2)
         .attr("width", width)
-        .attr("height", lineHeight)
+        .attr("height", lineHeight);
 
     gs.selectAll(".line")
       .data(function(d){
@@ -436,7 +436,7 @@ function moveToFront(){
         return i !== index;
       });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
-          margin.left < thisX  && thisX < width + 25){
+          margin.left < thisX  && thisX < width + margin.right){
         // gDivisions.classed("hidden", function(d, i){
         //   return i !== index;
         // })
@@ -477,16 +477,16 @@ function moveToFront(){
       //   return i !== index;
       // });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.data.length) - lineHeight/2 &&
-          margin.left < thisX  && thisX < width + 25){
+          margin.left < thisX  && thisX < width){
         gDivisions.classed("fixed", function(d, i){
           return i === index;
         })
         thisG.selectAll(".number-label")
-          // .classed("hidden", false)
-          .style("opacity", 1)
+          .classed("hidden", false)
+          // .style("opacity", 1)
         thisG.selectAll(".rect")
-          // .classed("hidden", false)
-          .style("opacity", 1)
+          .classed("hidden", false)
+          // .style("opacity", 1)
         // notThisG.selectAll(".number-label")
         //   .style("opacity", 0);
         thisG.selectAll(".show-districts")
@@ -527,6 +527,30 @@ function moveToFront(){
       });
 
     gDivisions.exit().remove();
+
+    // Division rects
+    let divisionRects = g.selectAll(".division").selectAll(".rect")
+      .data(function(d){
+        return [d];
+      });
+
+    divisionRects.enter().append("rect")
+      .attr("class", "rect hidden")
+      .attr("fill", "#f5f5f5")
+      .attr("x", 0)
+      .attr("y", -lineHeight/2)
+      .attr("width", width)
+      .attr("height", lineHeight);
+
+    divisionRects
+      .attr("class", "rect hidden")
+      .attr("fill", "#f5f5f5")
+      .attr("x", 0)
+      .attr("y", -lineHeight/2)
+      .attr("width", width)
+      .attr("height", lineHeight);
+
+    divisionRects.exit().remove();
 
     // Division names
     let divisionNames = g.selectAll(".division").selectAll(".division-name")
@@ -641,7 +665,8 @@ function moveToFront(){
       })
 
     divisionNumberLabels.enter().append("text")
-        .attr("class", "number-label hidden")
+        .attr("class", "number-label")
+        .classed("hidden", true)
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - 25;
@@ -665,7 +690,8 @@ function moveToFront(){
         })
 
     divisionNumberLabels
-        .attr("class", "number-label hidden")
+        .attr("class", "number-label")
+        .classed("hidden", true)
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - 25;
