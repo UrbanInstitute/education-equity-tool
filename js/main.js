@@ -3,7 +3,7 @@ var widthChart = document.getElementById("chart").offsetWidth;
 let svg, g, xScale, yScale;
 const transitionTime = 500;
 
-var margin = {top: 60, right: 50, bottom: 30, left: 40},
+var margin = {top: 20, right: 50, bottom: 20, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -394,9 +394,9 @@ viewSpans.enter().append("span")
     state.height = filteredData.length * lineHeight;
 
     svg = d3.select("#chart").append("svg")
-      .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+      .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height]) // + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
-      .attr("height", state.height + margin.bottom);
+      .attr("height", state.height) // + margin.top + margin.bottom);
 
     xScale = d3.scaleLinear()
       .domain([0, 1])
@@ -597,11 +597,11 @@ viewSpans.enter().append("span")
   }
 
   function updateChart(){
-    // state.height = state.data.length * lineHeight;
+    state.height = state.data.length * lineHeight;
 
-    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.bottom])
+    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
-      .attr("height", state.height + margin.bottom);
+      .attr("height", state.height + margin.top + margin.bottom);
 
     // Division groups
     var gDivisions = g.selectAll(".division").data(state.data);
