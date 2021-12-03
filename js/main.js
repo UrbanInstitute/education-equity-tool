@@ -1,13 +1,14 @@
 var widthChart = document.getElementById("chart").offsetWidth;
 
-let svg, g, xScale, yScale;
+let svg, g, gs, xScale, yScale;
 const transitionTime = 500;
 
 var margin = {top: 20, right: 50, bottom: 20, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
-var lineHeight = 12;
+let lineHeight = 18;
+let circleSize = 5;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -246,6 +247,12 @@ viewSpans.enter().append("span")
         }
       })
   }
+function moveToFront(){
+    gs.selectAll(".line").moveToFront();
+    gs.selectAll(".raceeth").filter(function (d,i){
+      return (raceEths[i] === state.raceEth1) || (raceEths[i] === state.raceEth2)
+    }).moveToFront();
+  }
 
   function initChart(filteredData) {
 
@@ -269,7 +276,7 @@ viewSpans.enter().append("span")
     g = svg.append("g")
         .style("font", "10px sans-serif")
 
-    var gs = g.selectAll("g")
+    gs = g.selectAll("g")
       .data(filteredData)
       .join("g")
         .attr("class", "division")
@@ -315,38 +322,40 @@ viewSpans.enter().append("span")
             return "#d2d2d2"
           }
         })
-        .attr("r", 3.5)
+        .attr("r", circleSize);
 
+    // Move highlighted elements to front
+    moveToFront();
 
-      gs.selectAll(".number-label")
-        .data(function(d){
-          let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-          let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-          return [d1, d2];
+    gs.selectAll(".number-label")
+      .data(function(d){
+        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        return [d1, d2];
+      })
+      .join("text")
+        .attr("class", "number-label")
+        .attr("x", function(d, i){
+          if (i === 0){
+            return xScale(d) - 25;
+          } else {
+            return xScale(d) + 5;
+          }
         })
-        .join("text")
-          .attr("class", "number-label")
-          .attr("x", function(d, i){
-            if (i === 0){
-              return xScale(d) - 25;
-            } else {
-              return xScale(d) + 5;
-            }
-          })
-          .style("text-anchor", function(d, i){
-            if (i === 0){
-              return "right";
-            } else {
-              return "left";
-            }
-          })
-          .style("vertical-align", "middle")
-          .style("opacity", 0)
-          .attr("y", lineHeight/4)
-          .attr("fill", "black")
-          .text(function(d){
-            return d.toFixed(2);
-          })
+        .style("text-anchor", function(d, i){
+          if (i === 0){
+            return "right";
+          } else {
+            return "left";
+          }
+        })
+        .style("vertical-align", "middle")
+        .style("opacity", 0)
+        .attr("y", lineHeight/4)
+        .attr("fill", "black")
+        .text(function(d){
+          return d.toFixed(2);
+        })
 
     gs.selectAll(".division-name")
       .data(function(d){
@@ -551,7 +560,7 @@ viewSpans.enter().append("span")
             return "#d2d2d2"
           }
         })
-        .attr("r", 3.5)
+        .attr("r", circleSize)
 
     divisionCircles
       .transition().duration(transitionTime)
@@ -569,6 +578,8 @@ viewSpans.enter().append("span")
       });
 
     divisionCircles.exit().remove();
+
+    moveToFront();
 
     // Division numer labels
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
