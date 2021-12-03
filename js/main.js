@@ -124,14 +124,7 @@ Promise.all([
 
   let statesMenu = getUniquesMenu(states, "STUSPS");
   let stateOp = addOptions("state-menu", statesMenu);
-  stateOp.style("display", function(d){
-      if (state.showing === 'states') {
-        return "none";
-      } else {
-        return "block";
-      }
-    })
-    .on("change", function(d){
+  stateOp.on("change", function(d){
       newStateValue = d3.select(this).node().value;
       if (state.showing === 'districts') {
         if (state.currentState !== newStateValue) {
@@ -194,7 +187,7 @@ viewSpans.enter().append("span")
       });
       state.name = "leaid";
       state.showing = 'districts';
-      d3.select("#state-menu").style("display", "block");
+      d3.select("#state-div").style("display", "inline-block");
       d3.select("#search").style("display", "none");
     } else {
       d3.select("#search").style("display", "block");
@@ -404,8 +397,8 @@ function moveToFront(){
             state.showing = 'districts';
             let idx = statesMenu.indexOf(state.currentState);
             document.getElementById("state-menu").selectedIndex = idx;
-            d3.select("#state-menu").style("display", "block");
-            d3.selectAll(".district-view").style("display", "block")
+            d3.select("#state-div").style("display", "inline-block");
+            d3.selectAll(".district-view").style("display", "inline-block")
               .classed("chosen", function(e){
                 return e === 'largest';
               });
@@ -413,7 +406,7 @@ function moveToFront(){
             state.data = states;
             state.name = "STUSPS";
             state.showing = 'states';
-            d3.select("#state-menu").style("display", "none");
+            d3.select("#state-div").style("display", "none");
             d3.selectAll(".district-view").style("display", "none");
           }
           updateChart();
@@ -673,8 +666,8 @@ function moveToFront(){
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
           document.getElementById("state-menu").selectedIndex = idx;
-          d3.select("#state-menu").style("display", "block");
-          d3.selectAll(".district-view").style("display", "block")
+          d3.select("#state-div").style("display", "inline-block");
+          d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){
               return e === 'largest';
             });
@@ -682,7 +675,7 @@ function moveToFront(){
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
-          d3.select("#state-menu").style("display", "none");
+          d3.select("#state-div").style("display", "none");
           d3.selectAll(".district-view").style("display", "none");
           d3.select("#search").style("display", "none");
         }
@@ -717,8 +710,8 @@ function moveToFront(){
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
           document.getElementById("state-menu").selectedIndex = idx;
-          d3.select("#state-menu").style("display", "block");
-          d3.selectAll(".district-view").style("display", "block")
+          d3.select("#state-div").style("display", "inline-block");
+          d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){
               return e === 'largest';
             });
@@ -726,7 +719,7 @@ function moveToFront(){
           state.data = states;
           state.name = "STUSPS";
           state.showing = 'states';
-          d3.select("#state-menu").style("display", "none");
+          d3.select("#state-div").style("display", "none");
           d3.selectAll(".district-view").style("display", "none");
           d3.select("#search").style("display", "none");
         }

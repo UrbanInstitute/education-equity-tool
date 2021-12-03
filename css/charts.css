@@ -32,8 +32,42 @@ body {
   opacity: 0.1;
 }
 
-span.chosen {
+#metrics {
+  padding: 20px 0;
+}
+
+#metrics span {
+  color: darkgray;
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+#metrics span.chosen {
   text-decoration: underline;
+  text-decoration-color: darkgray;
+  text-decoration-thickness: 3.5px;
+  text-underline-offset: 2px;
+  color: black;
+}
+
+.form-inline {
+  display: inline-block;
+}
+
+.district-view {
+  padding: 5px 10px;
+  margin-right: 10px;
+  margin-top: 20px;
+  text-transform: uppercase;
+  background-color: white;
+  color: #1696d2;
+  border: 2px solid #1696d2;
+  cursor: pointer;
+}
+
+.district-view.chosen {
+  background-color: #1696d2;
+  color: white;
 }
 
 .show-districts {
