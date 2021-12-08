@@ -52,7 +52,7 @@ body {
 
 #metrics span.chosen {
   text-decoration: underline;
-  text-decoration-color: darkgray;
+  text-decoration-color: #fdbf11;
   text-decoration-thickness: 3.5px;
   text-underline-offset: 2px;
   color: black;
