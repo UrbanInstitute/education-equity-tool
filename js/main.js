@@ -20,6 +20,15 @@ let circleSize = 5;
 
 var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white'];
 var metrics = ['Teachers', 'Classes', 'Counselors'];
+let colors = {
+  'Black': "#1696D2",
+  'Hisp': "#EC008B",
+  'aian': "#55B748",
+  'asian': "#12719E",
+  'nhpi': "#CA5800",
+  'twomore': "#696969",
+  'white': "#FDBF11"
+}
 
 var state = {
   raceEth1: 'Black',
@@ -330,9 +339,11 @@ Promise.all([
         .attr("class", "line")
         .attr("stroke", function(d,i){
            if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-             return color1;
+             // return color1;
+             return colors[state.raceEth1];
            } else {
-             return color2;
+             // return color2;
+             return colors[state.raceEth2];
            }
         })
         .attr("stroke-width", 1.0)
@@ -353,9 +364,11 @@ Promise.all([
         })
         .attr("fill", function(d,i){
           if (raceEths[i] === state.raceEth1) {
-            return color1
+            // return color1;
+            return colors[state.raceEth1];
           } else if (raceEths[i] === state.raceEth2) {
-            return color2
+            // return color2;
+            return colors[state.raceEth2];
           } else {
             return "#d2d2d2"
           }
@@ -643,9 +656,11 @@ Promise.all([
       .attr("class", "line")
       .attr("stroke", function(d,i){
          if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-           return color1;
+           // return color1;
+           return colors[state.raceEth1];
          } else {
-           return color2;
+           // return color2;
+           return colors[state.raceEth2];
          }
       })
       .attr("stroke-width", 1.0)
@@ -655,9 +670,11 @@ Promise.all([
     divisionLines.transition().duration(transitionTime)
       .attr("stroke", function(d,i){
          if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-           return color1;
+           // return color1;
+           return colors[state.raceEth1];
          } else {
-           return color2;
+           // return color2;
+           return colors[state.raceEth2];
          }
       })
       .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
@@ -679,9 +696,11 @@ Promise.all([
         })
         .attr("fill", function(d,i){
           if (raceEths[i] === state.raceEth1) {
-            return color1
+            // return color1;
+            return colors[state.raceEth1];
           } else if (raceEths[i] === state.raceEth2) {
-            return color2
+            // return color2;
+            return colors[state.raceEth2];
           } else {
             return "#d2d2d2"
           }
@@ -695,9 +714,11 @@ Promise.all([
       })
       .attr("fill", function(d,i){
         if (raceEths[i] === state.raceEth1) {
-          return color1
+          // return color1;
+          return colors[state.raceEth1];
         } else if (raceEths[i] === state.raceEth2) {
-          return color2
+          // return color2;
+          return colors[state.raceEth2];
         } else {
           return "#d2d2d2"
         }
