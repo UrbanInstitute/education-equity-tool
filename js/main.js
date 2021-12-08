@@ -278,6 +278,7 @@ Promise.all([
     gs.selectAll(".raceeth").filter(function (d,i){
       return (raceEths[i] === state.raceEth1) || (raceEths[i] === state.raceEth2)
     }).moveToFront();
+    gs.selectAll(".number-label").moveToFront();
   }
 
   function initChart(filteredData) {
