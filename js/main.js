@@ -7,8 +7,10 @@ var margin = {top: 20, right: 50, bottom: 20, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
-let lineHeight = 18;
-let circleSize = 5;
+const lineHeight = 20;
+const circleSize = 5;
+const numberLabelLeftMargin = 45;
+const numberLabelRightMargin = 10;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -388,9 +390,9 @@ Promise.all([
         .attr("class", "number-label hidden")
         .attr("x", function(d, i){
           if (i === 0){
-            return xScale(d) - 25;
+            return xScale(d) - numberLabelLeftMargin;
           } else {
-            return xScale(d) + 5;
+            return xScale(d) + numberLabelRightMargin;
           }
         })
         .style("text-anchor", function(d, i){
@@ -741,9 +743,9 @@ Promise.all([
         .classed("hidden", true)
         .attr("x", function(d, i){
           if (i === 0){
-            return xScale(d) - 25;
+            return xScale(d) - numberLabelLeftMargin;
           } else {
-            return xScale(d) + 5;
+            return xScale(d) + numberLabelRightMargin;
           }
         })
         .style("text-anchor", function(d, i){
@@ -766,9 +768,9 @@ Promise.all([
         .classed("hidden", true)
         .attr("x", function(d, i){
           if (i === 0){
-            return xScale(d) - 25;
+            return xScale(d) - numberLabelLeftMargin;
           } else {
-            return xScale(d) + 5;
+            return xScale(d) + numberLabelRightMargin;
           }
         })
         .style("text-anchor", function(d, i){
