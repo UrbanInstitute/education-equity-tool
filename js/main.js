@@ -299,8 +299,7 @@ Promise.all([
       .domain([0, filteredData.length])
       .rangeRound([margin.top + lineHeight/2, state.height])
 
-    g = svg.append("g")
-        .style("font", "10px sans-serif")
+    g = svg.append("g");
 
     gs = g.selectAll("g")
       .data(filteredData)
