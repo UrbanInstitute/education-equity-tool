@@ -100,6 +100,11 @@ function addOptions(id, values) {
   return element;
 }
 
+function updateOptionsCircles() {
+  d3.select("#raceEth1-circle").attr("fill", colors[state.raceEth1]);
+  d3.select("#raceEth2-circle").attr("fill", colors[state.raceEth2]);
+}
+
 function sortData(data) {
   let sortedData;
   if (state.sortByGap) {
@@ -140,6 +145,7 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
       state.raceEth1 = d3.select(this).node().value;
+      updateOptionsCircles();
       updateChart();
     } else {
       let idx = raceEths.indexOf(state.raceEth1);
@@ -152,12 +158,15 @@ Promise.all([
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth1) {
       state.raceEth2 = d3.select(this).node().value;
+      updateOptionsCircles();
       updateChart();
     } else {
       let idx = raceEths.indexOf(state.raceEth2);
       document.getElementById("raceEth2").selectedIndex = idx;
     }
   })
+
+  updateOptionsCircles();
 
   let statesMenu = getUniquesMenu(states, "STUSPS");
   let stateOp = addOptions("state-menu", statesMenu);
