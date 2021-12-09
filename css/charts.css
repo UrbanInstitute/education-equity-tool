@@ -181,3 +181,24 @@ input:checked + .slider:before {
   background-position-y: 50%;
   transition: all .4s ease-in-out;
 }
+
+.form-control:hover{
+  cursor: pointer;
+}
+
+#search-box {
+  padding: 5px 5px 5px 5px;
+  border: 1px solid lightgray;
+}
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+:-moz-placeholder {
+   font-style: italic;
+}
+::-moz-placeholder {
+   font-style: italic;
+}
+:-ms-input-placeholder {
+   font-style: italic;
+}

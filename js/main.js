@@ -279,7 +279,7 @@ Promise.all([
 
     options.exit().remove();
 
-    searchBox.attr("placeholder", "Start typing..." + state.myown.length + "/10")
+    searchBox.attr("placeholder", "Start typing... \t" + state.myown.length + "/10")
       .on("change", function(){
         let searchLabel = d3.select(this);
         let searchedLabel = searchLabel.property("value");
@@ -294,7 +294,7 @@ Promise.all([
             return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
           })
           updateChart();
-          d3.select(this).attr("placeholder", "Start typing..." + state.myown.length + "/10")
+          d3.select(this).attr("placeholder", "Start typing... \t" + state.myown.length + "/10")
         }
       })
   }
