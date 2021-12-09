@@ -82,13 +82,17 @@ function getUniquesMenu(df, thisVariable) {
   return uniqueList;
 }
 
-function addOptions(id, values) {
+function addOptions(id, values, addStudents) {
   var element = d3.select("#"+id);
   var options = element.selectAll("option").data(values);
 
   options.enter().append("option")
     .html(function(d){
-      return d;
+      if (addStudents) {
+        return d + " students"
+      } else {
+        return d;
+      }
     });
 
   options.exit().remove();
@@ -142,7 +146,7 @@ Promise.all([
   state.name = "STUSPS";
 
   let newRaceEthValue;
-  let raceEthOp1 = addOptions("raceEth1", raceEths);
+  let raceEthOp1 = addOptions("raceEth1", raceEths, false);
   raceEthOp1.on("change", function(d, i){
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
@@ -155,7 +159,7 @@ Promise.all([
     }
   })
 
-  let raceEthOp2 = addOptions("raceEth2", raceEths);
+  let raceEthOp2 = addOptions("raceEth2", raceEths, false);
   raceEthOp2.on("change", function(d){
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth1) {
@@ -170,7 +174,7 @@ Promise.all([
 
   updateOptionsCircles();
 
-  let statesMenu = getUniquesMenu(states, "STUSPS");
+  let statesMenu = getUniquesMenu(states, "STUSPS", false);
   let stateOp = addOptions("state-menu", statesMenu);
   stateOp.on("change", function(d){
       newStateValue = d3.select(this).node().value;

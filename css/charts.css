@@ -158,3 +158,26 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.form-control {
+  display: inline;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  border-color: darkgray;
+  vertical-align: middle;
+  max-height: 2em;
+  padding: 0 40px 5px 5px;
+  color: darkgray;
+  /* padding: 40px; */
+  /* margin: 10px; */
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='28' viewBox='0 0 28 28' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 50%;
+  transition: all .4s ease-in-out;
+}
