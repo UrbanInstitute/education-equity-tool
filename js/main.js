@@ -1,9 +1,10 @@
-var widthChart = document.getElementById("chart").offsetWidth;
+const offsetWidth = 250;
+var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 
 let svg, g, gs, xScale, yScale;
 const transitionTime = 500;
 
-var margin = {top: 20, right: 50, bottom: 20, left: 40},
+var margin = {top: 20, right: offsetWidth, bottom: 20, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -11,6 +12,7 @@ const lineHeight = 20;
 const circleSize = 5;
 const numberLabelLeftMargin = 45;
 const numberLabelRightMargin = 10;
+const marginRight = 20;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -441,7 +443,7 @@ Promise.all([
       .join('text')
         .attr("class", "show-districts")
         .style("display", "none")
-        .attr("x", width)
+        .attr("x", width + marginRight)
         .attr("y", lineHeight/4)
         .style("text-anchor", "left")
         .style("vertical-align", "middle")
@@ -808,7 +810,7 @@ Promise.all([
     divisionChange.enter().append("text")
       .attr("class", "show-districts")
       .style("display", "none")
-      .attr("x", width)
+      .attr("x", width + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
@@ -852,7 +854,7 @@ Promise.all([
     divisionChange
       .attr("class", "show-districts")
       .style("display", "none")
-      .attr("x", width)
+      .attr("x", width + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
