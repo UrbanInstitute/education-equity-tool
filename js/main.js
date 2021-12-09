@@ -12,7 +12,7 @@ const lineHeight = 20;
 const circleSize = 5;
 const numberLabelLeftMargin = 45;
 const numberLabelRightMargin = 10;
-const marginRight = 20;
+const marginRight = 30;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
