@@ -4,7 +4,7 @@ var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 let svg, g, gs, xScale, yScale;
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 20, left: 40},
+var margin = {top: 20, right: offsetWidth, bottom: 40, left: 40},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -316,7 +316,7 @@ Promise.all([
     svg = d3.select("#chart").append("svg")
       .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height]) // + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
-      .attr("height", state.height) // + margin.top + margin.bottom);
+      .attr("height", state.height + margin.top + margin.bottom) // + margin.top + margin.bottom);
 
     xScale = d3.scaleLinear()
       .domain([0, 1])
@@ -325,6 +325,31 @@ Promise.all([
     yScale = d3.scaleLinear()
       .domain([0, filteredData.length])
       .rangeRound([margin.top + lineHeight/2, state.height])
+
+    var ticks = null;
+    var xAxis = function(g) {
+      g.attr("transform", `translate(0,${margin.top})`)
+      .call(d3.axisTop(xScale).ticks(ticks))
+      .call(g => g.selectAll(".tick line").clone()
+                .attr("stroke-opacity", 0.05)
+                .attr("class", "axis-line")
+                .attr("y2", state.height - margin.top - margin.bottom))
+      .call(g => g.selectAll(".domain").remove())
+    }
+
+
+    var xAxisBottom = function(g) {
+      g.attr("transform", `translate(0,${state.height})`)
+      .attr("class", "bottom-axis")
+      .call(d3.axisBottom(xScale).ticks(ticks))
+      .call(g => g.selectAll(".domain").remove())
+    }
+
+    svg.append("g")
+      .call(xAxis)
+
+    svg.append("g")
+      .call(xAxisBottom)
 
     g = svg.append("g");
 
