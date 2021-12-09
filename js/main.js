@@ -4,7 +4,7 @@ var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 let svg, g, gs, xScale, yScale;
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 40, left: 40},
+var margin = {top: 20, right: offsetWidth, bottom: 40, left: 60},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -256,7 +256,7 @@ Promise.all([
       return d;
     })
 
-  let toggle = d3.select(".slider");
+  let toggle = d3.select("#toggle-gap").select(".slider");
   toggle.on("click", function(event, d){
     state.sortByGap = !state.sortByGap;
     updateChart();
@@ -314,7 +314,7 @@ Promise.all([
     state.height = filteredData.length * lineHeight;
 
     svg = d3.select("#chart").append("svg")
-      .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height]) // + margin.top + margin.bottom])
+      .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom) // + margin.top + margin.bottom);
 
@@ -329,17 +329,18 @@ Promise.all([
     var ticks = null;
     var xAxis = function(g) {
       g.attr("transform", `translate(0,${margin.top})`)
+      .attr("class", "top-axis")
       .call(d3.axisTop(xScale).ticks(ticks))
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
-                .attr("y2", state.height - margin.top - margin.bottom))
+                .attr("y2", state.height))
       .call(g => g.selectAll(".domain").remove())
     }
 
 
     var xAxisBottom = function(g) {
-      g.attr("transform", `translate(0,${state.height})`)
+      g.attr("transform", `translate(0,${state.height + margin.top})`)
       .attr("class", "bottom-axis")
       .call(d3.axisBottom(xScale).ticks(ticks))
       .call(g => g.selectAll(".domain").remove())
@@ -611,6 +612,13 @@ Promise.all([
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom);
+
+    // axes
+    var gAxisTopLines = svg.selectAll(".top-axis").selectAll(".axis-line");
+    gAxisTopLines.attr("y2", state.height);
+    var gAxisBottom = svg.selectAll(".bottom-axis");
+
+    gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")");
 
     // Division groups
     var gDivisions = g.selectAll(".division").data(state.dataToPlot);
