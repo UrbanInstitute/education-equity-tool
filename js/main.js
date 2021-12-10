@@ -1,7 +1,7 @@
 const offsetWidth = 250;
 var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 
-let svg, g, gs, xScale, yScale;
+let svg, g, gs, xScale, yScale, tickValues;
 const transitionTime = 500;
 
 var margin = {top: 20, right: offsetWidth, bottom: 40, left: 60},
@@ -47,6 +47,7 @@ var state = {
   // districtView: null,
   myown: [],
   sortByGap: false,
+  expandScale: false,
 }
 
 d3.selection.prototype.moveToFront = function() {
@@ -133,6 +134,31 @@ function sortData(data) {
   return sortedData;
 }
 
+function zoomInScale() {
+  let extent = d3.extent(state.dataToPlot, function(d){
+    let allValues = raceEths.map(function(r){
+      return d[state.metric + "_" + r];
+    })
+    return allValues;
+  })
+  let minValue = +d3.extent(extent[0])[0];
+  minValue = (Math.floor(minValue * 10) / 10).toFixed(1)
+  xScale.domain([minValue, 1])
+    .range([margin.left, width]);
+  if (minValue > 0.5) {
+    tickValues = d3.range(minValue, 1.0001, 0.05);
+  } else {
+    tickValues = d3.range(0, 1.0001, 0.1);
+  }
+  console.log(+d3.extent(extent[0])[0], minValue, tickValues)
+}
+
+function zoomOutScale() {
+  xScale.domain([0, 1])
+    .range([margin.left, width]);
+  tickValues = d3.range(0, 1.0001, 0.1);
+}
+
 
 Promise.all([
   d3.csv('data/early_state_draft.csv'),
@@ -206,10 +232,13 @@ Promise.all([
         })
       if (d === 'Teachers'){
         state.metric = 'avg_exp_year_perc';
+        d3.select("#toggle-scale").style("display", "inline-block");
       } else if (d === 'Classes'){
         state.metric = 'perc_ap_stem';
+        d3.select("#toggle-scale").style("display", "none");
       } else if (d === 'Counselors'){
         state.metric = 'percent_adq_couns';
+        d3.select("#toggle-scale").style("display", "none");
       }
       updateChart();
     })
@@ -256,9 +285,17 @@ Promise.all([
       return d;
     })
 
-  let toggle = d3.select("#toggle-gap").select(".slider");
-  toggle.on("click", function(event, d){
+  let toggleGap = d3.select("#toggle-gap").select(".slider");
+  toggleGap.on("click", function(event, d){
     state.sortByGap = !state.sortByGap;
+    updateChart();
+  })
+
+  let toggleScale = d3.select("#toggle-scale").select(".slider");
+  toggleScale.on("click", function(event, d){
+    if (state.metric == 'avg_exp_year_perc') {
+      state.expandScale = !state.expandScale;
+    }
     updateChart();
   })
 
@@ -326,11 +363,10 @@ Promise.all([
       .domain([0, filteredData.length])
       .rangeRound([margin.top + lineHeight/2, state.height])
 
-    var ticks = null;
     var xAxis = function(g) {
       g.attr("transform", `translate(0,${margin.top})`)
       .attr("class", "top-axis")
-      .call(d3.axisTop(xScale).ticks(ticks))
+      .call(d3.axisTop(xScale).tickValues(tickValues))
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
@@ -338,11 +374,10 @@ Promise.all([
       .call(g => g.selectAll(".domain").remove())
     }
 
-
     var xAxisBottom = function(g) {
       g.attr("transform", `translate(0,${state.height + margin.top})`)
       .attr("class", "bottom-axis")
-      .call(d3.axisBottom(xScale).ticks(ticks))
+      .call(d3.axisBottom(xScale).tickValues(tickValues))
       .call(g => g.selectAll(".domain").remove())
     }
 
@@ -613,12 +648,34 @@ Promise.all([
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom);
 
+    // Update scales
+    if (state.metric === 'avg_exp_year_perc'){
+      if (state.expandScale) {
+        zoomInScale();
+      } else {
+        zoomOutScale();
+      }
+    } else {
+      zoomOutScale();
+    }
+
     // axes
-    var gAxisTopLines = svg.selectAll(".top-axis").selectAll(".axis-line");
-    gAxisTopLines.attr("y2", state.height);
+    svg.selectAll(".axis-line").remove();
+
+    var gAxisTop = svg.selectAll(".top-axis");
+
+    gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues))
+      .call(g => g.selectAll(".tick line").clone()
+                .attr("stroke-opacity", 0.05)
+                .attr("class", "axis-line")
+                .attr("y2", state.height))
+      .call(g => g.selectAll(".domain").remove());
+
     var gAxisBottom = svg.selectAll(".bottom-axis");
 
-    gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")");
+    gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")")
+      .call(d3.axisBottom(xScale).tickValues(tickValues))
+      .call(g => g.selectAll(".domain").remove());
 
     // Division groups
     var gDivisions = g.selectAll(".division").data(state.dataToPlot);
