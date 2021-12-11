@@ -4,7 +4,7 @@ var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 let svg, g, gs, xScale, yScale, tickValues;
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 40, left: 60},
+var margin = {top: 20, right: offsetWidth, bottom: 40, left: 100},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
@@ -156,21 +156,21 @@ function zoomInScale() {
     return allValues;
   })
   let minValue = +d3.extent(extent[0])[0];
-  minValue = (Math.floor(minValue * 10) / 10).toFixed(1)
-  xScale.domain([minValue, 1])
+  minValue = (Math.floor(minValue / 10) * 10).toFixed(1)
+  xScale.domain([minValue, 100])
     .range([margin.left, width]);
-  if (minValue > 0.5) {
-    tickValues = d3.range(minValue, 1.0001, 0.05);
+  if (minValue > 50) {
+    tickValues = d3.range(minValue, 100.01, 5);
   } else {
-    tickValues = d3.range(0, 1.0001, 0.1);
+    tickValues = d3.range(0, 100.01, 10);
   }
   console.log(+d3.extent(extent[0])[0], minValue, tickValues)
 }
 
 function zoomOutScale() {
-  xScale.domain([0, 1])
+  xScale.domain([0, 100])
     .range([margin.left, width]);
-  tickValues = d3.range(0, 1.0001, 0.1);
+  tickValues = d3.range(0, 100.01, 10);
 }
 
 
@@ -186,7 +186,7 @@ Promise.all([
       for (let m = 0; m < metrics.length; m++ ) {
         for (let r = 0; r < raceEths.length; r++ ) {
           let col = metricCols[metrics[m]] + "_" + raceEths[r];
-          d[col] = +d[col];
+          d[col] = +d[col] * 100;
         }
       }
     })
@@ -421,6 +421,10 @@ Promise.all([
     }
   }
 
+  let formatPercent = function(d) {
+    return d + "%";
+  }
+
   function initChart(filteredData) {
 
     color1 = "#1696d2"
@@ -433,7 +437,7 @@ Promise.all([
       .attr("height", state.height + margin.top + margin.bottom) // + margin.top + margin.bottom);
 
     xScale = d3.scaleLinear()
-      .domain([0, 1])
+      .domain([0, 100])
       .range([margin.left, width])
 
     yScale = d3.scaleLinear()
@@ -443,7 +447,7 @@ Promise.all([
     var xAxis = function(g) {
       g.attr("transform", `translate(0,${margin.top})`)
       .attr("class", "top-axis")
-      .call(d3.axisTop(xScale).tickValues(tickValues))
+      .call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
@@ -454,7 +458,7 @@ Promise.all([
     var xAxisBottom = function(g) {
       g.attr("transform", `translate(0,${state.height + margin.top})`)
       .attr("class", "bottom-axis")
-      .call(d3.axisBottom(xScale).tickValues(tickValues))
+      .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".domain").remove())
     }
 
@@ -721,7 +725,7 @@ Promise.all([
 
     var gAxisTop = svg.selectAll(".top-axis");
 
-    gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues))
+    gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
@@ -731,7 +735,7 @@ Promise.all([
     var gAxisBottom = svg.selectAll(".bottom-axis");
 
     gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")")
-      .call(d3.axisBottom(xScale).tickValues(tickValues))
+      .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".domain").remove());
 
     // Division groups
