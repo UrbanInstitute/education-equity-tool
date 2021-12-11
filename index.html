@@ -1,90 +1,206 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-  <title></title>
-  <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, minimum-scale=1">
-<!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> -->
-<link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
-  <link rel="stylesheet" type="text/css" href="css/charts.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
-</head>
-<body>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <div id="container">
-    <!-- <input id="menuState" placeholder="Select a state"> -->
-    <div id="metrics">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, minimum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/charts.css">
+  </head>
+  <body>
+
+    <!-- START HEADER -->
+    <div id="header-pinned" class="no-touch">
+      <a target="_blank" href="https://www.urban.org/" title="Home" rel="home" class="site-logo"></a>
+      <div class="title">
+        <span class="feature-link"><a href="https://www.urban.org/features" target = "_blank" class="title-linkback" alt="Urban Institute logo">Features</a></span>
+      </div>
+      <div class="share-icons">
+        <div class="shareThisP">
+          <span onclick="toggle_visibility('shareBox');">
+            <div class="shareThisB"></div>
+          </span>
+
+          <div class="shareThisW" id="shareBox">
+            <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//urbn.is/stateaid" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
+
+              <a href="https://twitter.com/intent/tweet?text=Building%20a%20State%20Financial%20Aid%20Program%3A%20What%20Are%20the%20Trade-Offs%20of%20Different%20Design%20Choices%3F%20(via%20%40urbaninstitute)%20http%3A%2F%2Furbn.is%2Fstateaid" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+
+              <a href="mailto:%20?Subject=New Urban Institute feature&amp;Body=Hi! I thought you'd be interested in this new feature from the Urban Institute: &quot;Building a State Financial Aid Program: What Are the Trade-Offs of Different Design Choices?&quot; http://urbn.is/stateaid" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+              <div class="atclear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END HEADER -->
+
+    <div id="heroimage" class="headerimage">
     </div>
 
-    <div>
-      Show gap between
-			&nbsp;
-      <form class="form-inline">
-        <div class="form-group">
-          <svg width="10px" height="10px">
-            <circle id="raceEth1-circle" cx="5px" cy="5px" r="5px"></circle>
-          </svg>
-          <select class="form-control" id="raceEth1"></select>
-        </div>
-      </form>
-      &nbsp;
-			and
-			&nbsp;
-      <form class="form-inline">
-        <div class="form-group">
-          <svg width="10px" height="10px">
-            <circle id="raceEth2-circle" cx="5px" cy="5px" r="5px"></circle>
-          </svg>
-          <select class="form-control" id="raceEth2"></select>
-        </div>
-      </form>
-      <div id="state-div" style="display: none">
-        &nbsp;
-        for districts in
-        &nbsp;
+    <div class="text-wrapper">
+      <div class="intro-text">
+        <h1>This Is the Title</h1>
+        <h2>This Is the Subtitle</h2>
+        <p class="date-line">Month TK, 20TK</p>
+      </div>
+
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+
+      <h3>How about some buttons?</h3>
+      <div class="button">
+        choice 1
+      </div>
+      <div class="button">
+        choice 2
+      </div>
+      <div class="button">
+        choice 3
+      </div>
+      <div class="button">
+        choice 4
+      </div>
+
+      <h3>How about a dropdown?</h3>
+      <div class="dropdownSection">
+        <select id="dropdown" required="" style="">
+            <option value="one">One</option>
+            <option value="two">Two</option>
+            <option value="three">Three</option>
+            <option value="four">Four</option>
+        </select>
+      </div>
+    </div> <!-- end text-wrapper -->
+
+    <div id="container">
+      <!-- <input id="menuState" placeholder="Select a state"> -->
+      <div id="metrics">
+      </div>
+
+      <div>
+        Show gap between
+  			&nbsp;
         <form class="form-inline">
           <div class="form-group">
-            <select class="form-control" id="state-menu"></select>
+            <svg width="10px" height="10px">
+              <circle id="raceEth1-circle" cx="5px" cy="5px" r="5px"></circle>
+            </svg>
+            <select class="form-control" id="raceEth1"></select>
           </div>
         </form>
-      </div>
-    </div>
-
-    <div>
-      <div id="districts-views">
-      </div>
-      <div id="toggle">
-        <div id='toggle-scale'>
-          EXPAND SCALE
-          <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-          </label>
+        &nbsp;
+  			and
+  			&nbsp;
+        <form class="form-inline">
+          <div class="form-group">
+            <svg width="10px" height="10px">
+              <circle id="raceEth2-circle" cx="5px" cy="5px" r="5px"></circle>
+            </svg>
+            <select class="form-control" id="raceEth2"></select>
+          </div>
+        </form>
+        <div id="state-div" style="display: none">
+          &nbsp;
+          for districts in
+          &nbsp;
+          <form class="form-inline">
+            <div class="form-group">
+              <select class="form-control" id="state-menu"></select>
+            </div>
+          </form>
         </div>
-        <div id='toggle-gap'>
-          SORT BY GAP
-          <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-          </label>
+      </div>
+
+      <div>
+        <div id="districts-views">
+        </div>
+        <div id="toggle">
+          <div id='toggle-scale'>
+            EXPAND SCALE
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div id='toggle-gap'>
+            SORT BY GAP
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="chart"></div>
+      <div id="chart"></div>
 
-    <div class="row" id="search" style="display: none">
-			<!-- <label for="search-box" id="search-label"></label> -->
-			<span>
-			  <input name="name" type="text" id="search-box" list="search-list">
-			</span>
-			<datalist id="search-list"></datalist>
-		</div>
+      <div class="row" id="search" style="display: none">
+  			<!-- <label for="search-box" id="search-label"></label> -->
+  			<span>
+  			  <input name="name" type="text" id="search-box" list="search-list">
+  			</span>
+  			<datalist id="search-list"></datalist>
+  		</div>
 
-  <script src="js/vendor/jquery-1.12.4.js"></script>
-  <script src="js/vendor/jquery-ui.js"></script>
-  <script src="js/vendor/d3v7.1.1.min.js"></script>
-  <script src="js/main.js"></script>
-</body>
+      <footer>
+          <div id="about-the-data" class="content">
+
+            <h4>About the data</h4>
+
+            <a href="https://www.urban.org/research/publication/racial-and-ethnic-representation-postsecondary-education">
+              <div class="button">Read the report</div>
+            </a>
+
+            <a href="https://datacatalog.urban.org/dataset/racial-and-ethnic-representativeness-us-postsecondary-education-institutions">
+              <div class="button">Download data</div>
+            </a>
+
+            <p>
+              Facts and lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+
+            <h4>Project credits</h4>
+            <div class="urbanstatement">
+              This feature was funded by the Joyce Foundation and Lumina Foundation. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href="https://www.urban.org/support/funding-principles">here</a>. Read our terms of service <a href="https://www.urban.org/terms-service">here</a>.
+            </div>
+
+            <h3 class="job">Research</h3><a href=""><span class="employee">First Last</span></a> and <a href=""><span class="employee">First Last</span></a>
+
+            <h3 class="job">Design</h3><span class="employee">First Last</span>
+
+            <h3 class="job">Development</h3><span class="employee">First Last</span>
+
+            <h3 class="job">Editing</h3><span class="employee">First Last</span>
+
+            <div class="credits"><a href="" target="_blank">View this project on GitHub.</a></div>
+
+          </div>
+        </footer>
+
+
+
+    <script src="js/vendor/jquery-1.12.4.js"></script>
+    <script src="js/vendor/jquery-ui.js"></script>
+    <script src="js/vendor/d3v7.1.1.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
