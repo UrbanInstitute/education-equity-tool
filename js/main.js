@@ -572,7 +572,7 @@ Promise.all([
           .classed("hidden", false);
           // .style("opacity", 1)
         notThisG.selectAll(".number-label")
-          .classed("hidden", true);
+          .classed("hidden", state.showing !== 'districts');
           // .style("opacity", 0);
         thisG.selectAll(".show-districts")
           .style("display", "block")
@@ -581,7 +581,7 @@ Promise.all([
       } else {
         // gDivisions.classed("hidden", false)
         gDivisions.selectAll(".number-label")
-          .classed("hidden", true)
+          .classed("hidden", state.showing !== 'districts')
         gDivisions.selectAll(".rect")
           .classed("hidden", true)
           // .style("opacity", 0);
@@ -845,7 +845,7 @@ Promise.all([
 
     divisionNumberLabels.enter().append("text")
         .attr("class", "number-label")
-        .classed("hidden", true)
+        .classed("hidden", state.showing !== 'districts')
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - numberLabelLeftMargin;
@@ -870,7 +870,7 @@ Promise.all([
 
     divisionNumberLabels
         .attr("class", "number-label")
-        .classed("hidden", true)
+        .classed("hidden", state.showing !== 'districts')
         .attr("x", function(d, i){
           if (i === 0){
             return xScale(d) - numberLabelLeftMargin;
