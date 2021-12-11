@@ -760,6 +760,7 @@ Promise.all([
       });
 
     divisionLines.enter().append("line")
+      .transition().duration(transitionTime)
       .attr("class", "line")
       .attr("stroke", function(d,i){
          if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
