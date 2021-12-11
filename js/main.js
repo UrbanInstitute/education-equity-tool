@@ -515,7 +515,7 @@ Promise.all([
         .attr('fill', 'steelblue')
         .text(function(d) {
           if (state.showing === 'states') {
-            return "Show me districts in State " + d[state.name];
+            return "Show me districts in " + d[state.name];
           } else {
             return "Take me back to the state view"
           }
@@ -911,7 +911,7 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d) {
         if (state.showing === 'states') {
-          return "Show me districts in State " + d[state.name];
+          return "Show me districts in " + d[state.name];
         } else {
           return "Take me back to the state view"
         }
@@ -955,7 +955,7 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d) {
         if (state.showing === 'states') {
-          return "Show me districts in State " + d[state.name];
+          return "Show me districts in " + d[state.name];
         } else {
           return "Take me back to the state view"
         }
