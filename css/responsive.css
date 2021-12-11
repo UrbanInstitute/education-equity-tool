@@ -1,0 +1,334 @@
+#breakpoint1200, #breakpoint768, #breakpoint1010, #locker{
+	display: none;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 0px;
+	height: 0px;
+}
+@media(min-width: 1700){
+	.headerimage{
+		height: 700px;
+	}
+}
+@media(min-width: 1600){
+	.headerimage{
+		height: 892px;
+	}
+}
+@media(min-width: 1600){
+	.headerimage{
+		height: 750px;
+	}
+}
+@media(min-width: 1450){
+	.headerimage{
+		height: 720px;
+	}
+}
+
+@media(max-width: 1199px){
+	#breakpoint1200{
+		display: block;
+	}
+	#mainContent{
+		width: calc(100% - 68px);
+		margin-left: 34px;
+		margin-right: 34px;
+	}
+	#stateContainer, #demographicsContainer{
+		width: 100%;
+	}
+
+	#meepleMenu{
+    	display: block;
+    	margin: 0 auto;
+	}
+	.demographicMenuContainer{
+	    position: relative;
+    	width: 770px;
+    	margin: 0 auto;
+	}
+	#mapContainer{
+		display: block;
+		margin: 0 auto;
+	}
+	#leftColumn{
+		display: block;
+		width: 100%;
+		padding-right: 0px;
+	}
+	.colHeader.filter{
+		display: block;
+    	width: 103px;
+    	float: left;
+	}
+	.customRadioRow.state{
+    	display: block;
+    	width: 101px;
+    	float: left;
+	}
+	.customRadioRow.demographics{
+		display: block;
+    	width: 352px;
+	}
+	.legendItemContainer {
+	    margin-top: 10px;
+	    margin-bottom: 10px;
+	    width: calc(33% - 20px);
+	    display: inline-block;
+	    margin-right: 20px;
+	    vertical-align: top;
+	}
+	.tableTooltip{
+		right: 0px;
+		left: inherit;
+		pointer-events: none;
+	}
+	.tableTooltip:after {
+		top: calc(100% +  80px);
+		left: 50%;
+		border-top-color: #f5f5f5;
+		border-left-color: transparent;
+		margin-left: -20px;
+	}
+
+
+
+}
+@media(max-width: 1009px){
+	#breakpoint1010{
+		display: block;
+	}
+}
+@media(max-width: 768px){
+	#breakpoint768{
+		display: block;
+	}
+	#demographicTable, #stateTable{
+    	margin: 0 auto;
+    	display: block;
+	}
+	#mobileMenuContainer{
+		display: block;
+		width: 100%;
+		max-width: 390px;
+		margin: 0 auto;
+	}
+	.headerimage{
+		height: 355px;
+	}
+	.tableTooltip{
+		display: none;
+	}
+	#title{
+		font-size: 40px;
+	}
+	#subtitle{
+		font-size: 30px;
+		margin-bottom: 30px;
+	}
+	#datePublished{
+		font-size: 17px;
+	}
+	#filterContainer, .tableHeader {
+		display: none;
+	}
+	#stateContainer{
+		margin-bottom: 20px;
+	}
+	#topFooterHeader {
+		padding-top: 0px;
+	}
+	.mobileMenuRow.demographic{
+		display: none;
+	}
+	.colHeader.legend {
+	    margin-top: 10px;
+	}
+	.legendItemContainer{
+		width: 100%;
+	}
+	.legendLabel {
+		font-size: 14px;
+		margin-bottom: 8px;
+	}
+	.legendItemDescription{
+		font-size: 14px;
+    	line-height: 19px;
+	}
+	.mobileMenuLabel{
+		font-size: 16px;
+	    margin-bottom: 5px;
+	    color: #000;
+	    margin-left: 5px;
+	}
+	.mobileMenuLabel span{
+	    color: #1696d2;
+    	font-weight: bold;
+    	margin-right: 7px;
+    }
+    .mobileSortorder{
+    	font-size: 14px;
+    	font-style: italic;
+    	font-weight: normal;
+    	color: #ADABAC;
+    	display: inline-block;
+    	top: -24px;
+    	position: relative;
+    	cursor: pointer;
+    }
+    .mobileSortorder.active{
+    	font-weight: bold;
+    	font-style: normal;
+    	color: #1696d2;
+
+    }
+    .mobileSortorder.ascending{
+    	margin-right: 20px;
+    }
+	.colHeader {
+    	font-size: 16px;
+    	font-weight: bold;
+    	margin-bottom: 0px;
+	}
+	.introText{
+		font-size: 18px;
+	}
+	#mainContent {
+	    width: calc(100% - 30px);
+	    margin-left: 15px;
+	    margin-right: 15px;
+	}
+	#footerContainer{
+		width: calc(100% - 30px);
+		margin: 0 auto;
+	}
+	#footerContent {
+	    width: 100%;
+	}
+	.rowBgMobileBackground{
+		fill: #CFE8F3;
+		stroke: none;
+	}
+	.rowBgMobile{
+		fill: #fff;
+		stroke: #73BFE2;
+		stroke-width: 2px;
+	}
+	.tableText.category{
+		font-size: 14px;
+		font-weight: bold;
+		fill: #1696d2;
+	}
+	.standard.tableText.population{
+		font-size: 12px;
+	}
+	.mobileCornerLabel{
+	    fill: #A2D4EC;
+	    font-weight: bold;
+	    font-size: 12px;
+	}
+	.mobileHeader{
+		font-size: 12px;
+		font-weight: bold;
+	}
+	.tableText.parentCategory{
+    	fill: #12719E;
+    	font-size: 11px;
+    	font-weight: bold;
+	}
+	.demographic.row.total .tableText.population, .state.row.fips_99 .tableText.population{
+		fill: #353535;
+	}
+	.row.active .dot{
+	    fill: #fff;
+	}
+	.activeShow{
+		opacity: 1 !important;
+	}
+	.mobileDisclaimer{
+		font-size: 11px;
+		font-style: italic;
+		display: none;
+	}
+	.mobileDisclaimer.show{
+		display: block;
+	}
+	#mobileTooltipContainer{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 50px;
+		left: 0px;
+		background: rgba(0,0,0,.8);
+	}
+	#mobileTooltip{
+		vertical-align: middle;
+		width: calc(100% - 40px);
+		padding: 10px;
+		background: #fff;
+		top: 50px;
+		position: absolute;
+		left: 10px;
+	}
+	#mobileTooltip img{
+	    width: 20px;
+	    position: absolute;
+	    top: 10px;
+	    right: 10px;
+	}
+	#mobileTooltipText{
+	    font-size: 14px;
+	    font-style: italic;
+	    margin-top: 22px;
+	    display: block;
+	    margin-bottom: 22px;
+	    margin-left: 10px;
+	    margin-right: 10px;
+	}
+	.mobileInfoCircle{
+	    fill: #fff;
+	    stroke: #ADABAC;
+	    stroke-width: 1px;
+	}
+	.mobileInfoText{
+	    fill: #ADABAC;
+	    font-size: 11px;
+	    pointer-events: none;
+	}
+
+
+}
+@media(max-width: 500px){
+	.headerimage{
+		height: 280px;
+	}
+}
+@media(max-width: 400px){
+	.customShareBox {
+	    width: 286px !important;
+	    right: 14px !important;
+    }
+    #shareURL{
+    	width: 179px !important;
+    }
+}
+@media(max-width: 370px){
+	.demographic.row .tableText.category, .state.row .tableText.category{
+		font-size: 12px;
+	}
+	.row.active .rowBg{
+	    fill: #fff;
+	}
+	.feature-link{
+		font-size: 16px;
+		top: -3px;
+		position: relative;
+	}
+}
+@media(max-width: 350px){
+	.demographic.row .tableText.category, .state.row .tableText.category{
+		font-size: 11px;
+	}
+}
