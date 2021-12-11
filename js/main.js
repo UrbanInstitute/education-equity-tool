@@ -149,22 +149,22 @@ function sortData(data) {
 }
 
 function zoomInScale() {
-  let extent = d3.extent(state.dataToPlot, function(d){
-    let allValues = raceEths.map(function(r){
+  let allExtents = raceEths.map(function(r){
+    return d3.extent(state.dataToPlot, function(d){
       return d[state.metric + "_" + r];
     })
-    return allValues;
-  })
-  let minValue = +d3.extent(extent[0])[0];
-  minValue = (Math.floor(minValue / 10) * 10).toFixed(1)
+  });
+  let extent = d3.extent(allExtents, function(d){
+    return d[0];
+  });
+  let minValue = (Math.floor(extent[0] / 10) * 10);
   xScale.domain([minValue, 100])
     .range([margin.left, width]);
   if (minValue > 50) {
     tickValues = d3.range(minValue, 100.01, 5);
   } else {
-    tickValues = d3.range(0, 100.01, 10);
+    tickValues = d3.range(minValue, 100.01, 10);
   }
-  console.log(+d3.extent(extent[0])[0], minValue, tickValues)
 }
 
 function zoomOutScale() {
@@ -194,6 +194,7 @@ Promise.all([
 
   convertStringToNumbers(states);
   convertStringToNumbers(districts);
+  console.log(districts)
 
   state.sourceData = states;
   state.dataToPlot = states;
@@ -413,7 +414,6 @@ Promise.all([
   }
 
   let getNumberLabelFill = function(d, i) {
-    console.log(d)
     if (isNaN(d)) {
       return "none"
     } else {
