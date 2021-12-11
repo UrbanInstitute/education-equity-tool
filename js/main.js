@@ -24,6 +24,11 @@ const marginRight = 30;
 
 var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white'];
 var metrics = ['Teachers', 'Classes', 'Counselors'];
+var metricCols = {
+  'Teachers': 'avg_exp_year_perc',
+  'Classes': 'perc_ap_stem',
+  'Counselors': 'percent_adq_couns'
+}
 let colors = {
   'Black': "#1696D2",
   'Hisp': "#EC008B",
@@ -167,6 +172,20 @@ Promise.all([
   var states = data[0];
   var districts = data[1];
 
+  let convertStringToNumbers = function(array){
+    array.forEach(function(d){
+      for (let m = 0; m < metrics.length; m++ ) {
+        for (let r = 0; r < raceEths.length; r++ ) {
+          let col = metricCols[metrics[m]] + "_" + raceEths[r];
+          d[col] = +d[col];
+        }
+      }
+    })
+  }
+
+  convertStringToNumbers(states);
+  convertStringToNumbers(districts);
+
   state.sourceData = states;
   state.dataToPlot = states;
   state.name = "STUSPS";
@@ -230,14 +249,12 @@ Promise.all([
         .classed("chosen", function(e){
           return e === d;
         })
+      state.metric = metricCols[d]
       if (d === 'Teachers'){
-        state.metric = 'avg_exp_year_perc';
         d3.select("#toggle-scale").style("display", "inline-block");
       } else if (d === 'Classes'){
-        state.metric = 'perc_ap_stem';
         d3.select("#toggle-scale").style("display", "none");
       } else if (d === 'Counselors'){
-        state.metric = 'percent_adq_couns';
         d3.select("#toggle-scale").style("display", "none");
       }
       updateChart();
@@ -310,9 +327,13 @@ Promise.all([
     let options = searchList.selectAll("option").data(theseDistricts);
 
     options.enter().append("option")
-      .html(d => d);
+      .html(function(d) {
+        return d
+      });
 
-    options.html(d => d);
+    options.html(function(d) {
+      return d
+    });
 
     options.exit().remove();
 
@@ -342,6 +363,53 @@ Promise.all([
       return (raceEths[i] === state.raceEth1) || (raceEths[i] === state.raceEth2)
     }).moveToFront();
     gs.selectAll(".number-label").moveToFront();
+  }
+
+  let getLineStroke = function(d, i) {
+    if ((!isNaN(d[state.metric + "_" + state.raceEth1])) && (!isNaN(d[state.metric + "_" + state.raceEth2]))) {
+      if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+        // return color1;
+        return colors[state.raceEth1];
+      } else {
+        // return color2;
+        return colors[state.raceEth2];
+      }
+    } else {
+      return "none";
+    }
+  }
+
+  let getCircleFill = function(d, i) {
+    if (!isNaN(d)) {
+      if (raceEths[i] === state.raceEth1) {
+        // return color1;
+        return colors[state.raceEth1];
+      } else if (raceEths[i] === state.raceEth2) {
+        // return color2;
+        return colors[state.raceEth2];
+      } else {
+        return "#d2d2d2"
+      }
+    } else {
+      return "none";
+    }
+  }
+
+  let getNumberLabelPos = function(d, i) {
+    if (i === 0){
+      return xScale(d) - numberLabelLeftMargin;
+    } else {
+      return xScale(d) + numberLabelRightMargin;
+    }
+  }
+
+  let getNumberLabelFill = function(d, i) {
+    console.log(d)
+    if (isNaN(d)) {
+      return "none"
+    } else {
+      return "black";
+    }
   }
 
   function initChart(filteredData) {
@@ -415,18 +483,14 @@ Promise.all([
       })
       .join("line")
         .attr("class", "line")
-        .attr("stroke", function(d,i){
-           if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-             // return color1;
-             return colors[state.raceEth1];
-           } else {
-             // return color2;
-             return colors[state.raceEth2];
-           }
-        })
+        .attr("stroke", getLineStroke)
         .attr("stroke-width", 1.0)
-        .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-        .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+        .attr("x1", function(d) {
+          return xScale(d[state.metric + "_" + state.raceEth1])
+        })
+        .attr("x2", function(d) {
+          return xScale(d[state.metric + "_" + state.raceEth2])
+        });
 
     gs.selectAll(".raceeth")
       .data(function(d){
@@ -438,19 +502,9 @@ Promise.all([
         .attr("class", "raceeth")
         .attr("opacity", 1.0)
         .attr("cx", function(d){
-          return xScale(d)
+          return xScale(d);
         })
-        .attr("fill", function(d,i){
-          if (raceEths[i] === state.raceEth1) {
-            // return color1;
-            return colors[state.raceEth1];
-          } else if (raceEths[i] === state.raceEth2) {
-            // return color2;
-            return colors[state.raceEth2];
-          } else {
-            return "#d2d2d2"
-          }
-        })
+        .attr("fill", getCircleFill)
         .attr("r", circleSize);
 
     // Move highlighted elements to front
@@ -464,13 +518,7 @@ Promise.all([
       })
       .join("text")
         .attr("class", "number-label hidden")
-        .attr("x", function(d, i){
-          if (i === 0){
-            return xScale(d) - numberLabelLeftMargin;
-          } else {
-            return xScale(d) + numberLabelRightMargin;
-          }
-        })
+        .attr("x", getNumberLabelPos)
         .style("text-anchor", function(d, i){
           if (i === 0){
             return "right";
@@ -481,7 +529,7 @@ Promise.all([
         .style("vertical-align", "middle")
         // .style("opacity", 0)
         .attr("y", lineHeight/4)
-        .attr("fill", "black")
+        .attr("fill", getNumberLabelFill)
         .text(function(d){
           return d.toFixed(2);
         })
@@ -762,31 +810,23 @@ Promise.all([
     divisionLines.enter().append("line")
       .transition().duration(transitionTime)
       .attr("class", "line")
-      .attr("stroke", function(d,i){
-         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-           // return color1;
-           return colors[state.raceEth1];
-         } else {
-           // return color2;
-           return colors[state.raceEth2];
-         }
-      })
+      .attr("stroke", getLineStroke)
       .attr("stroke-width", 1.0)
-      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+      .attr("x1", function(d) {
+        return xScale(d[state.metric + "_" + state.raceEth1])
+      })
+      .attr("x2", function(d) {
+        return xScale(d[state.metric + "_" + state.raceEth2])
+      });
 
     divisionLines.transition().duration(transitionTime)
-      .attr("stroke", function(d,i){
-         if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
-           // return color1;
-           return colors[state.raceEth1];
-         } else {
-           // return color2;
-           return colors[state.raceEth2];
-         }
+      .attr("stroke", getLineStroke)
+      .attr("x1", function(d) {
+        return xScale(d[state.metric + "_" + state.raceEth1])
       })
-      .attr("x1", d => xScale(d[state.metric + "_" + state.raceEth1]))
-      .attr("x2", d => xScale(d[state.metric + "_" + state.raceEth2]));
+      .attr("x2", function(d) {
+        return xScale(d[state.metric + "_" + state.raceEth2])
+      });
 
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
@@ -800,37 +840,17 @@ Promise.all([
         .attr("class", "raceeth")
         .attr("opacity", 1.0)
         .attr("cx", function(d){
-          return xScale(d)
+          return xScale(d);
         })
-        .attr("fill", function(d,i){
-          if (raceEths[i] === state.raceEth1) {
-            // return color1;
-            return colors[state.raceEth1];
-          } else if (raceEths[i] === state.raceEth2) {
-            // return color2;
-            return colors[state.raceEth2];
-          } else {
-            return "#d2d2d2"
-          }
-        })
+        .attr("fill", getCircleFill)
         .attr("r", circleSize)
 
     divisionCircles
       .transition().duration(transitionTime)
       .attr("cx", function(d){
-        return xScale(d)
+        return xScale(d);
       })
-      .attr("fill", function(d,i){
-        if (raceEths[i] === state.raceEth1) {
-          // return color1;
-          return colors[state.raceEth1];
-        } else if (raceEths[i] === state.raceEth2) {
-          // return color2;
-          return colors[state.raceEth2];
-        } else {
-          return "#d2d2d2"
-        }
-      });
+      .attr("fill", getCircleFill);
 
     divisionCircles.exit().remove();
 
@@ -847,13 +867,7 @@ Promise.all([
     divisionNumberLabels.enter().append("text")
         .attr("class", "number-label")
         .classed("hidden", state.showing !== 'districts')
-        .attr("x", function(d, i){
-          if (i === 0){
-            return xScale(d) - numberLabelLeftMargin;
-          } else {
-            return xScale(d) + numberLabelRightMargin;
-          }
-        })
+        .attr("x", getNumberLabelPos)
         .style("text-anchor", function(d, i){
           if (i === 0){
             return "right";
@@ -864,7 +878,7 @@ Promise.all([
         .style("vertical-align", "middle")
         // .style("opacity", 0)
         .attr("y", lineHeight/4)
-        .attr("fill", "black")
+        .attr("fill", getNumberLabelFill)
         .text(function(d){
           return d.toFixed(2);
         })
@@ -872,13 +886,7 @@ Promise.all([
     divisionNumberLabels
         .attr("class", "number-label")
         .classed("hidden", state.showing !== 'districts')
-        .attr("x", function(d, i){
-          if (i === 0){
-            return xScale(d) - numberLabelLeftMargin;
-          } else {
-            return xScale(d) + numberLabelRightMargin;
-          }
-        })
+        .attr("x", getNumberLabelPos)
         .style("text-anchor", function(d, i){
           if (i === 0){
             return "right";
@@ -889,7 +897,7 @@ Promise.all([
         .style("vertical-align", "middle")
         // .style("opacity", 0)
         .attr("y", lineHeight/4)
-        .attr("fill", "black")
+        .attr("fill", getNumberLabelFill)
         .text(function(d){
           return d.toFixed(2);
         })
