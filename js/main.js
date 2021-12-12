@@ -22,26 +22,36 @@ const marginRight = 40;
 //   margin = {top: 60, right: 20, bottom: 80, left: 180};
 // }
 
-var raceEths = ['Black', 'Hisp', 'aian', 'asian', 'nhpi', 'twomore', 'white'];
-var metrics = ['Teachers', 'Classes', 'Counselors'];
-var metricCols = {
+let raceEthsLabels = ['AIAN students', 'Asian students', 'Black students',
+    'Hispanic students', 'NHPI students', 'Two or more', 'White students'];
+let raceEths = {
+  'Black students': 'Black',
+  'Hispanic students': 'Hisp',
+  'AIAN students': 'aian',
+  'Asian students': 'asian',
+  'NHPI students': 'nhpi',
+  'Two or more': 'twomore',
+  'White students': 'white'
+}
+let metrics = ['Teachers', 'Classes', 'Counselors'];
+let metricCols = {
   'Teachers': 'avg_exp_year_perc',
   'Classes': 'perc_ap_stem',
   'Counselors': 'percent_adq_couns'
 }
 let colors = {
-  'Black': "#1696D2",
-  'Hisp': "#EC008B",
-  'aian': "#55B748",
-  'asian': "#12719E",
-  'nhpi': "#CA5800",
-  'twomore': "#696969",
-  'white': "#FDBF11"
+  'Black students': "#1696D2",
+  'Hispanic students': "#EC008B",
+  'AIAN students': "#55B748",
+  'Asian students': "#12719E",
+  'NHPI students': "#CA5800",
+  'Two or more': "#696969",
+  'White students': "#FDBF11"
 }
 
 var state = {
-  raceEth1: 'Black',
-  raceEth2: 'white',
+  raceEth1: 'Black students',
+  raceEth2: 'White students',
   metric: 'avg_exp_year_perc',
   height: null,
   sourceData: null,
@@ -160,9 +170,9 @@ function sortData(data) {
 }
 
 function zoomInScale() {
-  let allExtents = raceEths.map(function(r){
+  let allExtents = raceEthsLabels.map(function(r){
     return d3.extent(state.dataToPlot, function(d){
-      return d[state.metric + "_" + r];
+      return d[state.metric + "_" + raceEths[r]];
     })
   });
   let extent = d3.extent(allExtents, function(d){
@@ -206,8 +216,8 @@ Promise.all([
   let convertStringToNumbers = function(array){
     array.forEach(function(d){
       for (let m = 0; m < metrics.length; m++ ) {
-        for (let r = 0; r < raceEths.length; r++ ) {
-          let col = metricCols[metrics[m]] + "_" + raceEths[r];
+        for (let r = 0; r < raceEthsLabels.length; r++ ) {
+          let col = metricCols[metrics[m]] + "_" + raceEths[raceEthsLabels[r]];
           d[col] = +d[col] * 100;
         }
       }
@@ -216,14 +226,13 @@ Promise.all([
 
   convertStringToNumbers(states);
   convertStringToNumbers(districts);
-  console.log(districts)
 
   state.sourceData = states;
   state.dataToPlot = states;
   state.name = "STUSPS";
 
   let newRaceEthValue;
-  let raceEthOp1 = addOptions("raceEth1", raceEths, false);
+  let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
   raceEthOp1.on("change", function(d, i){
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth2) {
@@ -231,12 +240,12 @@ Promise.all([
       updateOptionsCircles();
       updateChart();
     } else {
-      let idx = raceEths.indexOf(state.raceEth1);
+      let idx = raceEthsLabels.indexOf(state.raceEth1);
       document.getElementById("raceEth1").selectedIndex = idx;
     }
   })
 
-  let raceEthOp2 = addOptions("raceEth2", raceEths, false);
+  let raceEthOp2 = addOptions("raceEth2", raceEthsLabels);
   raceEthOp2.on("change", function(d){
     newRaceEthValue = d3.select(this).node().value;
     if (newRaceEthValue !== state.raceEth1) {
@@ -244,14 +253,14 @@ Promise.all([
       updateOptionsCircles();
       updateChart();
     } else {
-      let idx = raceEths.indexOf(state.raceEth2);
+      let idx = raceEthsLabels.indexOf(state.raceEth2);
       document.getElementById("raceEth2").selectedIndex = idx;
     }
   })
 
   updateOptionsCircles();
 
-  let statesMenu = getUniquesMenu(states, "STUSPS", false);
+  let statesMenu = getUniquesMenu(states, "STUSPS");
   let stateOp = addOptions("state-menu", statesMenu);
   stateOp.on("change", function(d){
       newStateValue = d3.select(this).node().value;
@@ -395,14 +404,15 @@ Promise.all([
   function moveToFront(){
     gs.selectAll(".line").moveToFront();
     gs.selectAll(".raceeth").filter(function (d,i){
-      return (raceEths[i] === state.raceEth1) || (raceEths[i] === state.raceEth2)
+      return (raceEthsLabels[i] === state.raceEth1) || (raceEthsLabels[i] === state.raceEth2)
     }).moveToFront();
     gs.selectAll(".number-label").moveToFront();
   }
 
   let getLineStroke = function(d, i) {
-    if ((!isNaN(d[state.metric + "_" + state.raceEth1])) && (!isNaN(d[state.metric + "_" + state.raceEth2]))) {
-      if (d[state.metric + "_" + state.raceEth1] > d[state.metric + "_" + state.raceEth2]) {
+    console.log(state.metric, raceEths[state.raceEth1], raceEths[state.raceEth2])
+    if ((!isNaN(d[state.metric + "_" + raceEths[state.raceEth1]])) && (!isNaN(d[state.metric + "_" + raceEths[state.raceEth2]]))) {
+      if (d[state.metric + "_" + raceEths[state.raceEth1]] > d[state.metric + "_" + raceEths[state.raceEth2]]) {
         // return color1;
         return colors[state.raceEth1];
       } else {
@@ -416,10 +426,10 @@ Promise.all([
 
   let getCircleFill = function(d, i) {
     if (!isNaN(d)) {
-      if (raceEths[i] === state.raceEth1) {
+      if (raceEthsLabels[i] === state.raceEth1) {
         // return color1;
         return colors[state.raceEth1];
-      } else if (raceEths[i] === state.raceEth2) {
+      } else if (raceEthsLabels[i] === state.raceEth2) {
         // return color2;
         return colors[state.raceEth2];
       } else {
@@ -530,16 +540,16 @@ Promise.all([
         .attr("stroke", getLineStroke)
         .attr("stroke-width", 1.0)
         .attr("x1", function(d) {
-          return xScale(d[state.metric + "_" + state.raceEth1])
+          return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
         })
         .attr("x2", function(d) {
-          return xScale(d[state.metric + "_" + state.raceEth2])
+          return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
         });
 
     gs.selectAll(".raceeth")
       .data(function(d){
-        return raceEths.map(function(r){
-          return d[state.metric + "_" + r];
+        return raceEthsLabels.map(function(r){
+          return d[state.metric + "_" + raceEths[r]];
         })
       })
       .join("circle")
@@ -857,25 +867,25 @@ Promise.all([
       .attr("stroke", getLineStroke)
       .attr("stroke-width", 1.0)
       .attr("x1", function(d) {
-        return xScale(d[state.metric + "_" + state.raceEth1])
+        return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
       })
       .attr("x2", function(d) {
-        return xScale(d[state.metric + "_" + state.raceEth2])
+        return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
       });
 
     divisionLines.transition().duration(transitionTime)
       .attr("stroke", getLineStroke)
       .attr("x1", function(d) {
-        return xScale(d[state.metric + "_" + state.raceEth1])
+        return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
       })
       .attr("x2", function(d) {
-        return xScale(d[state.metric + "_" + state.raceEth2])
+        return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
       });
 
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
-        return raceEths.map(function(r){
-          return d[state.metric + "_" + r];
+        return raceEthsLabels.map(function(r){
+          return d[state.metric + "_" + raceEths[r]];
         })
       });
 
