@@ -201,6 +201,10 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
+#chart {
+  padding: 60px 0;
+}
+
 #search-box {
   padding: 5px 5px 5px 5px;
   border: 1px solid lightgray;
