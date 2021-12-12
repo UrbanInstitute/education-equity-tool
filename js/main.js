@@ -117,6 +117,17 @@ function updateOptionsCircles() {
   d3.select("#raceEth2-circle").attr("fill", colors[state.raceEth2]);
 }
 
+function updateMetricText() {
+  let metricText = d3.select("#metrics-text");
+  if (state.metric === 'avg_exp_year_perc'){
+    metricText.html('<p>Research has shown that experienced teachers are more effective than inexperienced teachers,and <a href="https://edtrust.org/resource/5-things-to-advance-equity-in-access-to-strong-and-diverse-educators/" target="_blank">addressing these inequities</a> can improvereading and math test scores. Below, we display the share of teachers who have more than two years of experience.</p>')
+  } else if (state.metric === 'perc_ap_stem'){
+    metricText.html('<p>By engaging with advanced coursework, students are more likely to graduate from high schooland get a head start on postsecondary education. But students of color, including Black and Latino students,continue to <a href="https://edtrust.org/resource/inequities-in-advanced-coursework/" target="_blank">lack access to advanced classes</a>. Below, we display the share of high school students who have access to both an AP math class and an AP science class.</p>')
+  } else if (state.metric === 'percent_adq_couns'){
+    metricText.html('<p>School counselors can have an <a href="http://exclusive.multibriefs.com/content/beyond-teachers-estimating-individual-school-counselors-effects-on-educatio/education" target="_blank">outsized impact on a student’s life</a>, leading to increased high school graduation and college enrollment and completion. Below, we display the share of high school students who have access to adequate school counselors, defined as schools with at least <a href="https://www.schoolcounselor.org/Standards-Positions/Position-Statements/ASCA-Position-Statements/The-Professional-Counselor-and-Use-of-Support-Staf" target="_blank">one counselor for every 250 students</a>.</p>')
+  }
+}
+
 function sortData(data) {
   let sortedData;
   if (state.sortByGap) {
@@ -267,6 +278,7 @@ Promise.all([
       } else if (d === 'Counselors'){
         d3.select("#toggle-scale").style("display", "none");
       }
+      updateMetricText();
       updateChart();
     })
     .classed("chosen", function(d){
@@ -275,6 +287,8 @@ Promise.all([
     .html(function(d){
       return d;
     })
+
+  updateMetricText();
 
   let districtViews = ['largest', 'myown']
   let viewSpans = d3.select("#districts-views")

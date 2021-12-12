@@ -58,6 +58,14 @@ body {
   color: black;
 }
 
+#metrics-text {
+  padding-bottom: 20px;
+}
+
+#forms {
+  font-weight: bold;
+}
+
 .form-inline {
   display: inline-block;
 }
