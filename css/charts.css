@@ -63,9 +63,15 @@ body {
   padding-bottom: 20px;
 }
 
-#forms, #state-div {
+#forms {
+  padding: 15px 0;
   font-weight: bold;
 }
+
+#state-div {
+  font-weight: bold;
+}
+
 
 .form-inline {
   display: inline-block;
@@ -199,6 +205,11 @@ input:checked + .slider:before {
 
 .form-control:hover{
   cursor: pointer;
+}
+
+#districts-text {
+  padding: 20px 0;
+  font-style: italic;
 }
 
 #chart {
