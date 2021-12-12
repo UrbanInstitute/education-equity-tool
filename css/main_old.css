@@ -1,0 +1,797 @@
+body{
+	font-family: Lato;
+	color: #353535;
+h}
+body.print, body.noPrint{
+    display: block;
+}
+#mainContent{
+	width: 1120px;
+	margin: 0 auto;	
+}
+
+a{
+	color: #1696d2;
+	text-decoration: none;
+}
+
+/*********************************************************************************/
+/************************       ABOUT NAV BAR     ********************************/
+/*********************************************************************************/
+
+
+#aboutNavbar{
+    display: none;
+    position: absolute;
+    top: 50px;
+    height: 50px;
+    background: #EFEFEF;
+    color: #696969;
+    text-transform: uppercase;
+    font-size: 18px;
+    width: 100%;
+    cursor: pointer;
+}
+#aboutNavTitle{
+    width: 100%;
+    text-align: center;
+    padding-top: 13px;
+}
+
+
+
+/*********************************************************************************/
+/***************************       HOME TITLE     ********************************/
+/*********************************************************************************/
+#titleContainer{
+	width: calc(100% - 17px);
+    padding-bottom: 20px;
+    border-bottom: 1px solid #D2D2D2;
+    margin-bottom: 52px;
+}
+#title, #subtitle{
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+#title{
+	margin-top: -30px;
+    font-size: 60px;
+	font-weight: bold;
+}
+#subtitle{
+	font-weight: 300;
+    font-size: 38px;
+	margin-bottom: 50px;
+}
+.introText{
+	font-size: 24px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.5;
+    text-align: left;
+}
+#datePublished{
+	font-style: italic;
+    font-weight: lighter;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/*********************************************************************************/
+/***************************       HEADER IMAGE     ******************************/
+/*********************************************************************************/
+
+.headerimage{
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 720px;
+  z-index:-1;
+}
+
+.headerwrapper{
+  padding-top:120px;
+}
+
+#heroimage{
+  background-image: url(../images/header.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: bottom;
+}
+
+
+/*********************************************************************************/
+/*****************************      LEFT COLUMN      *****************************/
+/*********************************************************************************/
+.mobileMenu{
+    display: none;
+}
+#mobileMenuContainer{
+    display: none;
+}
+#leftColumn{
+    display: inline-block;
+    width: 350px;
+    padding-right: 50px;
+    vertical-align: top;
+}
+.colHeader{
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.customRadioRow{
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+.customRadio{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-size: 17px;
+    background-repeat: no-repeat;
+    background-image: url(../images/radio.png);
+    cursor: pointer;
+    position: relative;
+    top: 3px;
+    margin-right: 2px;
+}
+.customRadio.active{
+    background-image: url(../images/radio-active.png);
+}
+
+.customRadioLabel{
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+}
+.customRadioLabel.active{
+    color: #1696d2;
+}
+.colHeader.legend{
+    margin-top: 55px;
+}
+.legendItemContainer{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.legendMarker{
+    width: 35px;
+    border-bottom: 1px solid #C4C4C4;
+    position: relative;
+    display: inline-block;
+}
+.legendMarker span{
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 2px solid;
+    border-radius: 100px;
+    display: block;
+    position: absolute;
+    top: -8px;
+    left: 9px;
+}
+.legendMarker.low span{
+    border-color: #FDD870;
+}
+.legendMarker.medium span{
+    border-color: #E88E2D;
+}
+.legendMarker.high span{
+    border-color: #DB2B27;
+}
+
+
+.legendLabel{
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    top: 5px;
+    position: relative;
+}
+.readMore{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-style: italic;
+}
+.readMore img{
+    width: 13px;
+    margin-left: 5px;
+}
+.readMore.close{
+    color: #ADABAC;
+}
+.readMore.open{
+    color: #1696d2;
+    font-weight: bold;
+}
+.legendItemDescription{
+    line-height: 22px;
+}
+.legendMoreText{
+    color: #ADABAC;
+    line-height: 22px;
+    font-size: 14px;
+    font-style: italic;
+    overflow: hidden;
+    height: 0px;
+}
+
+
+/*********************************************************************************/
+/****************************      RIGHT COLUMN      *****************************/
+/*********************************************************************************/
+.rightColumnContainer{
+    position: relative;
+    display: none;
+    width: 700px;
+    background: white;
+}
+.rightColumnContainer.active{
+    display: inline-block;
+}
+
+/*********************************************************************************/
+/********************************      MAP      **********************************/
+/*********************************************************************************/
+#mapCategoryLabel{
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#mapDemographicLabel{
+    font-size: 16px;
+    font-weight: normal;    
+}
+
+#mapBg{
+    fill: #fff;
+    stroke: none;
+}
+.state{
+    cursor: pointer;
+}
+.smallAxis{
+    stroke: #353535;
+}
+.barBg{
+    fill: #E6E6E6;
+    stroke: none;
+}
+
+.barBg.active{
+    stroke: #d2d2d2;
+    stroke-width: 3.5px;
+}
+.barBg.clicked{
+    stroke: #000;
+    stroke-width: 2px;
+}
+.state.fips_99 .barBg{
+    fill: #A2D4EC;
+}
+.low.bar{
+    fill: #FDD870;
+}
+.medium.bar{
+    fill: #E88E2D;
+}
+.high.bar{
+    fill: #E25552;
+}
+.mapLabel{
+    font-size: 12px;
+    font-weight: bold;
+    fill: #696969;
+}
+.mapAxisLabel{
+    fill: #ADABAC;
+    font-size: 12px;
+}
+/*********************************************************************************/
+/*****************************       BODY COPY      ******************************/
+/*********************************************************************************/
+/*#homeCopy{
+    display: block;
+    margin-top: 900px;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.copyHeader{
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 35px;
+}
+.copyP, .copyUl{
+    font-size: 16px;6
+    line-height: 26px;
+    margin-bottom: 22px;
+}
+.copyUl{
+	padding-left: 21px;
+	width: calc(100% - 21px);
+}
+.copyUl li{
+	text-align: left;
+    list-style: initial;
+    padding-left: 20px;
+    padding-bottom: 30px;
+}
+
+.colorText.s1Type{
+	color: #1696d2;
+}
+.colorText.s2Type{
+	color: #408941;
+}
+
+#controlsContainer{
+	display: inline-block;
+	position: relative;
+	width: 1120px;
+}
+*/
+
+/*********************************************************************************/
+/**************************      DEMOGRAPHIC MENU      ***************************/
+/*********************************************************************************/
+svg{
+    overflow: hidden;
+}
+.head, .body{
+    stroke-width: 3px;
+    fill: #fff;
+    cursor: pointer;
+}
+.demographicMenu{
+    stroke: #c4c4c4;  
+}
+.demographicMenu.active.total, .demographicMenu.hover.total{
+    stroke: #FDD870;
+}
+.demographicMenu.active.race, .demographicMenu.hover.race{
+    stroke: #EC8B88;
+}
+.demographicMenu.active.latinx, .demographicMenu.hover.latinx{
+    stroke: #1696d2;
+}
+.demographicMenu.active.age, .demographicMenu.hover.age{
+    stroke: #98CF90;
+}
+
+.demographicMenuContainer{
+    position: relative;
+    width: 770px;
+}
+.demographicSubmenuContainer{
+    position: absolute;
+    top: -177px;
+    display: none;
+    z-index: 1;
+    background: white;
+    border: 2px solid #D2D2D2;
+    padding-left: 26px;
+    padding-top: 14px;
+}
+.demographicSubmenuContainer.race{
+    width: 200px;
+    left: -22px;
+    height: 237px;
+}
+.demographicSubmenuContainer.age{
+    left: 443px;
+    height: 198px;
+    width: 121px;
+    top: -177px;
+}
+
+.demographicSubmenuContainer:after, .demographicSubmenuContainer:before {
+    top: 75%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    left: 100%;
+}
+.demographicSubmenuContainer.age:after, .demographicSubmenuContainer.age:before{
+    top: 88%;
+}
+
+.demographicSubmenuContainer:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 14px;
+    margin-top: -14px;
+    border-left-color: #ffffff;
+}
+
+.demographicSubmenuContainer:before {
+    border-color: rgba(210, 210, 210, 0);
+    border-width: 17px;
+    margin-top: -17px;
+    border-left-color: #D2D2D2;
+}
+
+
+.demographicSubmenuContainer.active{
+    display: block;
+    z-index: 1;
+}
+.demographicSubmenuContainer.age{
+    right: 0px;
+}
+
+.state.menuItem{
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #C4C4C4;
+    cursor: pointer;
+}
+.top.state.menuItem{
+    display: inline-block;
+    margin-right: 68.5px;
+    text-align: center;
+}
+.top.state.menuItem.latinx{
+    margin-left: -14px;
+    margin-right: 82.5px;
+}
+.sub.state.race.menuItem{
+    max-width: 305px;
+    font-size: 16px;
+    display: block;
+    margin-top: 15px;
+}
+.sub.state.age.menuItem{
+    max-width: 305px;
+    margin-right: 21px;
+    font-size: 16px;
+    display: block;
+    vertical-align: middle;
+    margin-top: 15px;
+}
+
+.active.menuItem, .bolded.menuItem{
+    font-weight: bold;
+}
+
+.active.menuItem.total, .hover.menuItem.total{
+    color: #FDD870;
+}
+.active.menuItem.race, .bolded.menuItem.race, .hover.menuItem.race{
+    color: #EC8B88;
+}
+.active.menuItem.latinx, .hover.menuItem.latinx{
+    color: #12719e;
+}
+.active.menuItem.age, .bolded.menuItem.age, .hover.menuItem.age{
+    color: #98CF90;
+}
+
+
+
+/*********************************************************************************/
+/*****************************      TABLE STYLES      ****************************/
+/*********************************************************************************/
+.tableHeader{
+    font-weight: bold;
+    display: inline-block;
+    height: 40px;
+    margin-top: 97px;
+    cursor: pointer;
+    position: relative;
+}
+.state.tableHeader{
+    margin-top: 37px
+}
+.tableHeader.projection span, .tableHeader.miscount span{
+    padding-bottom: 4px;
+    border-bottom: 2px dotted #D2D2D2;
+}
+.tableHeader.projection span:hover, .tableHeader.miscount span:hover{
+    border-bottom: 2px dotted #CFE8F3;
+}
+.tableHeader.active{
+    color: #1696d2;
+}
+.tableHeader img{
+    width: 15px;
+    position: absolute;
+    margin-left: 7px;
+    margin-top: 3px;
+}
+.rowDivider{
+    stroke: #D2D2D2;
+    stroke-width: 2px;
+    display: none;
+}
+.demographic.row.total .rowBg, .state.row.fips_99 .rowBg{
+    stroke: #1696d2;
+    stroke-width: 3px;
+}
+.rowBg{
+    stroke: #D2D2D2;
+    stroke-width: 2px;
+    fill: rgba(255,255,255,.7);
+}
+.row.active .rowBg{
+    fill: #f5f5f5;
+}
+.standard.tableText{
+    font-size: 16px;
+    fill: #000;
+}
+.tableHeaderTooltip{
+    position: absolute;
+    width: 109px;
+    font-size: 14px;
+    background: #CFE8F3;
+    font-weight: normal;
+    padding: 14px;
+    top: -167px;
+    display: none;
+}
+.tableHeaderTooltip.projection{
+    top: -167px;   
+}
+.tableHeaderTooltip.miscount{
+    top: -200px;
+    width: 200px;
+    left: -42px;
+}
+
+.tableHeaderTooltip:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #CFE8F3;
+    border-width: 14px;
+    margin-left: -14px;
+}
+
+
+/*********************************************************************************/
+/**************************      DOT PLOT STYLES      ****************************/
+/*********************************************************************************/
+
+.demographic.row.total .axis, .state.row.fips_99 .axis{
+    stroke: #353535;
+}
+
+.axis{
+    stroke: #C4C4C4;
+    fill: none;
+}
+.x.axis{
+    stroke-width: 1px;
+}
+.y.axis{
+    stroke-width: 2px;
+}
+
+.row.active .dot{
+    fill: #f5f5f5;
+}
+.dot{
+    fill: #fff;
+    stroke-width: 1.5px;
+}
+.low.dot{
+    stroke: #FDD870;
+}
+.medium.dot{
+    stroke: #E88E2D;
+}
+.high.dot{
+    stroke: #E25552;
+}
+.axisLabel{
+    font-size: 12px;
+    color: #696969;
+}
+.dotLabel{
+    font-size: 12px;
+}
+.dotLegendText{
+    font-size: 12px;
+    font-weight: bold;
+}
+.dotLegendUnderline{
+    stroke-width: 1.5px;
+}
+.low.dotLegendUnderline{
+    stroke: #FDD870;
+}
+.medium.dotLegendUnderline{
+    stroke: #E88E2D;
+}
+.high.dotLegendUnderline{
+    stroke: #E25552;
+}
+
+
+/*********************************************************************************/
+/***********************     DEMOGRAPHIC TABLE STYLES      ***********************/
+/*********************************************************************************/
+.demographic.row{
+    cursor: pointer;
+}
+.demographic.spacer.row{
+    cursor: auto;
+}
+
+.demographic.header.tableText{
+    font-weight: bold;
+}
+.demographic.row.total .tableText, .state.row.fips_99 .tableText {
+    fill: #1696d2;
+}
+
+/*********************************************************************************/
+/*****************************      TABLE TOOLTIP      ***************************/
+/*********************************************************************************/
+.tableTooltip{
+    position: absolute;
+    background: #f5f5f5;
+    padding: 20px;
+    left: -349px;
+    width: 280px;
+    font-size: 14px;
+}
+.tableTooltip:after{
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    /*pointer-events: none;*/
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #f5f5f5;
+    border-width: 20px;
+    margin-top: -80px;
+
+}
+.table-tt-header{
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.table-tt-row{
+    margin-bottom: 20px;
+}
+.table-tt-row.low{
+    margin-bottom: 2px;
+}
+.table-tt-risk{
+    font-weight: bold;
+    margin-right: 5px;
+}
+.table-tt-row.low .table-tt-risk{
+    border-bottom: 2px solid #FDD870;
+}
+.table-tt-row.medium .table-tt-risk{
+    border-bottom: 2px solid #E88E2D;
+}
+.table-tt-row.high .table-tt-risk{
+    border-bottom: 2px solid #E25552;
+}
+.table-tt-disclaimer{
+    font-size: 12px;
+    font-style: italic;
+    display: none;
+    margin-top: 20px
+}
+.table-tt-disclaimer.show{
+    display: block;
+}
+.table-tt-spacer{
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: 100%;
+    height: 100%;
+    width: 30px;
+    background: transparent;
+    opacity: 0;
+}
+
+/*********************************************************************************/
+/*****************************      HOME FOOTER      *****************************/
+/*********************************************************************************/
+
+#footerContainer{
+	margin-top: 45px;
+	border-top: 2px solid #D2D2D2;
+}
+#footerContent{
+	width: 700px;
+	margin: 0 auto;
+}
+.footerHeader{
+	margin-top: 50px;
+	margin-bottom: 8px;
+	font-size: 34px;
+	font-weight: bold;
+	text-transform: uppercase;
+	display: inline-block;
+}
+#topFooterHeader{
+	padding-top: 44px;
+}
+.footerAbout, .footerCredits, .footerSpecialCredit{
+    font-size: 16px;
+    line-height: 26px;
+}
+.footerCredits, .footerSpecialCredit{
+	font-size: 14px;
+	font-style: italic;
+	line-height: 22px;
+}
+#bottomFooterCredits{
+	margin-bottom: 45px;
+}
+.creditsHeader{
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+.creditsNames{
+	margin-bottom: 30px;
+	margin-top: 5px;
+	font-size: 16px;
+}
+#copyright{
+	margin-bottom: 100px;
+	display: inline-block;
+}
+#footerContent .button{
+    text-transform: uppercase;
+    width: 198px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    margin-top: 44px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+#footerContent .button.bottom{
+    margin-top: 10px;
+}
+#footerContent .button{
+    border: 2px solid #353535;
+    color: #353535;
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: normal;
+}
+#footerContent .button:hover{
+    background: #353535;
+    color: #fff;
+}
+
+
+
+

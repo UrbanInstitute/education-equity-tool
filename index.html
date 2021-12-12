@@ -10,81 +10,84 @@
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/responsive.css">
-    <link rel="stylesheet" type="text/css" href="css/urban-header.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/responsive.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/urban-header.css"> -->
     <link rel="stylesheet" type="text/css" href="css/vendor/jquery-ui.css">
     <!-- <link rel="stylesheet" type="text/css" href="css/styles.css"> -->
     <link rel="stylesheet" type="text/css" href="css/charts.css">
+
+    <!-- <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@urbaninstitute">
+    <meta name="twitter:creator" content="@urbaninstitute">
+    <meta name="twitter:title" content="Dividing Lines">
+    <meta name="twitter:description" content="How School Districts Draw Attendance Boundaries to Perpetuate School Segregation">
+    <meta name="twitter:image" content="https://apps.urban.org/features/dividing-lines-school-segregation/img/social-twitter.jpeg">
+    <meta property="og:title" content="Dividing Lines" />
+    <meta property="og:description" content="How School Districts Draw Attendance Boundaries to Perpetuate School Segregation" />
+    <meta property="og:image" content="https://apps.urban.org/features/dividing-lines-school-segregation/img/social-og.jpeg" />
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" content="https://urbn.is/lines"> -->
   </head>
+
   <body>
 
-    <div id = "breakpoint1200"></div>
-<div id = "breakpoint768"></div>
-<div id = "breakpoint1010"></div>
-
-<div id = "locker"></div>
-<div id = "oldState"></div>
-<div id = "oldDemographic"></div>
-
-  <!-- START HEADER -->
+    <!-- START HEADER -->
     <div id="header-pinned" class="no-touch">
-       <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
-    <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" class="title-linkback" alt="Urban Institute logo">Features</a>
-        <div class = "customShareLink">Share this view</div>
-
-    </div>
-    <div class = "customShareBox">
-      <input type="text" id="shareURL" name="shareURL" readonly> <div id = "copyUrlButton">Copy</div>
-      <div id = "copyUrlNote">Copied to clipboard</div>
-    </div>
-
-    <div class="share-icons">
+      <a target="_blank" href="https://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+      <div class="title"><span class="feature-link"><a href="https://www.urban.org/features" class="title-linkback" alt="Urban Institute logo">Features</a></span>
+      </div>
+      <div class="share-icons">
         <div class="shareThisP">
-            <span onclick="toggle_visibility('shareBox');">
-                    <div class="shareThisB"></div>
-                </span>
-            <div class="shareThisW" id="shareBox">
+          <span onclick="toggle_visibility('shareBox');">
+            <div class="shareThisB"></div>
+          </span>
+          <div class="shareThisW" id="shareBox">
 
-                <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//urbn.is/2020census" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
+            <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//urbn.is/equitytool" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
 
-                    <a href="https://twitter.com/intent/tweet?text=%232020Census%3A%20Who%27s%20at%20risk%20of%20being%20miscounted%3F%20(via%20%40urbaninstitute)%20https%3A%2F%2Furbn.is%2F2020census" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+              <a href="https://twitter.com/intent/tweet?text=From%20%40urbaninstitute%3A%20How%20school%20districts%20draw%20attendance%20boundaries%20to%20perpetuate%20school%20segregation.%20https%3A%2F%2Furbn.is%2Flines" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
 
-                    <a href="mailto:%20?Subject=New feature from the Urban Institute &amp;Body=Hi! I thought you'd be interested in this new feature from the Urban Institute: “2020 Census: Who’s At Risk of Being Miscounted?” https://urbn.is/2020census" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email addthis_button_email" ><span class="at_a11y">Share on email</span></span></a>
-                    <div class="atclear"></div>
-                </div>
-
+              <a href="mailto:%20?Subject=New Urban Institute interactive feature&amp;Body=Hi! I thought you'd be interested in this new interactive feature from the Urban Institute: &ldquo;Dividing Lines: How School Districts Draw Attendance Boundaries to Perpetuate School Segregation&rdquo; https://urbn.is/lines" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+              <div class="atclear"></div>
             </div>
+
+          </div>
         </div>
-    </div>
+      </div>
     </div>
     <div class="headerimage" id="heroimage">
       <div class="wrapper headerwrapper">
       </div>
     </div>
-  <!-- END HEADER -->
+    <!-- END HEADER -->
 
+    <div id="containerFeature">
 
-  <div id = "aboutNavbar">
-    <div id = "aboutNavTitle">About this project</div>
-  </div>
+      <div id="topText">
 
+        <div id="intro">
 
-  <!-- MAIN CONTENT -->
-  <div id = "mainContent">
-    <!-- TITLE BLOCK -->
-    <div id = "titleContainer" class = "s1Type">
-      <div id = "title">Beyond Education Outcomes</div>
-      <div id = "subtitle">Where are students given the tools to succeed in school?</div>
-      <div id = "datePublished">June 4, 2019</div>
+          <div id="introMap"></div>
+          <div id="introText">
+            <h1>Beyond Education Outcomes</h1>
+            <h2>Where are students given the tools to succeed in school?</h2>
 
-      <p>The decennial census, which aims to count every US resident each decade, is critical to our democracy. It affects congressional seats and funding decisions at every level of government.</p>
-      <p class = "introText">But the 2020 Census faces unprecedented challenges and threats to its accuracy. Demographic changes over the past decade will make the population harder to count. And <a href = "https://www.urban.org/urban-wire/underfunded-2020-census-puts-accurate-count-risk" target = "_blank">underfunding</a>, <a href = "https://www.urban.org/urban-wire/2020-census-complex-vulnerable-and-vital-our-democracy" target = "_blank">undertested process changes</a>, and the last-minute introduction of a <a href = "https://www.urban.org/urban-wire/five-reasons-addition-citizenship-question-2020-census-detrimental-its-goal" target = "_blank">citizenship question</a> could result in serious miscounts, potentially <a href = "https://www.urban.org/urban-wire/fairness-not-just-accuracy-vital-2020-census" target = "_blank">diminishing communities&rsquo;</a> rightful political voice and share of funding.</p>
-      <p class = "introText">To understand <a href = "https://www.urban.org/research/publication/assessing-miscounts-2020-census" target = "_blank">how these factors could affect the 2020 Census counts</a>, we created projections under three scenarios&mdash;reflecting the miscount risk as low, medium, or high.</p>
-      <p class = "introText">Choose a state or demographic group to see who&rsquo;s at risk of being miscounted.</p>
+            <p id="date">January XX, 2022</p>
+
+            <!-- <div class="arrowDown"></div> -->
+
+          </div>
+        </div>
+
+        <p class="general">Student success is typically measured through outcomes, such as test scores and graduation rates. But those measures often overlook the inputs—including access to experienced teachers, counselors, and other resources—that helped create those outcomes.</p>
+
+        <p class="general">The <a href="https://www.urban.org/research/publication/when-school-segregated-making-sense-segregation-65-years-after-brown-v-board-education" target="_blank">legacy of explicit school segregation and present-day discriminatory practices</a> mean many students of color are left without equitable access to the resources needed for a robust education. By understanding the extent of these inequities in students’ learning environments, policymakers can address these disparities and expand students’ educational opportunities. </p>
+
+        <p class="general">This tool displays the share of students from different racial and ethnic backgrounds who attend schools that have access to some of the resources <a href="https://www.urban.org/policy-centers/center-education-data-and-policy/projects/broader-measure-student-achievement-and-learning-traditional-public-high-schools" target="_blank">evidence shows are beneficial for learning</a>: experienced teachers, Advanced Placement (AP) classes, and school counselors. Below, select two racial or ethnic groups to compareaccess to opportunity for different groups of students and how it variesby state and byschooldistrict.</p>
+
+      </div>
     </div>
-    <!-- END TITLE BLOCK -->
-
 
 
     <div id="container">
@@ -156,62 +159,44 @@
   			</span>
   			<datalist id="search-list"></datalist>
   		</div>
-
-      <!-- START FOOTER -->
-  <div id = "footerContainer">
-    <div id = "footerContent">
-
-      <div class = "footerHeader" id = "topFooterHeader">About the data</div>
-      </p>
-
-
-      <p class = "footerAbout">Our miscount assessments are quantitative but not meant to be used for statistical inference. There are no margins of error or significance levels available. Our goal is to provide some sense of the 2020 Census&rsquo;s potential outcomes under a few scenarios that we subjectively deemed realistic.</p>
-
-      <p class = "footerAbout">Population projections have been rounded to the nearest hundred. Population projections for the different racial and ethnic groups do not add up to the overall population projection because the Census Bureau&rsquo;s projection data do not separate the Hispanic/Latinx designation from any race except for white. The term &ldquo;Hispanic/Latinx&rdquo; is used throughout this feature to reflect the different ways in which people self-identify.</p>
-
-
-      <p class = "footerAbout">Our miscount projections are based on findings about the 2010 Census performance from the <a href = "https://www.census.gov/programs-surveys/decennial-census/about/coverage-measurement.html" target = "_blank">Census Coverage Measurement Program&rsquo;s Post Enumeration Survey</a>. For our projections of children younger than 5, we also use <a href = "https://www.springer.com/us/book/9783319189161" target = "_blank">demographic analysis</a>.
-
-      <p class = "footerAbout">In the low-risk scenario, we assume the 2020 Census will perform as the 2010 Census did. The 2010 Census was considered one of the most accurate in recent history, but it still miscounted subpopulations. We assume US age patterns, race and ethnic distribution, and the proportion of renters will all have changed by 2020, but the miscount rates for each group will be the same as they were in the 2010 Census.
-      </p>
-      <p class = "footerAbout">In the medium-risk scenario, we assume that, beyond demographic changes, the Census Bureau will achieve the initial self-response rate (including via the internet) it expects and that all operations will happen as the Bureau projects in its <a href = "https://www.census.gov/programs-surveys/decennial-census/2020-census/planning-management/planning-docs/operational-plan.html" target = "_blank">2020 Operational Plan</a>. This scenario also assumes that nonresponse follow-up cases will follow the Bureau&rsquo;s process changes for the 2020 Census, which include reducing the number of nonresponse follow-up contact attempts from six to one and relying more heavily on administrative records to predict housing status and fill data gaps.
-      </p>
-      <p class = "footerAbout">In the high-risk scenario, we use the baseline assumptions about 2020 Census operations from the medium-risk scenario (demographic and process changes) but assume the lowest self-response rate for which the Census Bureau is planning. In this scenario, we also assume lower response rates among the Hispanic/Latinx and immigrant populations because of the political climate regarding immigration and the potential addition of the citizenship question. This means that a greater share of households would be handled through the Bureau&rsquo;s new nonresponse follow-up processes, which would lead to greater miscounts overall.
-      </p>
-
-      <p class = "footerAbout">See more about our methodology in the technical appendix of the full report <a href = "https://www.urban.org/research/publication/assessing-miscounts-2020-census" target = "_blank">here</a>.</p>
-
-
-<a href = "data/Census 2020 Feature Data Download - Potential Miscounts.xlsx" class = "footerButtonLink"><div class = "button">Download data</div></a>
-<a href = "https://www.urban.org/research/publication/assessing-miscounts-2020-census" target = "_blank" class = "footerButtonLink"><div class = "button bottom">Read the report</div></a>
-
-      <div class = "footerHeader">PROJECT CREDITS</div>
-      <p class = "footerCredits">This feature was funded by the Bill and Melinda Gates Foundation. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href = "https://www.urban.org/support/funding-principles" target = "_blank">here</a>. Read our terms of service <a href = "https://www.urban.org/terms-service" target = "_blank">here</a>.</p>
-      <p class = "footerCredits">Steven Martin led the research on demographic projections and miscount estimates for this project.</p>
-
-
-      <div class = "creditsHeader">RESEARCH</div>
-      <div class = "creditsNames"><a href = "https://www.urban.org/author/diana-elliott" target = "_blank">Diana Elliott</a>, <a href = "https://www.urban.org/author/robert-santos" target = "_blank">Robert Santos</a>, <a href = "https://www.urban.org/author/steven-martin" target = "_blank">Steven Martin</a>, and <a href = "https://www.urban.org/author/charmaine-runes" target = "_blank">Charmaine Runes</a></div>
-
-      <div class = "creditsHeader">DESIGN</div>
-      <div class = "creditsNames">Allison Feldman</div>
-
-      <div class = "creditsHeader">DEVELOPMENT</div>
-      <div class = "creditsNames">Ben Chartoff</div>
-
-      <div class = "creditsHeader">EDITING</div>
-      <div class = "creditsNames">Liza Hagerman</div>
-
-      <div class = "creditsHeader">WRITING</div>
-      <div class = "creditsNames">Emily Peiffer</div>
-
-      <div id = "copyright"><a href = "https://github.com/UrbanInstitute/2020-census" target = "_blank">View this project on GitHub</a>.</div>
-
     </div>
-  </div>
-  <!-- END FOOTER -->
 
 
+    <footer>
+
+      <div class="content">
+
+        <h4>About the Data</h4>
+        <p>The data are from the Common Core of Data and the Civil Rights Data Collection for the 2017–18 school year, accessed through the <a href="https://educationdata.urban.org/data-explorer/" target="_blank">Urban Institute’s Education Data Portal</a>.</p>
+
+        <h4>Project credits</h4>
+        <div class="urbanstatement">
+          <p>This feature was funded by the Bill & Melinda Gates Foundation. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not beattributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts.</p>
+
+          <p>We are also grateful to Ivy Morgan and the Education Trust for their guidance and thought partnership in helping to make this work relevant to and actionable for those advocating for a more equitable distribution of resources across schools.</p>
+        </div>
+
+        <h3 class="job">Research</h3>
+        <p class="creditsWho">Leonardo Restrepo and Erica Blom</p>
+
+        <h3 class="job">Design</h3>
+        <p class="creditsWho">Allison Feldman</p>
+
+        <h3 class="job">Development</h3>
+        <p class="creditsWho">Fernando Becerra and Luis Melgar</p>
+
+        <h3 class="job">Editing</h3>
+        <p class="creditsWho">David Hinson</p>
+
+        <h3 class="job">Writing</h3>
+        <p class="creditsWho">Wesley Jenkins</p>
+
+        <p class="footerLink">You can download our <a href="https://datacatalog.urban.org/dataset/dividing-lines-%E2%80%93-characteristics-neighboring-pairs-public-schools" target="_blank">school boundary data</a> and our <a href="https://datacatalog.urban.org/dataset/census-block-level-racial-and-ethnic-demographics-randomized-dot-distribution" target="_blank">census block data</a> from the Urban Data Catalog.</p>
+
+        <p class="footerLink">View this project on <a href="https://github.com/UrbanInstitute/edp-equity-tool" target="_blank">GitHub</a>.</p>
+
+      </div>
+    </footer>
 
     <script src="js/vendor/jquery-1.12.4.js"></script>
     <script src="js/vendor/jquery-ui.js"></script>
