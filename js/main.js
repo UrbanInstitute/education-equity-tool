@@ -10,9 +10,9 @@ var margin = {top: 20, right: offsetWidth, bottom: 40, left: 100},
 
 const lineHeight = 20;
 const circleSize = 5;
-const numberLabelLeftMargin = 45;
+const numberLabelLeftMargin = 25;
 const numberLabelRightMargin = 10;
-const marginRight = 30;
+const marginRight = 40;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -421,7 +421,13 @@ Promise.all([
 
   let getNumberLabelPos = function(d, i) {
     if (i === 0){
-      return xScale(d) - numberLabelLeftMargin;
+      if (d === 100) {
+        return xScale(d) - numberLabelLeftMargin - 10;
+      } else if (d < 10) {
+        return xScale(d) - numberLabelLeftMargin + 5;
+      } else {
+        return xScale(d) - numberLabelLeftMargin;
+      }
     } else {
       return xScale(d) + numberLabelRightMargin;
     }
@@ -558,7 +564,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(2);
+          return d.toFixed(0);
         })
 
     gs.selectAll(".division-name")
@@ -907,7 +913,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(2);
+          return d.toFixed(0);
         })
 
     divisionNumberLabels
@@ -926,7 +932,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(2);
+          return d.toFixed(0);
         })
 
     divisionNumberLabels.exit().remove();
