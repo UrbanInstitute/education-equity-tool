@@ -63,7 +63,7 @@ body {
   padding-bottom: 20px;
 }
 
-#forms {
+#forms, #state-div {
   font-weight: bold;
 }
 
@@ -203,6 +203,10 @@ input:checked + .slider:before {
 
 #chart {
   padding: 60px 0;
+}
+
+#chart text {
+  font-size: 14px;
 }
 
 #search-box {
