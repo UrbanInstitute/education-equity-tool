@@ -301,7 +301,7 @@ Promise.all([
 
   updateMetricText();
 
-  let districtViews = ['largest', 'myown']
+  let districtViews = ['Largest districts', 'Build my own']
   let viewSpans = d3.select("#districts-views")
     .selectAll("span")
     .data(districtViews);
@@ -314,7 +314,7 @@ Promise.all([
         .classed("chosen", function(e){
           return e === d;
         })
-      if (d === 'largest'){
+      if (d === 'Largest districts'){
         state.sourceData = districts.filter(function(e){
           return e["STUSPS"] === state.currentState;
         });
@@ -628,7 +628,7 @@ Promise.all([
             showDistrictDivs();
             d3.selectAll(".district-view").style("display", "inline-block")
               .classed("chosen", function(e){
-                return e === 'largest';
+                return e === 'Largest districts';
               });
           } else {
             state.sourceData = states;
@@ -985,7 +985,7 @@ Promise.all([
           showDistrictDivs();
           d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){
-              return e === 'largest';
+              return e === 'Largest districts';
             });
         } else {
           state.sourceData = states;
@@ -1028,7 +1028,7 @@ Promise.all([
           showDistrictDivs();
           d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){
-              return e === 'largest';
+              return e === 'Largest districts';
             });
         } else {
           state.sourceData = states;
