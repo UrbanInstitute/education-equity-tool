@@ -142,8 +142,8 @@ function sortData(data) {
   let sortedData;
   if (state.sortByGap) {
     sortedData = data.sort(function(a,b) {
-      let gap1 = a[state.metric + "_" + state.raceEth1] - a[state.metric + "_" + state.raceEth2];
-      let gap2 = b[state.metric + "_" + state.raceEth1] - b[state.metric + "_" + state.raceEth2];
+      let gap1 = a[state.metric + "_" + raceEths[state.raceEth1]] - a[state.metric + "_" + raceEths[state.raceEth2]];
+      let gap2 = b[state.metric + "_" + raceEths[state.raceEth1]] - b[state.metric + "_" + raceEths[state.raceEth2]];
       if(!isFinite(gap1) && !isFinite(gap2)) {
         return 0;
       }
