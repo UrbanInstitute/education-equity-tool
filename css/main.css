@@ -559,6 +559,14 @@ footer h3, footer h4{
   margin-bottom: 40px;
 }
 
+.urbanstatement p {
+  margin: 1rem 0;
+}
+
+.footerLinks {
+  margin: 1rem 0;
+}
+
 p.creditsWho {
   font-size: 16px;
   margin: 0;
