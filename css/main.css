@@ -359,23 +359,24 @@ body {
 }
 
 #introMap {
-  height: 900px;
+  height: 400px;
   font-size: 16px;
 }
 
 #intro {
   position: relative;
   margin-top: 2em;
-  height: 900px;
+  height: 200px;
   margin-bottom: 5rem;
 }
 
 #introText {
   position: absolute;
-  width: 80%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  text-align: center;
+  width: 100%;
+  /* top: 50%;
+  left: 50%; */
+  /* transform: translate(-50%,-50%); */
 }
 
 #explorer {
@@ -385,19 +386,21 @@ body {
 h1, h2 {
   margin: 0 auto;
   font-size: 2rem;
-  font-weight: 300;
+  /* font-weight: 300; */
   line-height: 1.2;
   text-align: center;
 }
 
 h1 {
   font-weight: 700;
-  margin-bottom: 15px;
-  font-size: 3rem;
+  margin-bottom: 25px;
+  font-size: 2.25rem;
 }
 
 h2 {
   max-width: 60%;
+  font-style: italic;
+  font-size: 1rem;
 }
 
 h3 {
@@ -409,11 +412,12 @@ h3 {
 }
 
 p#date {
-  font-size: 14px;
-  color: #353535;
+  font-size: 0.875em;
+  color: #696969;
   text-align: center;
   margin: 0px auto;
-  padding-top: 50px;
+  margin-bottom: 2rem;
+  padding-top: 25px;
   max-width: 95%;
 }
 
@@ -432,6 +436,13 @@ p#date {
   border-right: 3px solid white;
   border-bottom: 3px solid white;
   transform: rotate(45deg);
+}
+
+hr {
+  border: 1px solid #D2D2D2;
+  opacity: .25;
+  max-width: 760px;
+  margin: 10px auto;
 }
 
 #topText {
