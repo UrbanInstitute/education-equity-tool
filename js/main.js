@@ -65,6 +65,9 @@ var state = {
   expandScale: false,
 }
 
+let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
+let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>'
+
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
     this.parentNode.appendChild(this);
@@ -129,13 +132,12 @@ function updateOptionsCircles() {
 
 function updateMetricText() {
   let metricText = d3.select("#metrics-text");
-  let tooltip = '<div class="help-tip"><p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p></div>'
   if (state.metric === 'avg_exp_year_perc'){
-    metricText.html('Research has shown that experienced teachers are more effective than inexperienced teachers, and <a href="https://edtrust.org/resource/5-things-to-advance-equity-in-access-to-strong-and-diverse-educators/" target="_blank">addressing these inequities</a> can improve reading and math test scores. Below, we display the share of teachers who have more than two years of experience.' + tooltip)
+    metricText.html('Research has shown that experienced teachers are more effective than inexperienced teachers, and <a href="https://edtrust.org/resource/5-things-to-advance-equity-in-access-to-strong-and-diverse-educators/" target="_blank">addressing these inequities</a> can improve reading and math test scores. Below, we display the share of teachers who have more than two years of experience.</p>')
   } else if (state.metric === 'perc_ap_stem'){
-    metricText.html('By engaging with advanced coursework, students are more likely to graduate from high school and get a head start on postsecondary education. But students of color, including Black and Latino students, continue to <a href="https://edtrust.org/resource/inequities-in-advanced-coursework/" target="_blank">lack access to advanced classes</a>. Below, we display the share of high school students who have access to both an AP math class and an AP science class.' + tooltip)
+    metricText.html('By engaging with advanced coursework, students are more likely to graduate from high school and get a head start on postsecondary education. But students of color, including Black and Latino students, continue to <a href="https://edtrust.org/resource/inequities-in-advanced-coursework/" target="_blank">lack access to advanced classes</a>. Below, we display the share of high school students who have access to both an AP math class and an AP science class.</p>')
   } else if (state.metric === 'percent_adq_couns'){
-    metricText.html('School counselors can have an <a href="http://exclusive.multibriefs.com/content/beyond-teachers-estimating-individual-school-counselors-effects-on-educatio/education" target="_blank">outsized impact on a student’s life</a>, leading to increased high school graduation and college enrollment and completion. Below, we display the share of high school students who have access to adequate school counselors, defined as schools with at least <a href="https://www.schoolcounselor.org/Standards-Positions/Position-Statements/ASCA-Position-Statements/The-Professional-Counselor-and-Use-of-Support-Staf" target="_blank">one counselor for every 250 students</a>.' + tooltip)
+    metricText.html('School counselors can have an <a href="http://exclusive.multibriefs.com/content/beyond-teachers-estimating-individual-school-counselors-effects-on-educatio/education" target="_blank">outsized impact on a student’s life</a>, leading to increased high school graduation and college enrollment and completion. Below, we display the share of high school students who have access to adequate school counselors, defined as schools with at least <a href="https://www.schoolcounselor.org/Standards-Positions/Position-Statements/ASCA-Position-Statements/The-Professional-Counselor-and-Use-of-Support-Staf" target="_blank">one counselor for every 250 students</a>.</p>')
   }
 }
 
@@ -197,12 +199,12 @@ function zoomOutScale() {
 
 function showDistrictDivs() {
   d3.select("#state-div").style("display", "inline-block");
-  d3.select("#districts-text").style("display", "block");
+  d3.select("#explanation-text").html(districtExplanation);
 }
 
 function hideDistrictDivs() {
   d3.select("#state-div").style("display", "none");
-  d3.select("#districts-text").style("display", "none");
+  d3.select("#explanation-text").html(stateExplanation);
   d3.selectAll(".district-view").style("display", "none");
 }
 
@@ -346,6 +348,8 @@ Promise.all([
     .html(function(d){
       return d;
     })
+
+  d3.select("#explanation-text").html(stateExplanation);
 
   let toggleGap = d3.select("#toggle-gap").select(".slider");
   toggleGap.on("click", function(event, d){
