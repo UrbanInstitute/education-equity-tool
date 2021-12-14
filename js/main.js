@@ -63,7 +63,7 @@ var state = {
   showing: 'states',
   // districtView: null,
   myown: [],
-  sortByGap: false,
+  sortByGap: true,
   expandScale: false,
 }
 
@@ -527,9 +527,24 @@ Promise.all([
     return d + "%";
   }
 
+  function processData() {
+    let sortedData = sortData(state.sourceData);
+    if (state.showing === 'states') {
+      state.dataToPlot = sortedData;
+    } else {
+      // add state average
+      let thisState = states.filter(function(d){
+        return d['STUSPS'] === state.currentState;
+      })
+      thisState[0].leaid = thisState[0]['STUSPS'] + ' avg';
+      state.dataToPlot = [thisState[0], ...sortedData];
+    }
+    state.height = state.dataToPlot.length * lineHeight;
+  }
+
   function initChart(filteredData) {
 
-    state.height = filteredData.length * lineHeight;
+    processData();
 
     svg = d3.select("#chart").append("svg")
       .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
@@ -792,18 +807,7 @@ Promise.all([
 
   function updateChart(){
 
-    let sortedData = sortData(state.sourceData);
-    if (state.showing === 'states') {
-      state.dataToPlot = sortedData;
-    } else {
-      // add state average
-      let thisState = states.filter(function(d){
-        return d['STUSPS'] === state.currentState;
-      })
-      thisState[0].leaid = thisState[0]['STUSPS'] + ' avg';
-      state.dataToPlot = [thisState[0], ...sortedData];
-    }
-    state.height = state.dataToPlot.length * lineHeight;
+    processData();
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
