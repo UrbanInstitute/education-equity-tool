@@ -1,5 +1,6 @@
-const offsetWidth = 250;
+const offsetWidth = 200;
 var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
+console.log(widthChart)
 
 let svg, g, gs, xScale, yScale, tickValues;
 const transitionTime = 500;
@@ -183,7 +184,7 @@ function zoomInScale() {
   });
   let minValue = (Math.floor(extent[0] / 10) * 10);
   xScale.domain([minValue, 100])
-    .range([margin.left, width]);
+    .range([margin.left, width + margin.left]);
   if (minValue > 50) {
     tickValues = d3.range(minValue, 100.01, 5);
   } else {
@@ -193,7 +194,7 @@ function zoomInScale() {
 
 function zoomOutScale() {
   xScale.domain([0, 100])
-    .range([margin.left, width]);
+    .range([margin.left, width + margin.left]);
   tickValues = d3.range(0, 100.01, 10);
 }
 
@@ -484,7 +485,7 @@ Promise.all([
 
     xScale = d3.scaleLinear()
       .domain([0, 100])
-      .range([margin.left, width])
+      .range([margin.left, width + margin.left])
 
     yScale = d3.scaleLinear()
       .domain([0, filteredData.length])
@@ -615,7 +616,7 @@ Promise.all([
       .join('text')
         .attr("class", "show-districts")
         .style("display", "none")
-        .attr("x", width + marginRight)
+        .attr("x", width + margin.left + marginRight)
         .attr("y", lineHeight/4)
         .style("text-anchor", "left")
         .style("vertical-align", "middle")
@@ -972,7 +973,7 @@ Promise.all([
     divisionChange.enter().append("text")
       .attr("class", "show-districts")
       .style("display", "none")
-      .attr("x", width + marginRight)
+      .attr("x", width + margin.left + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
@@ -1015,7 +1016,7 @@ Promise.all([
     divisionChange
       .attr("class", "show-districts")
       .style("display", "none")
-      .attr("x", width + marginRight)
+      .attr("x", width + margin.left + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
