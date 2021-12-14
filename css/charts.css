@@ -234,6 +234,9 @@ input:checked + .slider:before {
 #search-box {
   padding: 5px 5px 5px 5px;
   border: 1px solid lightgray;
+  font-size: 16px;
+  line-height: 150%;
+  color: #696969;
 }
 ::-webkit-input-placeholder {
    font-style: italic;
@@ -249,7 +252,7 @@ input:checked + .slider:before {
 }
 
 #selected-districts {
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 .selected-district {
