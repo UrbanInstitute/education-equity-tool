@@ -338,8 +338,10 @@ Promise.all([
         state.showing = 'districts';
         d3.select("#state-div").style("display", "inline-block");
         d3.select("#search").style("display", "none");
+        d3.select("#selected-districts").style("display", "none");
       } else {
         d3.select("#search").style("display", "block");
+        d3.select("#selected-districts").style("display", "block");
         state.sourceData = districts.filter(function(e){
           return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
         })
@@ -370,7 +372,14 @@ Promise.all([
   })
 
   let searchBox = d3.select("#search-box");
-  let searchList = d3.select("#search-list")
+  let searchList = d3.select("#search-list");
+  let districtsList = d3.select("#selected-districts");
+
+  function updateDistricts() {
+    state.sourceData = districts.filter(function(e){
+      return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
+    })
+  }
 
   function updateSearchBox() {
     let theseDistricts = getUniquesMenu(districts.filter(function(e){
@@ -401,13 +410,58 @@ Promise.all([
         if ((idxLabel >= 0) && (nSelected < 10) && (!isSelected)) {
           state.myown.push(theseDistricts[idxLabel]);
           searchLabel.node().value = "";
-          state.sourceData = districts.filter(function(e){
-            return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
-          })
+          updateDistricts();
+          updateDistrictsList();
           updateChart();
           d3.select(this).attr("placeholder", "Start typing... \t" + state.myown.length + "/10")
         }
       })
+  }
+
+  function updateDistrictsList() {
+    console.log(state.sourceData)
+
+    let selectedDistricts = districtsList.selectAll(".selected-district").data(state.sourceData);
+
+    selectedDistricts.enter().append("div")
+      .attr("class", "selected-district")
+      .html(function(d){
+        return d[state.name];
+      })
+
+    selectedDistricts.html(function(d){
+      return d[state.name];
+    })
+
+    selectedDistricts.exit().remove();
+
+    let spanClick = function(event, d) {
+      state.myown = state.myown.filter(function(m){
+        return m !== d.leaid;
+      });
+      updateDistricts();
+      updateDistrictsList();
+      updateChart();
+    }
+
+    let spans = districtsList.selectAll(".selected-district").selectAll("span")
+      .data(function(d){
+        return [d];
+      });
+
+    spans.enter().append("span")
+      .on("click", spanClick)
+      .html(function(d){
+        return 'Remove';
+      })
+
+    spans.on("click", spanClick)
+    .html(function(d){
+      return 'Remove';
+    })
+
+    spans.exit().remove();
+
   }
 
   function moveToFront(){
@@ -1009,6 +1063,7 @@ Promise.all([
           state.showing = 'states';
           hideDistrictDivs();
           d3.select("#search").style("display", "none");
+          d3.select("#selected-districts").style("display", "none");
         }
         updateChart();
       })
@@ -1052,6 +1107,7 @@ Promise.all([
           state.showing = 'states';
           hideDistrictDivs();
           d3.select("#search").style("display", "none");
+          d3.select("#selected-districts").style("display", "none");
         }
         updateChart();
       })
