@@ -567,8 +567,8 @@ Promise.all([
 
     gs.selectAll(".number-label")
       .data(function(d){
-        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        let d1 = Math.min(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
+        let d2 = Math.max(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
         return [d1, d2];
       })
       .join("text")
@@ -914,8 +914,8 @@ Promise.all([
     // Division numer labels
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
       .data(function(d){
-        let d1 = Math.min(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
-        let d2 = Math.max(d[state.metric + "_" + state.raceEth1], d[state.metric + "_" + state.raceEth2]);
+        let d1 = Math.min(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
+        let d2 = Math.max(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
         return [d1, d2];
       })
 
