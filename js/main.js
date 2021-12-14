@@ -534,7 +534,7 @@ Promise.all([
         .attr("fill", "#f5f5f5")
         .attr("x", 0)
         .attr("y", -lineHeight/2)
-        .attr("width", width)
+        .attr("width", width + margin.left)
         .attr("height", lineHeight);
 
     gs.selectAll(".line")
@@ -818,7 +818,7 @@ Promise.all([
       .attr("fill", "#f5f5f5")
       .attr("x", 0)
       .attr("y", -lineHeight/2)
-      .attr("width", width)
+      .attr("width", width + margin.left)
       .attr("height", lineHeight);
 
     divisionRects
@@ -826,7 +826,7 @@ Promise.all([
       .attr("fill", "#f5f5f5")
       .attr("x", 0)
       .attr("y", -lineHeight/2)
-      .attr("width", width)
+      .attr("width", width + margin.left)
       .attr("height", lineHeight);
 
     divisionRects.exit().remove();
