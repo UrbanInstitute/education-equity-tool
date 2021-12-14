@@ -192,7 +192,8 @@ input:checked + .slider:before {
   vertical-align: middle;
   max-height: 2em;
   padding: 0 40px 5px 5px;
-  color: darkgray;
+  color: #696969;
+  font-size: 16px;
   /* padding: 40px; */
   /* margin: 10px; */
   outline: none;
@@ -207,6 +208,10 @@ input:checked + .slider:before {
 
 .form-control:hover{
   cursor: pointer;
+}
+
+.form-control option {
+  font-size: 16px;
 }
 
 #explanation-text {
