@@ -212,7 +212,6 @@ function hideDistrictDivs() {
   d3.selectAll(".district-view").style("display", "none");
 }
 
-
 Promise.all([
   d3.csv('data/early_state_draft.csv'),
   d3.csv('data/early_district_draft.csv')
@@ -838,6 +837,12 @@ Promise.all([
     gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")")
       .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".domain").remove());
+
+    if (state.showing == 'districts') {
+      gAxisBottom.attr("opacity", 0);
+    } else {
+      gAxisBottom.attr("opacity", 1);
+    }
 
     // Division groups
     var gDivisions = g.selectAll(".division").data(state.dataToPlot);
