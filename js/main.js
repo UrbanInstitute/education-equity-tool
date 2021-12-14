@@ -5,7 +5,7 @@ console.log(widthChart)
 let svg, g, gs, xScale, yScale, tickValues;
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 40, left: 100},
+var margin = {top: 20, right: offsetWidth, bottom: 20, left: 100},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
