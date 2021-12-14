@@ -1,4 +1,4 @@
-const offsetWidth = 200;
+const offsetWidth = 250;
 var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 console.log(widthChart)
 
@@ -33,13 +33,13 @@ let raceEths = {
   'NHPI students': 'nhpi',
   'Two or more': 'twomore',
   'White students': 'white'
-}
+};
 let metrics = ['Teachers', 'Classes', 'Counselors'];
 let metricCols = {
   'Teachers': 'avg_exp_year_perc',
   'Classes': 'perc_ap_stem',
   'Counselors': 'percent_adq_couns'
-}
+};
 let colors = {
   'Black students': "#1696D2",
   'Hispanic students': "#EC008B",
@@ -48,7 +48,8 @@ let colors = {
   'NHPI students': "#CA5800",
   'Two or more': "#696969",
   'White students': "#FDBF11"
-}
+};
+let twoColors = ["#1696D2", "#FDBF11"];
 
 var state = {
   raceEth1: 'Black students',
@@ -127,8 +128,10 @@ function addOptions(id, values, addStudents) {
 }
 
 function updateOptionsCircles() {
-  d3.select("#raceEth1-circle").attr("fill", colors[state.raceEth1]);
-  d3.select("#raceEth2-circle").attr("fill", colors[state.raceEth2]);
+  // d3.select("#raceEth1-circle").attr("fill", colors[state.raceEth1]);
+  // d3.select("#raceEth2-circle").attr("fill", colors[state.raceEth2]);
+  d3.select("#raceEth1-circle").attr("fill", twoColors[0]);
+  d3.select("#raceEth2-circle").attr("fill", twoColors[1]);
 }
 
 function updateMetricText() {
@@ -416,14 +419,13 @@ Promise.all([
   }
 
   let getLineStroke = function(d, i) {
-    console.log(state.metric, raceEths[state.raceEth1], raceEths[state.raceEth2])
     if ((!isNaN(d[state.metric + "_" + raceEths[state.raceEth1]])) && (!isNaN(d[state.metric + "_" + raceEths[state.raceEth2]]))) {
       if (d[state.metric + "_" + raceEths[state.raceEth1]] > d[state.metric + "_" + raceEths[state.raceEth2]]) {
-        // return color1;
-        return colors[state.raceEth1];
+        return twoColors[0]
+        // return colors[state.raceEth1];
       } else {
-        // return color2;
-        return colors[state.raceEth2];
+        return twoColors[1];
+        // return colors[state.raceEth2]
       }
     } else {
       return "none";
@@ -433,13 +435,13 @@ Promise.all([
   let getCircleFill = function(d, i) {
     if (!isNaN(d)) {
       if (raceEthsLabels[i] === state.raceEth1) {
-        // return color1;
-        return colors[state.raceEth1];
+        return twoColors[0];
+        // return colors[state.raceEth1];
       } else if (raceEthsLabels[i] === state.raceEth2) {
-        // return color2;
-        return colors[state.raceEth2];
+        return twoColors[1];
+        // return colors[state.raceEth2];
       } else {
-        return "#d2d2d2"
+        return "#ECECEC"
       }
     } else {
       return "none";
@@ -474,8 +476,6 @@ Promise.all([
 
   function initChart(filteredData) {
 
-    color1 = "#1696d2"
-    color2 = "#fdbf11"
     state.height = filteredData.length * lineHeight;
 
     svg = d3.select("#chart").append("svg")
