@@ -4,12 +4,6 @@
   box-sizing: inherit;
 }
 
-body {
-  font-family: 'Lato', 'Arial', sans-serif;
-  font-weight: 400;
-  box-sizing: border-box;
-}
-
 #container {
   width: 100%;
   max-width: 760px;
@@ -49,23 +43,28 @@ body {
   padding-right: 20px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 18px;
 }
 
 #metrics span.chosen {
   text-decoration: underline;
-  text-decoration-color: #fdbf11;
+  text-decoration-color: #353535;
   text-decoration-thickness: 3.5px;
-  text-underline-offset: 2px;
-  color: black;
+  text-underline-offset: 4px;
+  color: #353535;
 }
 
 #metrics-text {
   padding-bottom: 20px;
+  font-size: 18px;
+  line-height: 150%;
+  /* paragraph-spacing: 28 */
 }
 
 #forms {
   padding: 15px 0;
   font-weight: bold;
+  font-size: 18px;
 }
 
 #state-div {
@@ -88,6 +87,7 @@ body {
 }
 
 #toggle-gap, #toggle-scale {
+  font-size: 14px;
   display: inline-block;
   padding: 0 10px;
 }
@@ -97,13 +97,13 @@ body {
   margin-right: 10px;
   text-transform: uppercase;
   background-color: white;
-  color: #1696d2;
-  border: 2px solid #1696d2;
+  color: #353535;
+  border: 2px solid #353535;
   cursor: pointer;
 }
 
 .district-view.chosen {
-  background-color: #1696d2;
+  background-color: #353535;
   color: white;
 }
 
@@ -158,11 +158,11 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #353535;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #353535;
 }
 
 input:checked + .slider:before {
@@ -210,6 +210,10 @@ input:checked + .slider:before {
 #explanation-text {
   padding: 20px 0;
   font-style: italic;
+}
+
+#explanation-text p {
+  font-size: 18px;
 }
 
 #chart {
