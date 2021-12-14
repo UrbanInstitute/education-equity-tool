@@ -3,6 +3,14 @@ var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 console.log(widthChart)
 
 let svg, g, gs, xScale, yScale, tickValues;
+let dataTooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("left", 0)
+    .style("top", 0)
+    .style("display", "block")
+    .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
+
 const transitionTime = 500;
 
 var margin = {top: 20, right: offsetWidth, bottom: 20, left: 100},
@@ -754,6 +762,16 @@ Promise.all([
           .style("display", "block")
         notThisG.selectAll(".show-districts")
           .style("display", "none");
+
+        // Show tooltip if missing data
+        let thisData = thisG.data()[0];
+        if (isNaN(thisData[state.metric + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[state.metric + "_" + raceEths[state.raceEth2]])){
+          dataTooltip.style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
+            .style("opacity", 1);
+        } else {
+          dataTooltip.style("opacity", 0);
+        }
       } else {
         // gDivisions.classed("hidden", false)
         gDivisions.selectAll(".number-label")
@@ -763,6 +781,7 @@ Promise.all([
           // .style("opacity", 0);
         gDivisions.selectAll(".show-districts")
           .style("display", "none");
+        dataTooltip.style("opacity", 0);
       }
     })
     .on("click", function(event){

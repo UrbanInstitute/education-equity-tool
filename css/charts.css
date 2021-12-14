@@ -273,6 +273,36 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
+.tooltip {
+  position: absolute;
+  text-align: center;
+  background-color: #F5F5F5;
+  color: #353535;
+  max-width: 250px;
+  line-height: 150%;
+}
+
+/* .tooltip {
+  background: rgba(255,255,255,.9);
+  border: 1px solid black;
+  font-family: sans-serif;
+  font-size: 11px;
+  opacity: 0;
+  padding: 4px;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  z-index: 1;
+  height: 300px;
+  width: 300px;
+} */
+
+.tooltip p {
+  padding: 20px;
+  font-size: 16px;
+  /* color: black; */
+}
+
 .help-tip {
     position: relative;
     display: inline-block;
