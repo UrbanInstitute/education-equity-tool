@@ -248,6 +248,26 @@ input:checked + .slider:before {
    font-style: italic;
 }
 
+#selected-districts {
+  padding-top: 40px;
+}
+
+.selected-district {
+  font-size: 16px;
+  color: #9D9D9D;
+  line-height: 150%;
+}
+
+.selected-district span {
+  padding-left: 20px;
+  font-size: 16px;
+  line-height: 150%;
+  color: #1696D2;
+  text-decoration-line: underline;
+  font-style: italic;
+  cursor: pointer;
+}
+
 .help-tip {
     position: relative;
     display: inline-block;
