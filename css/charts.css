@@ -145,6 +145,7 @@
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
+  transform: translateY(25%);
 }
 
 .slider:before {
