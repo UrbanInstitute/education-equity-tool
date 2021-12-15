@@ -127,8 +127,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 26px;
+  width: 72px;
+  height: 30px;
 }
 
 /* Hide default HTML checkbox */
@@ -149,19 +149,32 @@
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
-  transform: translateY(25%);
+  transform: translateY(4px);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 4px;
+  height: 22px;
+  width: 22px;
+  left: 46px;
   bottom: 4px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
+}
+
+.slider:after {
+  position: absolute;
+  content: "OFF";
+  font-size: 16px;
+  height: 18px;
+  width: 18px;
+  left: 10px;
+  top: 3px;
+  line-height: 22px;
+  text-transform: uppercase;
+  color: #FFFFFF;
 }
 
 input:checked + .slider {
@@ -173,9 +186,16 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(32px);
-  -ms-transform: translateX(32px);
-  transform: translateX(32px);
+  -webkit-transform: translateX(-40px);
+  -ms-transform: translateX(-40px);
+  transform: translateX(-40px);
+}
+
+input:checked + .slider:after {
+  content: "ON";
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
 }
 
 /* Rounded sliders */
@@ -463,3 +483,71 @@ input[type=text] {
     top:-40px;
     left:0;
 } */
+
+.toggle2 {
+    display: inline;
+    float: left;
+    margin-right: 30px;
+    margin-top: 5px;
+}
+
+.toggle > p.label.lg-screen {
+    display: inline-block;
+}
+.toggle > p.label, .toggle > p.label {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+input#only[type=checkbox], input#btm_20[type=checkbox] {
+    height: 0;
+    margin: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.check-switch {
+    border: 1px solid #565656;
+    display: block;
+    overflow: hidden;
+    padding: 0.5em;
+    position: relative;
+}
+
+label.check-switch {
+    margin-bottom: 0;
+    padding-left: 0px;
+    position: relative;
+    text-transform: uppercase;
+    top: 10px;
+    border: none;
+    cursor: pointer;
+    /* text-indent: -9999px; */
+    width: 63px;
+    height: 14px;
+    background: #696969;
+    display: inline-block;
+    border-radius: 100px;
+}
+
+label.check-switch:before {
+    color: #FFFFFF;
+    content: 'OFF';
+    position: absolute;
+    top: 3px;
+    left: 8px;
+}
+
+label.check-switch:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 44px;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 90px;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
