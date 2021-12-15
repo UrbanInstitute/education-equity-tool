@@ -135,12 +135,6 @@ function addOptions(id, values, addStudents) {
 
   options.exit().remove();
 
-  element.selectAll("a").each(function(d, i){
-    if (d === state[id]) {
-      document.getElementById(id).selectedIndex = i;
-    }
-  });
-
   return element;
 }
 
@@ -293,9 +287,6 @@ Promise.all([
       d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
       updateOptionsCircles();
       updateChart();
-    } else {
-      let idx = raceEthsLabels.indexOf(state.raceEth1);
-      document.getElementById("raceEth1").selectedIndex = idx;
     }
   })
 
@@ -311,9 +302,6 @@ Promise.all([
       d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       updateOptionsCircles();
       updateChart();
-    } else {
-      let idx = raceEthsLabels.indexOf(state.raceEth2);
-      document.getElementById("raceEth2").selectedIndex = idx;
     }
   })
 
