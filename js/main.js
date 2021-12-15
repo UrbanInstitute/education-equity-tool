@@ -926,6 +926,16 @@ Promise.all([
       zoomOutScale();
     }
 
+    if (state.showing === 'states') {
+      yScale = d3.scaleLinear()
+        .domain([0, state.dataToPlot.length])
+        .rangeRound([margin.top + lineHeight/2, state.height])
+    } else {
+      yScale = d3.scaleLinear()
+        .domain([0, 1, state.dataToPlot.length])
+        .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
+    }
+
     // axes
     svg.selectAll(".axis-line").remove();
 
