@@ -123,7 +123,7 @@ function addOptions(id, values, addStudents) {
   var element = d3.select("#"+id);
   var options = element.selectAll("option").data(values);
 
-  options.enter().append("option")
+  options.enter().append("a")
     .html(function(d){
       if (addStudents) {
         return d + " students"
@@ -134,7 +134,7 @@ function addOptions(id, values, addStudents) {
 
   options.exit().remove();
 
-  element.selectAll("option").each(function(d, i){
+  element.selectAll("a").each(function(d, i){
     if (d === state[id]) {
       document.getElementById(id).selectedIndex = i;
     }
@@ -253,12 +253,36 @@ Promise.all([
   state.dataToPlot = states;
   state.name = "STUSPS";
 
-  let newRaceEthValue;
+  function getCircleHtml(color) {
+    return '<svg width="14px" height="14px"><circle id="raceEth1-circle" cx="7px" cy="7px" r="7px" fill="' + color + '"></circle></svg>'
+  }
+
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('#dropbtn1')) {
+      var dropdown = document.getElementById("raceEth1");
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    }
+    if (!event.target.matches('#dropbtn2')) {
+      var dropdown = document.getElementById("raceEth2");
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    }
+  }
+
   let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
-  raceEthOp1.on("change", function(d, i){
-    newRaceEthValue = d3.select(this).node().value;
-    if (newRaceEthValue !== state.raceEth2) {
-      state.raceEth1 = d3.select(this).node().value;
+  d3.select("#dropdown1")
+    .on("click", function(d){
+      document.getElementById("raceEth1").classList.toggle("show");
+    });
+  d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+  raceEthOp1.selectAll("a").on("click", function(event, d){
+    if (d !== state.raceEth2) {
+      state.raceEth1 = d;
+      d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
       updateOptionsCircles();
       updateChart();
     } else {
@@ -268,10 +292,15 @@ Promise.all([
   })
 
   let raceEthOp2 = addOptions("raceEth2", raceEthsLabels);
-  raceEthOp2.on("change", function(d){
-    newRaceEthValue = d3.select(this).node().value;
-    if (newRaceEthValue !== state.raceEth1) {
-      state.raceEth2 = d3.select(this).node().value;
+  d3.select("#dropdown2")
+    .on("click", function(d){
+      document.getElementById("raceEth2").classList.toggle("show");
+    });
+  d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+  raceEthOp2.selectAll("a").on("click", function(event, d){
+    if (d !== state.raceEth1) {
+      state.raceEth2 = d;
+      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       updateOptionsCircles();
       updateChart();
     } else {
@@ -283,12 +312,15 @@ Promise.all([
   updateOptionsCircles();
 
   let statesMenu = getUniquesMenu(states, "STUSPS");
+  d3.select("#dropdown3")
+    .on("click", function(d){
+      document.getElementById("state-menu").classList.toggle("show");
+    });
   let stateOp = addOptions("state-menu", statesMenu);
-  stateOp.on("change", function(d){
-      newStateValue = d3.select(this).node().value;
+  stateOp.selectAll("a").on("click", function(event, d){
       if (state.showing === 'districts') {
-        if (state.currentState !== newStateValue) {
-          state.currentState = newStateValue;
+        if (state.currentState !== d) {
+          state.currentState = d;
           state.myown = [];
         }
         state.sourceData = districts.filter(function(e){
@@ -724,7 +756,8 @@ Promise.all([
             state.name = "leaid";
             state.showing = 'districts';
             let idx = statesMenu.indexOf(state.currentState);
-            document.getElementById("state-menu").selectedIndex = idx;
+            // document.getElementById("state-menu").selectedIndex = idx;
+            d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
             showDistrictDivs();
             d3.selectAll(".district-view").style("display", "inline-block")
               .classed("chosen", function(e){
@@ -1099,7 +1132,8 @@ Promise.all([
           state.name = "leaid";
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
-          document.getElementById("state-menu").selectedIndex = idx;
+          // document.getElementById("state-menu").selectedIndex = idx;
+          d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
           showDistrictDivs();
           d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){
@@ -1143,7 +1177,8 @@ Promise.all([
           state.name = "leaid";
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
-          document.getElementById("state-menu").selectedIndex = idx;
+          // document.getElementById("state-menu").selectedIndex = idx;
+          d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
           showDistrictDivs();
           d3.selectAll(".district-view").style("display", "inline-block")
             .classed("chosen", function(e){

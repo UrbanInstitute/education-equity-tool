@@ -98,30 +98,26 @@
 
       <div id="forms">
         Show gap between
-        <form class="form-inline">
-          <div class="form-group">
-            <svg width="10px" height="10px">
-              <circle id="raceEth1-circle" cx="5px" cy="5px" r="5px"></circle>
-            </svg>
-            <select class="form-control" id="raceEth1"></select>
-          </div>
-        </form>
-  			and
-        <form class="form-inline">
-          <div class="form-group">
-            <svg width="10px" height="10px">
-              <circle id="raceEth2-circle" cx="5px" cy="5px" r="5px"></circle>
-            </svg>
-            <select class="form-control" id="raceEth2"></select>
-          </div>
-        </form>
+        <div class="dropdown" id="dropdown1">
+          <div class="dropbtn" id="dropbtn1"></div>
+          <div id="raceEth1" class="dropdown-content"></div>
+        </div>
+  			<span class='between-dropdowns'>and</span>
+        <div class="dropdown" id="dropdown2">
+          <div class="dropbtn" id="dropbtn2"></div>
+          <div id="raceEth2" class="dropdown-content"></div>
+        </div>
         <div id="state-div" style="display: none">
           for districts in
-          <form class="form-inline">
+          <!-- <form class="form-inline">
             <div class="form-group">
               <select class="form-control" id="state-menu"></select>
             </div>
-          </form>
+          </form> -->
+          <div class="dropdown" id="dropdown3">
+            <div class="dropbtn" id="dropbtn3"></div>
+            <div id="state-menu" class="dropdown-content"></div>
+          </div>
         </div>
       </div>
 
