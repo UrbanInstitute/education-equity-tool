@@ -11,6 +11,14 @@ let dataTooltip = d3.select("body").append("div")
     .style("display", "block")
     .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
 
+let stateTooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("left", 0)
+    .style("top", 0)
+    .style("display", "block")
+    .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
+
 const transitionTime = 500;
 
 var margin = {top: 20, right: offsetWidth, bottom: 20, left: 100},
@@ -771,6 +779,18 @@ Promise.all([
             .style("opacity", 1);
         } else {
           dataTooltip.style("opacity", 0);
+        }
+
+        if ((state.showing === 'states') & ((thisData[state.name] === 'DC') | (thisData[state.name] === 'HI'))) {
+          let thisGPos = thisG.node().getBoundingClientRect();
+          let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+
+          stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+            .style("top", (event.pageY - yOffset) + "px")
+            .style("opacity", 1);
+
+        } else {
+          stateTooltip.style("opacity", 0);
         }
       } else {
         // gDivisions.classed("hidden", false)
