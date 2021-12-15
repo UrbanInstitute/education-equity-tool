@@ -85,6 +85,7 @@ var state = {
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
 let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>'
+let plusIcon = '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 0H26V48H23V0Z" fill="black"/><path d="M48 23V26L0 26L1.31135e-07 23L48 23Z" fill="black"/></svg>';
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -446,7 +447,8 @@ Promise.all([
 
     options.exit().remove();
 
-    searchBox.attr("placeholder", "Start typing... \t" + state.myown.length + "/10")
+    d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
+    searchBox.attr("placeholder", "Start typing...")
       .on("change", function(){
         let searchLabel = d3.select(this);
         let searchedLabel = searchLabel.property("value");
@@ -460,13 +462,13 @@ Promise.all([
           updateDistricts();
           updateDistrictsList();
           updateChart();
-          d3.select(this).attr("placeholder", "Start typing... \t" + state.myown.length + "/10")
+          d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
+          d3.select(this).attr("placeholder", "Start typing...")
         }
       })
   }
 
   function updateDistrictsList() {
-    console.log(state.sourceData)
 
     let selectedDistricts = districtsList.selectAll(".selected-district").data(state.sourceData);
 
@@ -486,6 +488,7 @@ Promise.all([
       state.myown = state.myown.filter(function(m){
         return m !== d.leaid;
       });
+      d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
       updateDistricts();
       updateDistrictsList();
       updateChart();

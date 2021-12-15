@@ -293,11 +293,12 @@ input:checked + .slider:before {
 }
 
 #search-box {
-  padding: 5px 5px 5px 5px;
+  padding: 12px;
   border: 1px solid lightgray;
   font-size: 16px;
   line-height: 150%;
   color: #696969;
+  width: 260px;
 }
 ::-webkit-input-placeholder {
    font-style: italic;
@@ -310,6 +311,16 @@ input:checked + .slider:before {
 }
 :-ms-input-placeholder {
    font-style: italic;
+}
+
+#number-selected {
+  margin-left: -70px;
+  font-size: 16px;
+  color: #696969;
+}
+
+#number-selected svg {
+  transform: scale(0.33)translate(-30px, 54px);
 }
 
 #selected-districts {
