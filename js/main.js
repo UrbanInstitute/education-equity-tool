@@ -172,7 +172,7 @@ function sortData(data) {
       if(!isFinite(gap2)) {
         return -1;
       }
-      return gap1 - gap2;
+      return gap2 - gap1;
     })
   } else {
     sortedData = data.sort(function(a,b){
