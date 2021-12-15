@@ -617,12 +617,13 @@ Promise.all([
       thisState[0].leaid = thisState[0]['STUSPS'] + ' avg';
       state.dataToPlot = [thisState[0], ...sortedData];
     }
-    state.height = state.dataToPlot.length * lineHeight;
   }
 
   function initChart(filteredData) {
 
     processData();
+
+    state.height = state.dataToPlot.length * lineHeight;
 
     svg = d3.select("#chart").append("svg")
       .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
@@ -911,6 +912,19 @@ Promise.all([
 
     processData();
 
+    if (state.showing === 'states') {
+      state.height = state.dataToPlot.length * lineHeight;
+      yScale = d3.scaleLinear()
+        .domain([0, state.dataToPlot.length])
+        .rangeRound([margin.top + lineHeight/2, state.height])
+    } else {
+      state.height = state.dataToPlot.length * lineHeight + 3 * lineHeight / 2;
+      yScale = d3.scaleLinear()
+        .domain([0, 1, state.dataToPlot.length])
+        .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
+    }
+    console.log(state.height)
+
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom);
@@ -924,16 +938,6 @@ Promise.all([
       }
     } else {
       zoomOutScale();
-    }
-
-    if (state.showing === 'states') {
-      yScale = d3.scaleLinear()
-        .domain([0, state.dataToPlot.length])
-        .rangeRound([margin.top + lineHeight/2, state.height])
-    } else {
-      yScale = d3.scaleLinear()
-        .domain([0, 1, state.dataToPlot.length])
-        .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
     }
 
     // axes
