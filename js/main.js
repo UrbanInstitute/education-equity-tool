@@ -272,6 +272,13 @@ Promise.all([
         dropdown.classList.remove('show');
       }
     }
+    if (!event.target.matches('#search-box')) {
+      var dropdown = document.getElementById("search-list");
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        d3.select("#search-box").html("Start typing...");
+      }
+    }
   }
 
   let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
@@ -429,42 +436,58 @@ Promise.all([
     })
   }
 
+
   function updateSearchBox() {
     let theseDistricts = getUniquesMenu(districts.filter(function(e){
       return e['STUSPS'] === state.currentState;
     }), "leaid")
 
-    let options = searchList.selectAll("option").data(theseDistricts);
+    function updateSearchList(thisData){
+      let options = searchList.selectAll("a").data(thisData);
 
-    options.enter().append("option")
-      .html(function(d) {
+      options.enter().append("a")
+        .html(function(d) {
+          return d
+        });
+
+      options.html(function(d) {
         return d
       });
 
-    options.html(function(d) {
-      return d
-    });
+      options.exit().remove();
 
-    options.exit().remove();
-
-    d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
-    searchBox.attr("placeholder", "Start typing...")
-      .on("change", function(){
-        let searchLabel = d3.select(this);
-        let searchedLabel = searchLabel.property("value");
-        let idxLabel = theseDistricts.indexOf(searchedLabel.toLowerCase());
+      searchList.selectAll("a").on("click", function(event, d){
+        let idxLabel = theseDistricts.indexOf(d.toLowerCase());
         let nSelected = state.myown.length;
-        let isSelected = state.myown.indexOf(searchedLabel.toLowerCase()) >= 0;
+        let isSelected = state.myown.indexOf(d.toLowerCase()) >= 0;
 
         if ((idxLabel >= 0) && (nSelected < 10) && (!isSelected)) {
           state.myown.push(theseDistricts[idxLabel]);
-          searchLabel.node().value = "";
+          searchBox.html("Start typing...");
+          updateSearchList(theseDistricts);
           updateDistricts();
           updateDistrictsList();
           updateChart();
           d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
-          d3.select(this).attr("placeholder", "Start typing...")
         }
+      })
+    }
+
+    updateSearchList(theseDistricts);
+
+    d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
+
+    searchBox.on("click",function(){
+        d3.select(this).html("");
+        document.getElementById("search-list").classList.toggle("show");
+        updateSearchList(theseDistricts);
+      })
+      .on("keyup", function(event, d){
+        let entered =  d3.select(this).text().toLowerCase();
+        let thisData = theseDistricts.filter(function(d){
+          return d.includes(entered);
+        })
+        updateSearchList(thisData);
       })
   }
 

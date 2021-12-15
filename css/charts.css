@@ -8,6 +8,7 @@
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
+  padding-bottom: 150px
 }
 
 /* svg {
@@ -299,6 +300,8 @@ input:checked + .slider:before {
   line-height: 150%;
   color: #696969;
   width: 260px;
+  display: inline-block;
+  font-style: italic;
 }
 ::-webkit-input-placeholder {
    font-style: italic;
@@ -311,6 +314,26 @@ input:checked + .slider:before {
 }
 :-ms-input-placeholder {
    font-style: italic;
+}
+
+#search-list {
+  width: 286px;
+  max-height: 250px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+/* Firefox */
+input[type=text] {
+  -moz-appearance: textfield;
 }
 
 #number-selected {

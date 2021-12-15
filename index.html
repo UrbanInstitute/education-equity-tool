@@ -150,10 +150,11 @@
       <div class="row" id="search" style="display: none">
   			<!-- <label for="search-box" id="search-label"></label> -->
   			<span>
-  			  <input name="name" type="text" id="search-box" list="search-list">
+  			  <!-- <input name="name" type="text" id="search-box" list="search-list"> -->
+          <div contenteditable="true" id="search-box">Start typing...</div>
           <span id='number-selected'></span>
   			</span>
-  			<datalist id="search-list"></datalist>
+  			<div id="search-list" class="dropdown-content"></div>
   		</div>
 
       <div class="row" id="selected-districts" style="display: none">
