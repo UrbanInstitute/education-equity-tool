@@ -34,16 +34,14 @@
   opacity: 1.0;
 }
 
-#metrics {
-  padding: 20px 0;
-}
-
 #metrics span {
   color: darkgray;
   padding-right: 20px;
   cursor: pointer;
   font-weight: bold;
   font-size: 18px;
+  line-height: 22px;
+  margin: 28px auto;
 }
 
 #metrics span.chosen {
@@ -55,14 +53,13 @@
 }
 
 #metrics-text {
-  padding-bottom: 20px;
   font-size: 18px;
   line-height: 150%;
-  /* paragraph-spacing: 28 */
+  margin: 28px auto;
 }
 
 #forms {
-  padding: 15px 0;
+  margin: 28px auto;
   font-weight: bold;
   font-size: 18px;
 }
@@ -216,7 +213,7 @@ input:checked + .slider:before {
 }
 
 #explanation-text {
-  padding: 20px 0;
+  margin-bottom: 28px;
   font-style: italic;
 }
 
