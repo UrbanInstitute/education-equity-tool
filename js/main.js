@@ -793,17 +793,27 @@ Promise.all([
       })
       .join('text')
         .attr("class", "show-districts")
-        .style("display", "none")
+        .style("display", function(){
+          if (state.showing === 'states') {
+            return "none";
+          } else {
+            return "block";
+          }
+        })
         .attr("x", width + margin.left + marginRight)
         .attr("y", lineHeight/4)
         .style("text-anchor", "left")
         .style("vertical-align", "middle")
         .attr('fill', 'steelblue')
-        .text(function(d) {
+        .text(function(d, i) {
           if (state.showing === 'states') {
             return "Show me districts in " + d[state.name];
           } else {
-            return "Take me back to the state view"
+            if (d[state.name].includes('avg')){
+              return "Take me back to the state view"
+            } else {
+              return null;
+            }
           }
         })
         .on("click", function(event, d){
@@ -861,10 +871,12 @@ Promise.all([
         notThisG.selectAll(".number-label")
           .classed("hidden", state.showing !== 'districts');
           // .style("opacity", 0);
-        thisG.selectAll(".show-districts")
-          .style("display", "block")
-        notThisG.selectAll(".show-districts")
-          .style("display", "none");
+        if (state.showing === 'states') {
+          thisG.selectAll(".show-districts")
+            .style("display", "block")
+          notThisG.selectAll(".show-districts")
+            .style("display", "none");
+        }
 
         // Show tooltip if missing data
         let thisData = thisG.data()[0];
@@ -894,8 +906,10 @@ Promise.all([
         gDivisions.selectAll(".rect")
           .classed("hidden", true)
           // .style("opacity", 0);
-        gDivisions.selectAll(".show-districts")
-          .style("display", "none");
+        if (state.showing === 'states'){
+          gDivisions.selectAll(".show-districts")
+            .style("display", "none");
+        }
         dataTooltip.style("opacity", 0);
       }
     })
@@ -1175,17 +1189,27 @@ Promise.all([
 
     divisionChange.enter().append("text")
       .attr("class", "show-districts")
-      .style("display", "none")
+      .style("display", function(){
+        if (state.showing === 'states') {
+          return "none";
+        } else {
+          return "block";
+        }
+      })
       .attr("x", width + margin.left + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
       .attr('fill', 'steelblue')
-      .text(function(d) {
+      .text(function(d, i) {
         if (state.showing === 'states') {
           return "Show me districts in " + d[state.name];
         } else {
-          return "Take me back to the state view"
+          if (d[state.name].includes('avg')){
+            return "Take me back to the state view"
+          } else {
+            return null;
+          }
         }
       })
       .on("click", function(event, d){
@@ -1220,17 +1244,27 @@ Promise.all([
 
     divisionChange
       .attr("class", "show-districts")
-      .style("display", "none")
+      .style("display", function(){
+        if (state.showing === 'states') {
+          return "none";
+        } else {
+          return "block";
+        }
+      })
       .attr("x", width + margin.left + marginRight)
       .attr("y", lineHeight/4)
       .style("text-anchor", "left")
       .style("vertical-align", "middle")
       .attr('fill', 'steelblue')
-      .text(function(d) {
+      .text(function(d, i) {
         if (state.showing === 'states') {
           return "Show me districts in " + d[state.name];
         } else {
-          return "Take me back to the state view"
+          if (d[state.name].includes('avg')){
+            return "Take me back to the state view"
+          } else {
+            return null;
+          }
         }
       })
       .on("click", function(event, d){
