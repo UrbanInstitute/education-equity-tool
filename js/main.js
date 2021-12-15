@@ -545,7 +545,7 @@ Promise.all([
   function moveToFront(){
     gs.selectAll(".line").moveToFront();
     gs.selectAll(".raceeth").filter(function (d,i){
-      return (raceEthsLabels[i] === state.raceEth1) || (raceEthsLabels[i] === state.raceEth2)
+      return ((raceEthsLabels[i] === state.raceEth1) | (raceEthsLabels[i] === state.raceEth2))
     }).moveToFront();
     gs.selectAll(".number-label").moveToFront();
   }

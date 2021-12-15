@@ -59,6 +59,10 @@
   margin: 28px auto;
 }
 
+#metrics-text a {
+  font-size: 18px;
+}
+
 #forms {
   margin: 28px auto;
   font-weight: bold;
@@ -115,8 +119,8 @@
 
 .show-districts {
   text-decoration: underline;
-  font-style: italic;
   cursor: pointer;
+  color: #1696D2;
 }
 
 .state-average .division-name {
