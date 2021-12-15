@@ -5,18 +5,16 @@ console.log(widthChart)
 let svg, g, gs, xScale, yScale, tickValues;
 let dataTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
-    .style("opacity", 0)
     .style("left", 0)
     .style("top", 0)
-    .style("display", "block")
+    .style("display", "none")
     .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
 
 let stateTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
-    .style("opacity", 0)
     .style("left", 0)
     .style("top", 0)
-    .style("display", "block")
+    .style("display", "none")
     .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
 
 const transitionTime = 500;
@@ -811,7 +809,11 @@ Promise.all([
         .attr('fill', 'steelblue')
         .text(function(d, i) {
           if (state.showing === 'states') {
-            return "Show me districts in " + d[state.name];
+            if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+              return null;
+            } else {
+              return "Show me districts in " + d[state.name];
+            }
           } else {
             if (d[state.name].includes('avg')){
               return "Take me back to the state view"
@@ -887,9 +889,9 @@ Promise.all([
         if (isNaN(thisData[state.metric + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[state.metric + "_" + raceEths[state.raceEth2]])){
           dataTooltip.style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
-            .style("opacity", 1);
+            .style("display", "block");
         } else {
-          dataTooltip.style("opacity", 0);
+          dataTooltip.style("display", "none");
         }
 
         if ((state.showing === 'states') & ((thisData[state.name] === 'DC') | (thisData[state.name] === 'HI'))) {
@@ -898,10 +900,10 @@ Promise.all([
 
           stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
             .style("top", (event.pageY - yOffset) + "px")
-            .style("opacity", 1);
+            .style("display", "block");
 
         } else {
-          stateTooltip.style("opacity", 0);
+          stateTooltip.style("display", "none");
         }
       } else {
         // gDivisions.classed("hidden", false)
@@ -914,7 +916,7 @@ Promise.all([
           gDivisions.selectAll(".show-districts")
             .style("display", "none");
         }
-        dataTooltip.style("opacity", 0);
+        dataTooltip.style("display", "none");
       }
     })
     .on("click", function(event){
@@ -1210,7 +1212,11 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d, i) {
         if (state.showing === 'states') {
-          return "Show me districts in " + d[state.name];
+          if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+            return null;
+          } else {
+            return "Show me districts in " + d[state.name];
+          }
         } else {
           if (d[state.name].includes('avg')){
             return "Take me back to the state view"
@@ -1265,7 +1271,11 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d, i) {
         if (state.showing === 'states') {
-          return "Show me districts in " + d[state.name];
+          if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+            return null;
+          } else {
+            return "Show me districts in " + d[state.name];
+          }
         } else {
           if (d[state.name].includes('avg')){
             return "Take me back to the state view"
