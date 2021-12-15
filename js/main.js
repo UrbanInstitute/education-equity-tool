@@ -275,6 +275,18 @@ Promise.all([
     }
   }
 
+  function greyOutRaceEth(){
+    d3.select("#raceEth1").selectAll("a")
+      .classed("not-available", function(d){
+        return d === state.raceEth2;
+      })
+
+    d3.select("#raceEth2").selectAll("a")
+      .classed("not-available", function(d){
+        return d === state.raceEth1;
+      })
+  }
+
   let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
   d3.select("#dropdown1")
     .on("click", function(d){
@@ -285,6 +297,7 @@ Promise.all([
     if (d !== state.raceEth2) {
       state.raceEth1 = d;
       d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
     }
@@ -300,10 +313,13 @@ Promise.all([
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
       d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+      greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
     }
   })
+
+  greyOutRaceEth();
 
   updateOptionsCircles();
 

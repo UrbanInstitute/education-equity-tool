@@ -275,6 +275,11 @@ input:checked + .slider:before {
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
+.dropdown-content a.not-available {
+  opacity: 0.2;
+  cursor: auto;
+}
+
 #explanation-text {
   margin-bottom: 28px;
   font-style: italic;
