@@ -545,7 +545,7 @@ Promise.all([
   function moveToFront(){
     gs.selectAll(".line").moveToFront();
     gs.selectAll(".raceeth").filter(function (d,i){
-      return ((raceEthsLabels[i] === state.raceEth1) | (raceEthsLabels[i] === state.raceEth2))
+      return ((d.raceEth === state.raceEth1) | (d.raceEth === state.raceEth2));
     }).moveToFront();
     gs.selectAll(".number-label").moveToFront();
   }
@@ -565,11 +565,11 @@ Promise.all([
   }
 
   let getCircleFill = function(d, i) {
-    if (!isNaN(d)) {
-      if (raceEthsLabels[i] === state.raceEth1) {
+    if (!isNaN(d.value)) {
+      if (d.raceEth === state.raceEth1) {
         return twoColors[0];
         // return colors[state.raceEth1];
-      } else if (raceEthsLabels[i] === state.raceEth2) {
+      } else if (d.raceEth === state.raceEth2) {
         return twoColors[1];
         // return colors[state.raceEth2];
       } else {
@@ -733,14 +733,18 @@ Promise.all([
     gs.selectAll(".raceeth")
       .data(function(d){
         return raceEthsLabels.map(function(r){
-          return d[state.metric + "_" + raceEths[r]];
+          let obj = {};
+          obj.value = d[state.metric + "_" + raceEths[r]];
+          obj.raceEth = r;
+          return obj
+          // return d[state.metric + "_" + raceEths[r]];
         })
       })
       .join("circle")
         .attr("class", "raceeth")
         .attr("opacity", 1.0)
         .attr("cx", function(d){
-          return xScale(d);
+          return xScale(d.value);
         })
         .attr("fill", getCircleFill)
         .attr("r", circleSize);
@@ -961,7 +965,6 @@ Promise.all([
         .domain([0, 1, state.dataToPlot.length])
         .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
     }
-    console.log(state.height)
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
@@ -1108,7 +1111,11 @@ Promise.all([
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
         return raceEthsLabels.map(function(r){
-          return d[state.metric + "_" + raceEths[r]];
+          let obj = {};
+          obj.value = d[state.metric + "_" + raceEths[r]];
+          obj.raceEth = r;
+          return obj
+          // return d[state.metric + "_" + raceEths[r]];
         })
       });
 
@@ -1117,7 +1124,7 @@ Promise.all([
         .attr("class", "raceeth")
         .attr("opacity", 1.0)
         .attr("cx", function(d){
-          return xScale(d);
+          return xScale(d.value);
         })
         .attr("fill", getCircleFill)
         .attr("r", circleSize)
@@ -1125,7 +1132,7 @@ Promise.all([
     divisionCircles
       .transition().duration(transitionTime)
       .attr("cx", function(d){
-        return xScale(d);
+        return xScale(d.value);
       })
       .attr("fill", getCircleFill);
 
