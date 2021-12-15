@@ -77,7 +77,8 @@ var state = {
   name: null,
   currentState: null,
   showing: 'states',
-  // districtView: null,
+  stateFixed: null,
+  districtFixed: null,
   myown: [],
   sortByGap: true,
   expandScale: false,
@@ -619,6 +620,36 @@ Promise.all([
     }
   }
 
+  function highlightFixed() {
+    let gDivisions = g.selectAll(".division");
+
+    function showHighlighted(reference, id){
+      if (reference === null) {
+        gDivisions.classed("fixed", false);
+      } else {
+        let thisGroup = gDivisions.filter(function(d,i){
+          return d[id] === reference;
+        });
+        gDivisions.classed("fixed", function(d, i){
+          return d[id] === reference;
+        })
+        thisGroup.selectAll(".number-label")
+          .classed("hidden", false);
+        thisGroup.selectAll(".rect")
+          .classed("hidden", false);
+        thisGroup.selectAll(".show-districts")
+          .style("display", "block");
+      }
+    }
+
+    if (state.showing === 'states') {
+      showHighlighted(state.stateFixed, 'STUSPS');
+    } else {
+      showHighlighted(state.districtFixed, 'leaid');
+    }
+
+  }
+
   function initChart(filteredData) {
 
     processData();
@@ -876,34 +907,27 @@ Promise.all([
       let thisG = gDivisions.filter(function(d,i){
         return i === index;
       });
-      // let notThisG = gDivisions.filter(function(d,i){
-      //   return i !== index;
-      // });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
           margin.left < thisX  && thisX < width){
-        gDivisions.classed("fixed", function(d, i){
-          return i === index;
-        })
-        thisG.selectAll(".number-label")
-          .classed("hidden", false)
-          // .style("opacity", 1)
-        thisG.selectAll(".rect")
-          .classed("hidden", false)
-          // .style("opacity", 1)
-        // notThisG.selectAll(".number-label")
-        //   .style("opacity", 0);
-        thisG.selectAll(".show-districts")
-          .style("display", "block")
-        // notThisG.selectAll(".show-districts")
-        //   .style("display", "none");
+        let thisData = thisG.data()[0];
+
+        if (state.showing === 'states'){
+          if (state.stateFixed === thisData['STUSPS']) {
+            state.stateFixed = null;
+          } else {
+            state.stateFixed = thisData['STUSPS'];
+          }
+        } else {
+          if (state.districtFixed === thisData['leaid']) {
+            state.districtFixed = null;
+          } else {
+            state.districtFixed = thisData['leaid'];
+          }
+        }
+
+        highlightFixed();
+
       }
-      // else {
-      //   gDivisions.classed("hidden", false)
-      //   gDivisions.selectAll(".number-label")
-      //     .style("opacity", 0);
-      //   gDivisions.selectAll(".show-districts")
-      //     .style("display", "none");
-      // }
     });
 
   }
@@ -1240,6 +1264,8 @@ Promise.all([
       })
 
     divisionChange.exit().remove();
+
+    highlightFixed();
   }
 
   initChart(state.dataToPlot);
