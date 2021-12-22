@@ -75,6 +75,7 @@ var state = {
   name: null,
   currentState: null,
   showing: 'states',
+  districtView: 'Largest districts',
   stateFixed: null,
   districtFixed: null,
   myown: [],
@@ -394,6 +395,7 @@ Promise.all([
         });
         state.name = "lea_name";
         state.showing = 'districts';
+        state.districtViews = 'largest';
         d3.select("#state-div").style("display", "inline-block");
         d3.select("#search").style("display", "none");
         d3.select("#selected-districts").style("display", "none");
@@ -405,6 +407,7 @@ Promise.all([
         })
         state.name = "lea_name";
         state.showing = 'districts';
+        state.districtView = 'myown';
         updateSearchBox();
       }
       updateChart();
@@ -605,10 +608,10 @@ Promise.all([
   }
 
   function processData() {
-    let sortedData = sortData(state.sourceData);
     if (state.showing === 'states') {
-      state.dataToPlot = sortedData;
+      state.dataToPlot = sortData(state.sourceData);
     } else {
+      let sortedData = sortData(state.sourceData.filter(n => n.top10_flag === '1'))
       // add state average
       let thisState = states.filter(function(d){
         return d['NAME'] === state.currentState;
@@ -845,6 +848,7 @@ Promise.all([
             state.sourceData = states;
             state.name = "NAME";
             state.showing = 'states';
+            state.districtView = 'largest';
             showDistrictDivs();
             d3.selectAll(".district-view").style("display", "none");
           }
@@ -1244,6 +1248,7 @@ Promise.all([
             .classed("chosen", function(e){
               return e === 'Largest districts';
             });
+          state.districtView = 'largest';
         } else {
           state.sourceData = states;
           state.name = "NAME";
@@ -1303,6 +1308,7 @@ Promise.all([
             .classed("chosen", function(e){
               return e === 'Largest districts';
             });
+          state.districtView = 'largest';
         } else {
           state.sourceData = states;
           state.name = "NAME";
