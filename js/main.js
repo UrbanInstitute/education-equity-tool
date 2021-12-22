@@ -612,7 +612,7 @@ Promise.all([
       state.dataToPlot = sortData(state.sourceData);
     } else {
       let sortedData;
-      if (state.districtView === 'largets'){
+      if (state.districtView === 'largest'){
         sortedData = sortData(state.sourceData.filter(n => n.top10_flag === '1'));
       } else {
         sortedData = sortData(state.sourceData);
