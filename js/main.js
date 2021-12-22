@@ -40,8 +40,8 @@ const marginRight = 40;
 let raceEthsLabels = ['AIAN students', 'Asian students', 'Black students',
     'Hispanic students', 'NHPI students', 'Two or more', 'White students'];
 let raceEths = {
-  'Black students': 'Black',
-  'Hispanic students': 'Hisp',
+  'Black students': 'black',
+  'Hispanic students': 'hispanic',
   'AIAN students': 'aian',
   'Asian students': 'asian',
   'NHPI students': 'nhpi',
@@ -223,8 +223,8 @@ function hideDistrictDivs() {
 }
 
 Promise.all([
-  d3.csv('data/early_state_draft.csv'),
-  d3.csv('data/early_district_draft.csv')
+  d3.csv('data/state_final.csv'),
+  d3.csv('data/district_final.csv')
 ]).then(function(data) {
   var states = data[0];
   var districts = data[1];
@@ -245,7 +245,7 @@ Promise.all([
 
   state.sourceData = states;
   state.dataToPlot = states;
-  state.name = "STUSPS";
+  state.name = "NAME";
 
   function getCircleHtml(color) {
     return '<svg width="14px" height="14px"><circle id="raceEth1-circle" cx="7px" cy="7px" r="7px" fill="' + color + '"></circle></svg>'
@@ -322,7 +322,7 @@ Promise.all([
 
   updateOptionsCircles();
 
-  let statesMenu = getUniquesMenu(states, "STUSPS");
+  let statesMenu = getUniquesMenu(states, "NAME");
   d3.select("#dropdown3")
     .on("click", function(d){
       document.getElementById("state-menu").classList.toggle("show");
@@ -335,9 +335,9 @@ Promise.all([
           state.myown = [];
         }
         state.sourceData = districts.filter(function(e){
-          return e["STUSPS"] === state.currentState;
+          return e["NAME"] === state.currentState;
         });
-        state.name = "leaid";
+        state.name = "lea_name";
         state.showing = 'districts';
         updateSearchBox();
       }
@@ -390,9 +390,9 @@ Promise.all([
         })
       if (d === 'Largest districts'){
         state.sourceData = districts.filter(function(e){
-          return e["STUSPS"] === state.currentState;
+          return e["NAME"] === state.currentState;
         });
-        state.name = "leaid";
+        state.name = "lea_name";
         state.showing = 'districts';
         d3.select("#state-div").style("display", "inline-block");
         d3.select("#search").style("display", "none");
@@ -401,9 +401,9 @@ Promise.all([
         d3.select("#search").style("display", "block");
         d3.select("#selected-districts").style("display", "block");
         state.sourceData = districts.filter(function(e){
-          return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
+          return ((e["NAME"] === state.currentState) && (state.myown.indexOf(e["lea_name"]) >= 0));
         })
-        state.name = "leaid";
+        state.name = "lea_name";
         state.showing = 'districts';
         updateSearchBox();
       }
@@ -435,15 +435,15 @@ Promise.all([
 
   function updateDistricts() {
     state.sourceData = districts.filter(function(e){
-      return ((e["STUSPS"] === state.currentState) && (state.myown.indexOf(e["leaid"]) >= 0));
+      return ((e["NAME"] === state.currentState) && (state.myown.indexOf(e["lea_name"]) >= 0));
     })
   }
 
 
   function updateSearchBox() {
     let theseDistricts = getUniquesMenu(districts.filter(function(e){
-      return e['STUSPS'] === state.currentState;
-    }), "leaid")
+      return e['NAME'] === state.currentState;
+    }), "lea_name")
 
     function updateSearchList(thisData){
       let options = searchList.selectAll("a").data(thisData);
@@ -512,7 +512,7 @@ Promise.all([
 
     let spanClick = function(event, d) {
       state.myown = state.myown.filter(function(m){
-        return m !== d.leaid;
+        return m !== d.lea_name;
       });
       d3.select("#number-selected").html(state.myown.length + "/10" + plusIcon);
       updateDistricts();
@@ -611,9 +611,9 @@ Promise.all([
     } else {
       // add state average
       let thisState = states.filter(function(d){
-        return d['STUSPS'] === state.currentState;
+        return d['NAME'] === state.currentState;
       })
-      thisState[0].leaid = thisState[0]['STUSPS'] + ' avg';
+      thisState[0].lea_name = thisState[0]['NAME'] + ' avg';
       state.dataToPlot = [thisState[0], ...sortedData];
     }
   }
@@ -641,9 +641,9 @@ Promise.all([
     }
 
     if (state.showing === 'states') {
-      showHighlighted(state.stateFixed, 'STUSPS');
+      showHighlighted(state.stateFixed, 'NAME');
     } else {
-      showHighlighted(state.districtFixed, 'leaid');
+      showHighlighted(state.districtFixed, 'lea_name');
     }
 
   }
@@ -824,14 +824,14 @@ Promise.all([
         })
         .on("click", function(event, d){
           if (state.showing === 'states') {
-            if (state.currentState !== d["STUSPS"]) {
-              state.currentState = d["STUSPS"];
+            if (state.currentState !== d["NAME"]) {
+              state.currentState = d["NAME"];
               state.myown = [];
             }
             state.sourceData = districts.filter(function(e){
-              return e["STUSPS"] === state.currentState;
+              return e["NAME"] === state.currentState;
             });
-            state.name = "leaid";
+            state.name = "lea_name";
             state.showing = 'districts';
             let idx = statesMenu.indexOf(state.currentState);
             // document.getElementById("state-menu").selectedIndex = idx;
@@ -843,7 +843,7 @@ Promise.all([
               });
           } else {
             state.sourceData = states;
-            state.name = "STUSPS";
+            state.name = "NAME";
             state.showing = 'states';
             showDistrictDivs();
             d3.selectAll(".district-view").style("display", "none");
@@ -932,16 +932,16 @@ Promise.all([
         let thisData = thisG.data()[0];
 
         if (state.showing === 'states'){
-          if (state.stateFixed === thisData['STUSPS']) {
+          if (state.stateFixed === thisData['NAME']) {
             state.stateFixed = null;
           } else {
-            state.stateFixed = thisData['STUSPS'];
+            state.stateFixed = thisData['NAME'];
           }
         } else {
-          if (state.districtFixed === thisData['leaid']) {
+          if (state.districtFixed === thisData['lea_name']) {
             state.districtFixed = null;
           } else {
-            state.districtFixed = thisData['leaid'];
+            state.districtFixed = thisData['lea_name'];
           }
         }
 
@@ -1227,14 +1227,14 @@ Promise.all([
       })
       .on("click", function(event, d){
         if (state.showing === 'states') {
-          if (state.currentState !== d["STUSPS"]) {
-            state.currentState = d["STUSPS"];
+          if (state.currentState !== d["NAME"]) {
+            state.currentState = d["NAME"];
             state.myown = [];
           }
           state.sourceData = districts.filter(function(e){
-            return e["STUSPS"] === state.currentState;
+            return e["NAME"] === state.currentState;
           });
-          state.name = "leaid";
+          state.name = "lea_name";
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
           // document.getElementById("state-menu").selectedIndex = idx;
@@ -1246,7 +1246,7 @@ Promise.all([
             });
         } else {
           state.sourceData = states;
-          state.name = "STUSPS";
+          state.name = "NAME";
           state.showing = 'states';
           hideDistrictDivs();
           d3.select("#search").style("display", "none");
@@ -1286,14 +1286,14 @@ Promise.all([
       })
       .on("click", function(event, d){
         if (state.showing === 'states') {
-          if (state.currentState !== d["STUSPS"]) {
-            state.currentState = d["STUSPS"];
+          if (state.currentState !== d["NAME"]) {
+            state.currentState = d["NAME"];
             state.myown = [];
           }
           state.sourceData = districts.filter(function(e){
-            return e["STUSPS"] === state.currentState;
+            return e["NAME"] === state.currentState;
           });
-          state.name = "leaid";
+          state.name = "lea_name";
           state.showing = 'districts';
           let idx = statesMenu.indexOf(state.currentState);
           // document.getElementById("state-menu").selectedIndex = idx;
@@ -1305,7 +1305,7 @@ Promise.all([
             });
         } else {
           state.sourceData = states;
-          state.name = "STUSPS";
+          state.name = "NAME";
           state.showing = 'states';
           hideDistrictDivs();
           d3.select("#search").style("display", "none");
