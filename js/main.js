@@ -817,7 +817,7 @@ Promise.all([
         .attr('fill', 'steelblue')
         .text(function(d, i) {
           if (state.showing === 'states') {
-            if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
               return null;
             } else {
               return "Show me districts in " + d[state.name];
@@ -903,7 +903,7 @@ Promise.all([
           dataTooltip.style("display", "none");
         }
 
-        if ((state.showing === 'states') & ((thisData[state.name] === 'DC') | (thisData[state.name] === 'HI'))) {
+        if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') | (thisData[state.name] === 'Hawaii'))) {
           let thisGPos = thisG.node().getBoundingClientRect();
           let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
 
@@ -1221,7 +1221,7 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d, i) {
         if (state.showing === 'states') {
-          if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+          if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
             return null;
           } else {
             return "Show me districts in " + d[state.name];
@@ -1281,7 +1281,7 @@ Promise.all([
       .attr('fill', 'steelblue')
       .text(function(d, i) {
         if (state.showing === 'states') {
-          if ((d[state.name] === 'HI') | (d[state.name] === 'DC')) {
+          if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
             return null;
           } else {
             return "Show me districts in " + d[state.name];
