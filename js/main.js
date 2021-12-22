@@ -463,9 +463,9 @@ Promise.all([
       options.exit().remove();
 
       searchList.selectAll("a").on("click", function(event, d){
-        let idxLabel = theseDistricts.indexOf(d.toLowerCase());
+        let idxLabel = theseDistricts.indexOf(d);
         let nSelected = state.myown.length;
-        let isSelected = state.myown.indexOf(d.toLowerCase()) >= 0;
+        let isSelected = state.myown.indexOf(d) >= 0;
 
         if ((idxLabel >= 0) && (nSelected < 10) && (!isSelected)) {
           state.myown.push(theseDistricts[idxLabel]);
@@ -491,7 +491,7 @@ Promise.all([
       .on("keyup", function(event, d){
         let entered =  d3.select(this).text().toLowerCase();
         let thisData = theseDistricts.filter(function(d){
-          return d.includes(entered);
+          return d.toLowerCase().includes(entered);
         })
         updateSearchList(thisData);
       })
@@ -611,7 +611,12 @@ Promise.all([
     if (state.showing === 'states') {
       state.dataToPlot = sortData(state.sourceData);
     } else {
-      let sortedData = sortData(state.sourceData.filter(n => n.top10_flag === '1'))
+      let sortedData;
+      if (state.districtView === 'largets'){
+        sortedData = sortData(state.sourceData.filter(n => n.top10_flag === '1'));
+      } else {
+        sortedData = sortData(state.sourceData);
+      }
       // add state average
       let thisState = states.filter(function(d){
         return d['NAME'] === state.currentState;
