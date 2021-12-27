@@ -291,6 +291,18 @@ Promise.all([
         dropdown.classList.remove('show');
       }
     }
+    if (!event.target.matches('#dropbtn5')) {
+      var dropdown = document.getElementById("raceEth1-sticky");
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    }
+    if (!event.target.matches('#dropbtn6')) {
+      var dropdown = document.getElementById("raceEth2-sticky");
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    }
     if (!event.target.matches('#search-box')) {
       var dropdown = document.getElementById("search-list");
       if (dropdown.classList.contains('show')) {
@@ -317,6 +329,16 @@ Promise.all([
       .classed("not-available", function(d){
         return d === state.raceEth1;
       })
+
+    d3.select("#raceEth1-sticky").selectAll("a")
+      .classed("not-available", function(d){
+        return d === state.raceEth2;
+      })
+
+    d3.select("#raceEth2-sticky").selectAll("a")
+      .classed("not-available", function(d){
+        return d === state.raceEth1;
+      })
   }
 
   let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
@@ -329,6 +351,7 @@ Promise.all([
     if (d !== state.raceEth2) {
       state.raceEth1 = d;
       d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
       greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
@@ -345,6 +368,41 @@ Promise.all([
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
       d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      greyOutRaceEth();
+      updateOptionsCircles();
+      updateChart();
+    }
+  })
+
+  let raceEthOp1Sticky = addOptions("raceEth1-sticky", raceEthsLabels);
+  d3.select("#dropdown5")
+    .on("click", function(d){
+      document.getElementById("raceEth1-sticky").classList.toggle("show");
+    });
+  d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+  raceEthOp1Sticky.selectAll("a").on("click", function(event, d){
+    if (d !== state.raceEth2) {
+      state.raceEth1 = d;
+      d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      greyOutRaceEth();
+      updateOptionsCircles();
+      updateChart();
+    }
+  })
+
+  let raceEthOp2Sticky = addOptions("raceEth2-sticky", raceEthsLabels);
+  d3.select("#dropdown6")
+    .on("click", function(d){
+      document.getElementById("raceEth2-sticky").classList.toggle("show");
+    });
+  d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+  raceEthOp2Sticky.selectAll("a").on("click", function(event, d){
+    if (d !== state.raceEth1) {
+      state.raceEth2 = d;
+      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
