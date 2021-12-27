@@ -35,6 +35,11 @@
   opacity: 1.0;
 }
 
+#metrics {
+  margin-top: 52px;
+
+}
+
 #metrics span {
   color: darkgray;
   padding-right: 20px;
@@ -56,7 +61,7 @@
 #metrics-text {
   font-size: 18px;
   line-height: 150%;
-  margin: 28px auto;
+  margin: 16px auto 28px auto;
 }
 
 #metrics-text a {
@@ -72,7 +77,6 @@
 #forms span {
   font-weight: bold;
   font-size: 18px;
-  padding: 0 5px;
 }
 
 #state-div {
@@ -137,6 +141,7 @@
   display: inline-block;
   width: 72px;
   height: 30px;
+  margin-left: 4px;
 }
 
 /* Hide default HTML checkbox */
@@ -250,16 +255,18 @@ input:checked + .slider:after {
 /* Dropdown Button */
 .dropbtn {
   color: #696969;
-  padding: 8px;
+  padding: 8px 12px;
   line-height: 150%;
   font-size: 16px;
   border: 1px solid #D2D2D2;
   cursor: pointer;
   width: auto;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='28' viewBox='0 0 28 28' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  /* background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='28' viewBox='0 0 28 28' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>"); */
+  background-image: url("../img/icon-dropdown.svg");
   background-repeat: no-repeat;
-  background-position-x: 100%;
+  background-position-x: 95%;
   background-position-y: 50%;
+  background-size: 16px;
 }
 
 .dropbtn svg {
@@ -268,7 +275,7 @@ input:checked + .slider:after {
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  margin: 5px 0;
+  margin: 5px 4px;
   position: relative;
   display: inline-block;
   width: 260px;
