@@ -393,17 +393,21 @@ h1, h2 {
 }
 
 h1 {
+  color: #000000;
   font-weight: 700;
   margin-bottom: 25px;
-  font-size: 40px;
-  line-height: 48px;
+  font-size: 48px;
+  line-height: 60px;
   text-align: center;
 }
 
 h2 {
+  color: #353535;
+  font-weight: 400;
   max-width: 60%;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 20px;
+  line-height: 32.5px;
 }
 
 h3 {
@@ -415,7 +419,9 @@ h3 {
 }
 
 p#date {
-  font-size: 0.875em;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
   color: #696969;
   text-align: center;
   margin: 0px auto;
