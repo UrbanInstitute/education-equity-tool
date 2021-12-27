@@ -23,8 +23,8 @@ var margin = {top: 20, right: offsetWidth, bottom: 20, left: 150},
     height = 550 - margin.top - margin.bottom;
 
 const lineHeight = 14;
-const linePadding = 6;
-const circleSize = 5;
+const linePadding = 10;
+const circleSize = 7;
 const numberLabelLeftMargin = 25;
 const numberLabelRightMargin = 10;
 const marginRight = 40;
