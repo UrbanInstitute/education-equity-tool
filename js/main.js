@@ -123,7 +123,7 @@ function getUniquesMenu(df, thisVariable) {
 }
 
 function addOptions(id, values, addStudents) {
-  var element = d3.select("#"+id);
+  var element = d3.selectAll("."+id);
   var options = element.selectAll("option").data(values);
 
   options.enter().append("a")
@@ -300,13 +300,20 @@ Promise.all([
     }
   }
 
+  window.addEventListener("scroll", function(event){
+    let nodeSvg = svg.node().getBoundingClientRect();
+    let sticky = d3.select("#sticky")
+      .style("max-width", margin.left + 'px')
+      .style("display", ((nodeSvg.top > 60) || (nodeSvg.top < -nodeSvg.height + 60)) ? "none" : "inline-block");
+  })
+
   function greyOutRaceEth(){
-    d3.select("#raceEth1").selectAll("a")
+    d3.select(".raceEth1").selectAll("a")
       .classed("not-available", function(d){
         return d === state.raceEth2;
       })
 
-    d3.select("#raceEth2").selectAll("a")
+    d3.select(".raceEth2").selectAll("a")
       .classed("not-available", function(d){
         return d === state.raceEth1;
       })

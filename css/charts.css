@@ -566,3 +566,10 @@ label.check-switch:after {
     -webkit-transition: 0.3s;
     transition: 0.3s;
 }
+
+#sticky {
+  top: 60px;
+  left: 10px;
+  position: fixed;
+  display: none;
+}
