@@ -472,8 +472,8 @@ input[type=text] {
     position: absolute;
     border-radius: 3px;
     /* box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); */
-    right: -405px;
-    top: 0px;
+    right: 0px;
+    top: 30px;
     font-size: 14px;
     line-height: 1.4;
     z-index: 100;

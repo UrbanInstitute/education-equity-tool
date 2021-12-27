@@ -86,7 +86,8 @@ var state = {
 }
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
-let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>'
+// let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>';
+let stateExplanation = '';
 let plusIcon = '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 0H26V48H23V0Z" fill="black"/><path d="M48 23V26L0 26L1.31135e-07 23L48 23Z" fill="black"/></svg>';
 
 d3.selection.prototype.moveToFront = function() {
@@ -216,12 +217,14 @@ function zoomOutScale() {
 
 function showDistrictDivs() {
   d3.select("#state-div").style("display", "inline-block");
-  d3.select("#explanation-text").html(districtExplanation);
+  d3.select("#explanation-text").html(districtExplanation)
+    .style("display", "inline-block");;
 }
 
 function hideDistrictDivs() {
   d3.select("#state-div").style("display", "none");
-  d3.select("#explanation-text").html(stateExplanation);
+  d3.select("#explanation-text").html(stateExplanation)
+    .style("display", "none");;
   d3.selectAll(".district-view").style("display", "none");
 }
 
@@ -441,7 +444,8 @@ Promise.all([
       return d;
     })
 
-  d3.select("#explanation-text").html(stateExplanation);
+  d3.select("#explanation-text").html(stateExplanation)
+    .style("display", "none");
 
   let toggleGap = d3.select("#toggle-gap").select(".slider");
   toggleGap.on("click", function(event, d){
