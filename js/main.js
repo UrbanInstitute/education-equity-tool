@@ -255,8 +255,6 @@ Promise.all([
         line.push(word);
         text.text(line.join(" "));
         if (text.node().getComputedTextLength() > textWidth) {
-          line.pop();
-          text.text(line.join(" "));
           line = [word];
           text.text(word);
           lineNumber++;
@@ -784,7 +782,9 @@ Promise.all([
         .attr("x", 0)
         .attr("y", -lineHeight/2)
         .attr("width", width + margin.left)
-        .attr("height", lineHeight);
+        .attr("height", function(d){
+          return d.lines * lineHeight;
+        });
 
     gs.selectAll(".line")
       .data(function(d){
@@ -1120,7 +1120,9 @@ Promise.all([
       .attr("x", 0)
       .attr("y", -lineHeight/2)
       .attr("width", width + margin.left)
-      .attr("height", lineHeight);
+      .attr("height", function(d){
+        return d.lines * lineHeight;
+      });
 
     divisionRects
       .attr("class", "rect hidden")
@@ -1128,7 +1130,9 @@ Promise.all([
       .attr("x", 0)
       .attr("y", -lineHeight/2)
       .attr("width", width + margin.left)
-      .attr("height", lineHeight);
+      .attr("height", function(d){
+        return d.lines * lineHeight;
+      });
 
     divisionRects.exit().remove();
 
