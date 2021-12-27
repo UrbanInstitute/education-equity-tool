@@ -1048,9 +1048,17 @@ Promise.all([
     //     .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
     // }
 
-    yScale = d3.scaleLinear()
-      .domain(d3.range(state.dataToPlot.length))
-      .rangeRound(state.yRange);
+    if (state.dataToPlot.length === 1){
+      yScale = d3.scaleLinear()
+        .domain([0, 0])
+        .rangeRound([state.yRange[0], state.yRange[0]]);
+    } else {
+      yScale = d3.scaleLinear()
+        .domain(d3.range(state.dataToPlot.length))
+        .rangeRound(state.yRange);
+    }
+
+    console.log(d3.range(state.dataToPlot.length))
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
