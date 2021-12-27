@@ -127,6 +127,10 @@
   font-weight: bold;
 }
 
+.division-name tspan {
+  font-size: 14px;
+}
+
 /* Toggle */
 .switch {
   position: relative;

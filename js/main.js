@@ -1,8 +1,7 @@
 const offsetWidth = 250;
 var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
-console.log(widthChart)
 
-let svg, g, gs, xScale, yScale, tickValues;
+let svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
 let dataTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("left", 0)
@@ -19,15 +18,16 @@ let stateTooltip = d3.select("body").append("div")
 
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 20, left: 100},
+var margin = {top: 20, right: offsetWidth, bottom: 20, left: 150},
     width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
-const lineHeight = 20;
+const lineHeight = 14;
 const circleSize = 5;
 const numberLabelLeftMargin = 25;
 const numberLabelRightMargin = 10;
 const marginRight = 40;
+const textWidth = margin.left;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -81,6 +81,7 @@ var state = {
   myown: [],
   sortByGap: true,
   expandScale: false,
+  yRange: [],
 }
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
@@ -230,7 +231,15 @@ Promise.all([
   var states = data[0];
   var districts = data[1];
 
-  let convertStringToNumbers = function(array){
+  let convertStringToNumbers = function(array, label){
+
+    let dummySvg = d3.select("body").append("svg")
+      .attr("width", 0)
+      .attr("height", 0);
+
+    let text = dummySvg.append("text")
+      .style("font-size", "14px");
+
     array.forEach(function(d){
       for (let m = 0; m < metrics.length; m++ ) {
         for (let r = 0; r < raceEthsLabels.length; r++ ) {
@@ -238,11 +247,28 @@ Promise.all([
           d[col] = +d[col] * 100;
         }
       }
+
+      let words = d[label].split(/\s+/).reverse(),
+          line = [words.pop()],
+          lineNumber = 1;
+      while (word = words.pop()) {
+        line.push(word);
+        text.text(line.join(" "));
+        if (text.node().getComputedTextLength() > textWidth) {
+          line.pop();
+          text.text(line.join(" "));
+          line = [word];
+          text.text(word);
+          lineNumber++;
+        }
+      }
+      d.lines = lineNumber;
     })
+
   }
 
-  convertStringToNumbers(states);
-  convertStringToNumbers(districts);
+  convertStringToNumbers(states, "NAME");
+  convertStringToNumbers(districts, "lea_name");
 
   state.sourceData = states;
   state.dataToPlot = states;
@@ -608,6 +634,7 @@ Promise.all([
   }
 
   function processData() {
+
     if (state.showing === 'states') {
       state.dataToPlot = sortData(state.sourceData);
     } else {
@@ -622,8 +649,17 @@ Promise.all([
         return d['NAME'] === state.currentState;
       })
       thisState[0].lea_name = thisState[0]['NAME'] + ' avg';
+      thisState[0].lines = 1;
       state.dataToPlot = [thisState[0], ...sortedData];
     }
+
+    let dy = margin.top + lineHeight/2;
+    state.yRange = [dy];
+    state.dataToPlot.forEach(function(d){
+      dy += d.lines * lineHeight;
+      state.yRange.push(dy);
+    })
+    state.height = dy;
   }
 
   function highlightFixed() {
@@ -656,11 +692,36 @@ Promise.all([
 
   }
 
+  function wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [words.pop()],
+          lineNumber = 0,
+          lineHeightText = 1.1 * lineHeight, // ems
+          x = text.attr("x"),
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("0")),
+          tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).text(line);
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeightText + "px").text(word);
+        }
+      }
+    });
+  }
+
   function initChart(filteredData) {
 
     processData();
 
-    state.height = state.dataToPlot.length * lineHeight;
+    // state.height = state.dataToPlot.length * lineHeight;
 
     svg = d3.select("#chart").append("svg")
       .attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
@@ -671,9 +732,13 @@ Promise.all([
       .domain([0, 100])
       .range([margin.left, width + margin.left])
 
+    // yScale = d3.scaleLinear()
+    //   .domain([0, filteredData.length])
+    //   .rangeRound([margin.top + lineHeight/2, state.height])
+
     yScale = d3.scaleLinear()
-      .domain([0, filteredData.length])
-      .rangeRound([margin.top + lineHeight/2, state.height])
+      .domain(d3.range(filteredData.length))
+      .rangeRound(state.yRange);
 
     var xAxis = function(g) {
       g.attr("transform", `translate(0,${margin.top})`)
@@ -796,6 +861,7 @@ Promise.all([
         .text(function(d){
           return d[state.name]
         })
+        .call(wrap, textWidth)
 
     gs.selectAll(".show-districts")
       .data(function(d){
@@ -965,17 +1031,21 @@ Promise.all([
 
     processData();
 
-    if (state.showing === 'states') {
-      state.height = state.dataToPlot.length * lineHeight;
-      yScale = d3.scaleLinear()
-        .domain([0, state.dataToPlot.length])
-        .rangeRound([margin.top + lineHeight/2, state.height])
-    } else {
-      state.height = state.dataToPlot.length * lineHeight + 3 * lineHeight / 2;
-      yScale = d3.scaleLinear()
-        .domain([0, 1, state.dataToPlot.length])
-        .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
-    }
+    // if (state.showing === 'states') {
+    //   state.height = state.dataToPlot.length * lineHeight;
+    //   yScale = d3.scaleLinear()
+    //     .domain([0, state.dataToPlot.length])
+    //     .rangeRound([margin.top + lineHeight/2, state.height])
+    // } else {
+    //   state.height = state.dataToPlot.length * lineHeight + 3 * lineHeight / 2;
+    //   yScale = d3.scaleLinear()
+    //     .domain([0, 1, state.dataToPlot.length])
+    //     .rangeRound([margin.top + lineHeight/2, margin.top + 2 * lineHeight, state.height])
+    // }
+
+    yScale = d3.scaleLinear()
+      .domain(d3.range(state.dataToPlot.length))
+      .rangeRound(state.yRange);
 
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
@@ -1077,7 +1147,8 @@ Promise.all([
       .attr('fill', 'black')
       .text(function(d){
         return d[state.name]
-      });
+      })
+      .call(wrap, textWidth);
 
     divisionNames
       .attr("class", "division-name")
@@ -1089,6 +1160,7 @@ Promise.all([
       .text(function(d){
         return d[state.name]
       })
+      .call(wrap, textWidth)
 
     divisionNames.exit().remove();
 
