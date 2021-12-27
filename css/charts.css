@@ -74,6 +74,11 @@
   font-size: 18px;
 }
 
+#sticky {
+  margin-left: 26px;
+  margin-right: 26px;
+}
+
 #forms span {
   font-weight: bold;
   font-size: 18px;
@@ -572,4 +577,8 @@ label.check-switch:after {
   left: 10px;
   position: fixed;
   display: none;
+}
+
+#sticky .dropdown {
+  width: 210px;
 }
