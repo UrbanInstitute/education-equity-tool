@@ -395,7 +395,7 @@ h1, h2 {
 h1 {
   color: #000000;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 27px;
   font-size: 48px;
   line-height: 60px;
   text-align: center;
@@ -408,6 +408,7 @@ h2 {
   font-style: italic;
   font-size: 20px;
   line-height: 32.5px;
+  margin-bottom: 16px;
 }
 
 h3 {
@@ -425,8 +426,7 @@ p#date {
   color: #696969;
   text-align: center;
   margin: 0px auto;
-  margin-bottom: 2rem;
-  padding-top: 25px;
+  margin-bottom: 32px;
   max-width: 95%;
 }
 
@@ -452,6 +452,19 @@ hr {
   opacity: .25;
   max-width: 760px;
   margin: 10px auto;
+}
+
+#share-icons {
+  margin-top: 33px;
+  margin-bottom: 48px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.share-icon {
+  height: 24px;
+  width: 24px;
+  margin: 0px 8px;
 }
 
 #topText {
