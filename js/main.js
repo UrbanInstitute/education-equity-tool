@@ -55,6 +55,11 @@ let metricCols = {
   'Classes': 'perc_ap_stem',
   'Counselors': 'percent_adq_couns'
 };
+let metricLabels = {
+  'Teachers': 'experienced teachers',
+  'Classes': 'access to AP classes',
+  'Counselors': 'adequate counselors'
+}
 let colors = {
   'Black students': "#1696D2",
   'Hispanic students': "#EC008B",
@@ -69,7 +74,7 @@ let twoColors = ["#1696D2", "#FDBF11"];
 var state = {
   raceEth1: 'Black students',
   raceEth2: 'White students',
-  metric: 'avg_exp_year_perc',
+  metric: 'Teachers',
   height: null,
   sourceData: null,
   dataToPlot: null,
@@ -162,8 +167,9 @@ function sortData(data) {
   let sortedData;
   if (state.sortByGap) {
     sortedData = data.sort(function(a,b) {
-      let gap1 = a[state.metric + "_" + raceEths[state.raceEth1]] - a[state.metric + "_" + raceEths[state.raceEth2]];
-      let gap2 = b[state.metric + "_" + raceEths[state.raceEth1]] - b[state.metric + "_" + raceEths[state.raceEth2]];
+      let thisMetric = metricCols[state.metric];
+      let gap1 = a[thisMetric + "_" + raceEths[state.raceEth1]] - a[thisMetric + "_" + raceEths[state.raceEth2]];
+      let gap2 = b[thisMetric + "_" + raceEths[state.raceEth1]] - b[thisMetric + "_" + raceEths[state.raceEth2]];
       if(!isFinite(gap1) && !isFinite(gap2)) {
         return 0;
       }
@@ -192,7 +198,7 @@ function sortData(data) {
 function zoomInScale() {
   let allExtents = raceEthsLabels.map(function(r){
     return d3.extent(state.dataToPlot, function(d){
-      return d[state.metric + "_" + raceEths[r]];
+      return d[metricCols[state.metric] + "_" + raceEths[r]];
     })
   });
   let extent = d3.extent(allExtents, function(d){
@@ -368,9 +374,37 @@ Promise.all([
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
       d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
-      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       greyOutRaceEth();
       updateOptionsCircles();
+      updateChart();
+    }
+  })
+
+  let metricOp = addOptions("metric-sticky", metrics.map(function(d){ return metricLabels[d]; }));
+  d3.select("#dropdown4")
+    .on("click", function(d){
+      document.getElementById("metric-sticky").classList.toggle("show");
+    });
+  d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
+  metricOp.selectAll("a").on("click", function(event, d){
+    if (d !== metricLabels[state.metric]) {
+      state.metric = metrics.filter(function(m){
+        return metricLabels[m] === d;
+      })[0];
+      d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
+      d3.selectAll(".metric")
+        .classed("chosen", function(e){
+          return e === state.metric;
+        })
+      if (state.metric === 'Teachers'){
+        d3.select("#toggle-scale").style("display", "inline-block");
+      } else if (state.metric === 'Classes'){
+        d3.select("#toggle-scale").style("display", "none");
+      } else if (state.metric === 'Counselors'){
+        d3.select("#toggle-scale").style("display", "none");
+      }
+      updateMetricText();
       updateChart();
     }
   })
@@ -401,7 +435,7 @@ Promise.all([
   raceEthOp2Sticky.selectAll("a").on("click", function(event, d){
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
-      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
       greyOutRaceEth();
       updateOptionsCircles();
@@ -446,7 +480,7 @@ Promise.all([
         .classed("chosen", function(e){
           return e === d;
         })
-      state.metric = metricCols[d]
+      state.metric = d;
       if (d === 'Teachers'){
         d3.select("#toggle-scale").style("display", "inline-block");
       } else if (d === 'Classes'){
@@ -454,6 +488,7 @@ Promise.all([
       } else if (d === 'Counselors'){
         d3.select("#toggle-scale").style("display", "none");
       }
+      d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
       updateMetricText();
       updateChart();
     })
@@ -516,7 +551,7 @@ Promise.all([
 
   let toggleScale = d3.select("#toggle-scale").select(".slider");
   toggleScale.on("click", function(event, d){
-    if (state.metric == 'avg_exp_year_perc') {
+    if (metricCols[state.metric] == 'avg_exp_year_perc') {
       state.expandScale = !state.expandScale;
     }
     updateChart();
@@ -642,8 +677,9 @@ Promise.all([
   }
 
   let getLineStroke = function(d, i) {
-    if ((!isNaN(d[state.metric + "_" + raceEths[state.raceEth1]])) && (!isNaN(d[state.metric + "_" + raceEths[state.raceEth2]]))) {
-      if (d[state.metric + "_" + raceEths[state.raceEth1]] > d[state.metric + "_" + raceEths[state.raceEth2]]) {
+    let thisMetric = metricCols[state.metric]
+    if ((!isNaN(d[thisMetric + "_" + raceEths[state.raceEth1]])) && (!isNaN(d[thisMetric + "_" + raceEths[state.raceEth2]]))) {
+      if (d[thisMetric + "_" + raceEths[state.raceEth1]] > d[thisMetric + "_" + raceEths[state.raceEth2]]) {
         return twoColors[0]
         // return colors[state.raceEth1];
       } else {
@@ -865,17 +901,17 @@ Promise.all([
         .attr("stroke", getLineStroke)
         .attr("stroke-width", 1.0)
         .attr("x1", function(d) {
-          return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
+          return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]])
         })
         .attr("x2", function(d) {
-          return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
+          return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])
         });
 
     gs.selectAll(".raceeth")
       .data(function(d){
         return raceEthsLabels.map(function(r){
           let obj = {};
-          obj.value = d[state.metric + "_" + raceEths[r]];
+          obj.value = d[metricCols[state.metric] + "_" + raceEths[r]];
           obj.raceEth = r;
           return obj
           // return d[state.metric + "_" + raceEths[r]];
@@ -895,8 +931,9 @@ Promise.all([
 
     gs.selectAll(".number-label")
       .data(function(d){
-        let d1 = Math.min(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
-        let d2 = Math.max(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
+        let thisMetric = metricCols[state.metric];
+        let d1 = Math.min(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
+        let d2 = Math.max(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
         return [d1, d2];
       })
       .join("text")
@@ -1031,7 +1068,7 @@ Promise.all([
 
         // Show tooltip if missing data
         let thisData = thisG.data()[0];
-        if (isNaN(thisData[state.metric + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[state.metric + "_" + raceEths[state.raceEth2]])){
+        if (isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])){
           dataTooltip.style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
             .style("display", "block");
@@ -1130,7 +1167,7 @@ Promise.all([
       .attr("height", state.height + margin.top + margin.bottom);
 
     // Update scales
-    if (state.metric === 'avg_exp_year_perc'){
+    if (metricCols[state.metric] === 'avg_exp_year_perc'){
       if (state.expandScale) {
         zoomInScale();
       } else {
@@ -1258,26 +1295,26 @@ Promise.all([
       .attr("stroke", getLineStroke)
       .attr("stroke-width", 1.0)
       .attr("x1", function(d) {
-        return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
+        return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]])
       })
       .attr("x2", function(d) {
-        return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
+        return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])
       });
 
     divisionLines.transition().duration(transitionTime)
       .attr("stroke", getLineStroke)
       .attr("x1", function(d) {
-        return xScale(d[state.metric + "_" + raceEths[state.raceEth1]])
+        return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]])
       })
       .attr("x2", function(d) {
-        return xScale(d[state.metric + "_" + raceEths[state.raceEth2]])
+        return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])
       });
 
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
         return raceEthsLabels.map(function(r){
           let obj = {};
-          obj.value = d[state.metric + "_" + raceEths[r]];
+          obj.value = d[metricCols[state.metric] + "_" + raceEths[r]];
           obj.raceEth = r;
           return obj
           // return d[state.metric + "_" + raceEths[r]];
@@ -1308,8 +1345,9 @@ Promise.all([
     // Division numer labels
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
       .data(function(d){
-        let d1 = Math.min(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
-        let d2 = Math.max(d[state.metric + "_" + raceEths[state.raceEth1]], d[state.metric + "_" + raceEths[state.raceEth2]]);
+        let thisMetric = metricCols[state.metric];
+        let d1 = Math.min(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
+        let d2 = Math.max(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
         return [d1, d2];
       })
 
