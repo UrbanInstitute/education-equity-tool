@@ -23,6 +23,7 @@ var margin = {top: 20, right: offsetWidth, bottom: 20, left: 150},
     height = 550 - margin.top - margin.bottom;
 
 const lineHeight = 14;
+const linePadding = 6;
 const circleSize = 5;
 const numberLabelLeftMargin = 25;
 const numberLabelRightMargin = 10;
@@ -653,8 +654,12 @@ Promise.all([
 
     let dy = margin.top + lineHeight/2;
     state.yRange = [dy];
-    state.dataToPlot.forEach(function(d){
-      dy += d.lines * lineHeight;
+    state.dataToPlot.forEach(function(d, i){
+      if ((state.showing === 'districts') && (i === 0)) {
+        dy += d.lines * lineHeight + 2 * linePadding;
+      } else {
+        dy += d.lines * lineHeight + linePadding;
+      }
       state.yRange.push(dy);
     })
     state.height = dy;
@@ -938,7 +943,7 @@ Promise.all([
         return i !== index;
       });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
-          margin.left < thisX  && thisX < width + margin.right){
+          0 < thisX  && thisX < width + margin.right){
         // gDivisions.classed("hidden", function(d, i){
         //   return i !== index;
         // })
