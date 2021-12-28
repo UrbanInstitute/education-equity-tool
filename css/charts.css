@@ -121,6 +121,11 @@
   cursor: pointer;
 }
 
+.district-view:hover {
+  background-color: #353535;
+  color: white;
+}
+
 .district-view.chosen {
   background-color: #353535;
   color: white;
