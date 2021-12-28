@@ -939,7 +939,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(0);
+          return Math.floor(d);
         })
 
     gs.selectAll(".division-name")
@@ -1354,7 +1354,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(0);
+          return Math.floor(d);
         })
 
     divisionNumberLabels
@@ -1373,7 +1373,7 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return d.toFixed(0);
+          return Math.floor(d);
         })
 
     divisionNumberLabels.exit().remove();
