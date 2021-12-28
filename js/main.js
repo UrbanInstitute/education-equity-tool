@@ -223,6 +223,7 @@ function zoomOutScale() {
 function showDistrictDivs() {
   d3.select("#state-div").style("display", "inline-block");
   d3.select("#explanation-text").html(districtExplanation);
+  d3.select("#sticky").style("display", "none");
 }
 
 function hideDistrictDivs() {
@@ -319,10 +320,12 @@ Promise.all([
   }
 
   window.addEventListener("scroll", function(event){
-    let nodeSvg = svg.node().getBoundingClientRect();
-    let sticky = d3.select("#sticky")
-      .style("max-width", margin.left + 'px')
-      .style("display", ((nodeSvg.top > 60) || (nodeSvg.top < -nodeSvg.height + 60)) ? "none" : "inline-block");
+    if (state.showing === 'states') {
+      let nodeSvg = svg.node().getBoundingClientRect();
+      d3.select("#sticky")
+        .style("max-width", margin.left + 'px')
+        .style("display", ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + 60)) ? "none" : "inline-block");
+    }
   })
 
   function greyOutRaceEth(){
