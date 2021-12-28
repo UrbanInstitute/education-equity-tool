@@ -346,12 +346,12 @@ input:checked + .slider:after {
 }
 
 #search-box {
-  padding: 10px 16px 7px 16px;
-  border: 1px solid lightgray;
+  padding: 8px 12px;
+  border: 1px solid #D2D2D2;
   font-size: 16px;
   line-height: 150%;
   color: #696969;
-  width: 226px;
+  width: 234px;
   display: inline-block;
   font-style: italic;
 }
