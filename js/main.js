@@ -839,12 +839,12 @@ Promise.all([
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
-                .attr("y2", state.height))
+                .attr("y2", state.height - margin.top - lineHeight/2))
       .call(g => g.selectAll(".domain").remove())
     }
 
     var xAxisBottom = function(g) {
-      g.attr("transform", `translate(0,${state.height + margin.top})`)
+      g.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
       .attr("class", "bottom-axis")
       .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".domain").remove())
@@ -1176,12 +1176,12 @@ Promise.all([
       .call(g => g.selectAll(".tick line").clone()
                 .attr("stroke-opacity", 0.05)
                 .attr("class", "axis-line")
-                .attr("y2", state.height))
+                .attr("y2", state.height - margin.top - lineHeight/2))
       .call(g => g.selectAll(".domain").remove());
 
     var gAxisBottom = svg.selectAll(".bottom-axis");
 
-    gAxisBottom.attr("transform", "translate(0," + (state.height + margin.top) + ")")
+    gAxisBottom.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
       .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
       .call(g => g.selectAll(".domain").remove());
 
