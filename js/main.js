@@ -1,4 +1,4 @@
-const offsetWidth = 250;
+const offsetWidth = 280;
 var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
 
 let svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
@@ -81,7 +81,7 @@ var state = {
   name: null,
   currentState: null,
   showing: 'states',
-  districtView: 'Largest districts',
+  districtView: 'largest',
   stateFixed: null,
   districtFixed: null,
   myown: [],
@@ -442,21 +442,25 @@ Promise.all([
       document.getElementById("state-menu").classList.toggle("show");
     });
   let stateOp = addOptions("state-menu", statesMenu);
+  stateOp.selectAll("a").classed("not-available", function(d){
+    return ((d === 'Hawaii') || (d === 'District of Columbia'));
+  })
   stateOp.selectAll("a").on("click", function(event, d){
-      if (state.showing === 'districts') {
-        if (state.currentState !== d) {
-          state.currentState = d;
-          state.myown = [];
-        }
-        state.sourceData = districts.filter(function(e){
-          return e["NAME"] === state.currentState;
-        });
-        state.name = "lea_name";
-        state.showing = 'districts';
-        updateSearchBox();
+    if (state.showing === 'districts') {
+      if ((state.currentState !== d) && (d !== 'Hawaii') && (d !== 'District of Columbia')) {
+        state.currentState = d;
+        state.myown = [];
       }
-      updateChart();
-    })
+      d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+      state.sourceData = districts.filter(function(e){
+        return e["NAME"] === state.currentState;
+      });
+      state.name = "lea_name";
+      state.showing = 'districts';
+      updateSearchBox();
+    }
+    updateChart();
+  })
 
   let spans = d3.select("#metrics")
     .selectAll("span")
@@ -729,7 +733,9 @@ Promise.all([
     } else {
       let sortedData;
       if (state.districtView === 'largest'){
-        sortedData = sortData(state.sourceData.filter(n => n.top10_flag === '1'));
+        sortedData = sortData(state.sourceData.filter(function(n) {
+          return n.top10_flag === '1';
+        }));
       } else {
         sortedData = sortData(state.sourceData);
       }
@@ -1437,6 +1443,7 @@ Promise.all([
               return e === 'Largest districts';
             });
           state.districtView = 'largest';
+          window.scrollTo(0, 1240);
         } else {
           state.sourceData = states;
           state.name = "NAME";
@@ -1497,6 +1504,7 @@ Promise.all([
               return e === 'Largest districts';
             });
           state.districtView = 'largest';
+          window.scrollTo(0, 1240);
         } else {
           state.sourceData = states;
           state.name = "NAME";
