@@ -296,7 +296,7 @@ input:checked + .slider:after {
   display: none;
   position: absolute;
   width: 258px;
-  max-height: 350px;
+  max-height: 360px;
   /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
   z-index: 1;
   overflow: scroll;
