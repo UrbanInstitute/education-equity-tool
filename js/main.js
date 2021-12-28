@@ -305,6 +305,7 @@ Promise.all([
   }
 
   window.addEventListener("scroll", function(event){
+    console.log(window.scrollY)
     if (state.showing === 'states') {
       let nodeSvg = svg.node().getBoundingClientRect();
       d3.select("#sticky")
@@ -1010,6 +1011,7 @@ Promise.all([
               .classed("chosen", function(e){
                 return e === 'Largest districts';
               });
+            window.scrollTo(0, 1600);
           } else {
             state.sourceData = states;
             state.name = "NAME";
