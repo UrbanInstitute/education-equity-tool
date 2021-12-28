@@ -336,8 +336,8 @@ input:checked + .slider:after {
 }
 
 #chart {
-  padding-top: 60px;
-  padding-bottom: 20px;
+  margin-top: 32px;
+  /* padding-bottom: 20px; */
 }
 
 #chart text {
