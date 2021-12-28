@@ -1071,18 +1071,22 @@ Promise.all([
 
         // Show tooltip if missing data
         let thisData = thisG.data()[0];
+        let thisGPos = thisG.node().getBoundingClientRect();
+
         if (isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])){
-          dataTooltip.style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
+          // dataTooltip.style("left", (event.pageX + 10) + "px")
+          //   .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
+          //   .style("display", "block");
+          let yOffset = dataTooltip.node().getBoundingClientRect().height / 2;
+          dataTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+            .style("top", (event.pageY - yOffset) + "px")
             .style("display", "block");
         } else {
           dataTooltip.style("display", "none");
         }
 
         if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') | (thisData[state.name] === 'Hawaii'))) {
-          let thisGPos = thisG.node().getBoundingClientRect();
           let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-
           stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
             .style("top", (event.pageY - yOffset) + "px")
             .style("display", "block");
