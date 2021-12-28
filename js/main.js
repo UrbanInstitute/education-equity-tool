@@ -94,21 +94,6 @@ let districtExplanation = '<p>Use the tabs below to explore the largest 10 distr
 let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>'
 let plusIcon = '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 0H26V48H23V0Z" fill="black"/><path d="M48 23V26L0 26L1.31135e-07 23L48 23Z" fill="black"/></svg>';
 
-d3.selection.prototype.moveToFront = function() {
-  return this.each(function(){
-    this.parentNode.appendChild(this);
-  });
-};
-
-d3.selection.prototype.moveToBack = function() {
-    return this.each(function() {
-        var firstChild = this.parentNode.firstChild;
-        if (firstChild) {
-            this.parentNode.insertBefore(this, firstChild);
-        }
-    });
-};
-
 function getUniquesMenu(df, thisVariable) {
 
   var thisList = df.map(function(o) {
@@ -672,11 +657,11 @@ Promise.all([
   }
 
   function moveToFront(){
-    gs.selectAll(".line").moveToFront();
-    gs.selectAll(".raceeth").filter(function (d,i){
-      return ((d.raceEth === state.raceEth1) | (d.raceEth === state.raceEth2));
-    }).moveToFront();
-    gs.selectAll(".number-label").moveToFront();
+    svg.selectAll(".division").selectAll(".line").raise();
+    svg.selectAll(".division").selectAll(".raceeth").filter(function (d,i){
+      return ((d.raceEth === state.raceEth1) || (d.raceEth === state.raceEth2));
+    }).raise();
+    svg.selectAll(".division").selectAll(".number-label").raise();
   }
 
   let getLineStroke = function(d, i) {
@@ -1167,8 +1152,6 @@ Promise.all([
         .rangeRound(state.yRange);
     }
 
-    console.log(d3.range(state.dataToPlot.length))
-
     svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
       .attr("width", width + margin.left + margin.right)
       .attr("height", state.height + margin.top + margin.bottom);
@@ -1297,7 +1280,6 @@ Promise.all([
       });
 
     divisionLines.enter().append("line")
-      .transition().duration(transitionTime)
       .attr("class", "line")
       .attr("stroke", getLineStroke)
       .attr("stroke-width", 1.0)
@@ -1308,7 +1290,7 @@ Promise.all([
         return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])
       });
 
-    divisionLines.transition().duration(transitionTime)
+    divisionLines
       .attr("stroke", getLineStroke)
       .attr("x1", function(d) {
         return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]])
@@ -1316,6 +1298,8 @@ Promise.all([
       .attr("x2", function(d) {
         return xScale(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])
       });
+
+    divisionLines.exit().remove();
 
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
@@ -1329,7 +1313,6 @@ Promise.all([
       });
 
     divisionCircles.enter().append("circle")
-        .transition().duration(transitionTime)
         .attr("class", "raceeth")
         .attr("opacity", 1.0)
         .attr("cx", function(d){
@@ -1339,15 +1322,12 @@ Promise.all([
         .attr("r", circleSize)
 
     divisionCircles
-      .transition().duration(transitionTime)
       .attr("cx", function(d){
         return xScale(d.value);
       })
       .attr("fill", getCircleFill);
 
     divisionCircles.exit().remove();
-
-    moveToFront();
 
     // Division numer labels
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
@@ -1397,6 +1377,8 @@ Promise.all([
         })
 
     divisionNumberLabels.exit().remove();
+
+    moveToFront();
 
     // Division change division
     let divisionChange = g.selectAll(".division").selectAll(".show-districts")
