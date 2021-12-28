@@ -1011,7 +1011,7 @@ Promise.all([
               .classed("chosen", function(e){
                 return e === 'Largest districts';
               });
-            window.scrollTo(0, 1600);
+            window.scrollTo(0, 1240);
           } else {
             state.sourceData = states;
             state.name = "NAME";
