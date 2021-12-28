@@ -137,8 +137,8 @@
   color: #1696D2;
 }
 
-.state-average .division-name {
-  font-weight: bold;
+.state-average .division-name tspan {
+  font-weight: 700;
 }
 
 .division-name tspan {
