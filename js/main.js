@@ -1,5 +1,14 @@
-const offsetWidth = 280;
-var widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
+const isMobile = $(window).width() < 830;
+
+let offsetWidth, widthChart;
+
+ if (isMobile){
+   offsetWidth = 16;
+   widthChart = document.getElementById("chart").offsetWidth;
+ } else {
+   offsetWidth = 280;
+   widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
+ }
 
 let svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
 let dataTooltip = d3.select("body").append("div")
@@ -18,8 +27,15 @@ let stateTooltip = d3.select("body").append("div")
 
 const transitionTime = 500;
 
-var margin = {top: 20, right: offsetWidth, bottom: 20, left: 150},
-    width = widthChart - margin.left - margin.right,
+let margin;
+
+if (isMobile){
+  margin = {top: 20, right: offsetWidth, bottom: 20, left: 100};
+} else {
+  margin = {top: 20, right: offsetWidth, bottom: 20, left: 150};
+}
+
+let width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
 const lineHeight = 14;
@@ -192,17 +208,31 @@ function zoomInScale() {
   let minValue = (Math.floor(extent[0] / 10) * 10);
   xScale.domain([minValue, 100])
     .range([margin.left, width + margin.left]);
-  if (minValue > 50) {
-    tickValues = d3.range(minValue, 100.01, 5);
+  if (isMobile){
+    if (minValue > 70) {
+      tickValues = d3.range(minValue, 100.01, 5);
+    } else if (minValue > 40) {
+      tickValues = d3.range(minValue, 100.01, 10);
+    } else {
+      tickValues = d3.range(minValue, 100.01, 20);
+    }
   } else {
-    tickValues = d3.range(minValue, 100.01, 10);
+    if (minValue > 50) {
+      tickValues = d3.range(minValue, 100.01, 5);
+    } else {
+      tickValues = d3.range(minValue, 100.01, 10);
+    }
   }
 }
 
 function zoomOutScale() {
   xScale.domain([0, 100])
     .range([margin.left, width + margin.left]);
-  tickValues = d3.range(0, 100.01, 10);
+  if (isMobile) {
+    tickValues = d3.range(0, 100.01, 20);
+  } else {
+    tickValues = d3.range(0, 100.01, 10);
+  }
 }
 
 function showDistrictDivs() {
@@ -305,11 +335,16 @@ Promise.all([
   }
 
   window.addEventListener("scroll", function(event){
-    console.log(window.scrollY)
     if (state.showing === 'states') {
       let nodeSvg = svg.node().getBoundingClientRect();
       d3.select("#sticky")
-        .style("max-width", margin.left + 'px')
+        .style("max-width", function(){
+          if (isMobile) {
+            return "none";
+          } else {
+            return margin.left + 'px';
+          }
+        })
         .style("display", ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + 60)) ? "none" : "inline-block");
     }
   })
@@ -778,8 +813,10 @@ Promise.all([
           .classed("hidden", false);
         thisGroup.selectAll(".rect")
           .classed("hidden", false);
-        thisGroup.selectAll(".show-districts")
-          .style("display", "block");
+        if (!isMobile) {
+          thisGroup.selectAll(".show-districts")
+            .style("display", "block");
+        }
       }
     }
 
@@ -838,6 +875,12 @@ Promise.all([
     yScale = d3.scaleLinear()
       .domain(d3.range(filteredData.length))
       .rangeRound(state.yRange);
+
+    if (isMobile) {
+      tickValues = d3.range(0, 100.01, 20);
+    } else {
+      tickValues = d3.range(0, 100.01, 10);
+    }
 
     var xAxis = function(g) {
       g.attr("transform", `translate(0,${margin.top})`)
@@ -965,69 +1008,71 @@ Promise.all([
         })
         .call(wrap, textWidth)
 
-    gs.selectAll(".show-districts")
-      .data(function(d){
-        return [d];
-      })
-      .join('text')
-        .attr("class", "show-districts")
-        .style("display", function(){
-          if (state.showing === 'states') {
-            return "none";
-          } else {
-            return "block";
-          }
+    if (!isMobile) {
+      gs.selectAll(".show-districts")
+        .data(function(d){
+          return [d];
         })
-        .attr("x", width + margin.left + marginRight)
-        .attr("y", lineHeight/4)
-        .style("text-anchor", "left")
-        .style("vertical-align", "middle")
-        .attr('fill', 'steelblue')
-        .text(function(d, i) {
-          if (state.showing === 'states') {
-            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
-              return null;
+        .join('text')
+          .attr("class", "show-districts")
+          .style("display", function(){
+            if (state.showing === 'states') {
+              return "none";
             } else {
-              return "Show me districts in " + d[state.name];
+              return "block";
             }
-          } else {
-            if (d[state.name].includes('avg')){
-              return "Take me back to the state view"
+          })
+          .attr("x", width + margin.left + marginRight)
+          .attr("y", lineHeight/4)
+          .style("text-anchor", "left")
+          .style("vertical-align", "middle")
+          .attr('fill', 'steelblue')
+          .text(function(d, i) {
+            if (state.showing === 'states') {
+              if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+                return null;
+              } else {
+                return "Show me districts in " + d[state.name];
+              }
             } else {
-              return null;
+              if (d[state.name].includes('avg')){
+                return "Take me back to the state view"
+              } else {
+                return null;
+              }
             }
-          }
-        })
-        .on("click", function(event, d){
-          if (state.showing === 'states') {
-            if (state.currentState !== d["NAME"]) {
-              state.currentState = d["NAME"];
-              state.myown = [];
-            }
-            state.sourceData = districts.filter(function(e){
-              return e["NAME"] === state.currentState;
-            });
-            state.name = "lea_name";
-            state.showing = 'districts';
-            let idx = statesMenu.indexOf(state.currentState);
-            // document.getElementById("state-menu").selectedIndex = idx;
-            d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
-            showDistrictDivs();
-            d3.selectAll(".district-view").style("display", "inline-block")
-              .classed("chosen", function(e){
-                return e === 'Largest districts';
+          })
+          .on("click", function(event, d){
+            if (state.showing === 'states') {
+              if (state.currentState !== d["NAME"]) {
+                state.currentState = d["NAME"];
+                state.myown = [];
+              }
+              state.sourceData = districts.filter(function(e){
+                return e["NAME"] === state.currentState;
               });
-            window.scrollTo(0, 1240);
-          } else {
-            state.sourceData = states;
-            state.name = "NAME";
-            state.showing = 'states';
-            state.districtView = 'largest';
-            showDistrictDivs();
-            d3.selectAll(".district-view").style("display", "none");
-          }
-          updateChart();
-        })
+              state.name = "lea_name";
+              state.showing = 'districts';
+              let idx = statesMenu.indexOf(state.currentState);
+              // document.getElementById("state-menu").selectedIndex = idx;
+              d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+              showDistrictDivs();
+              d3.selectAll(".district-view").style("display", "inline-block")
+                .classed("chosen", function(e){
+                  return e === 'Largest districts';
+                });
+              window.scrollTo(0, 1240);
+            } else {
+              state.sourceData = states;
+              state.name = "NAME";
+              state.showing = 'states';
+              state.districtView = 'largest';
+              showDistrictDivs();
+              d3.selectAll(".district-view").style("display", "none");
+            }
+            updateChart();
+          })
+    }
 
     svg.on("touchmove mousemove", function(event) {
       let thisX = d3.pointer(event, this)[0],
@@ -1055,7 +1100,7 @@ Promise.all([
         notThisG.selectAll(".number-label")
           .classed("hidden", state.showing !== 'districts');
           // .style("opacity", 0);
-        if (state.showing === 'states') {
+        if ((state.showing === 'states') && !isMobile) {
           thisG.selectAll(".show-districts")
             .style("display", "block")
           notThisG.selectAll(".show-districts")
@@ -1094,7 +1139,7 @@ Promise.all([
         gDivisions.selectAll(".rect")
           .classed("hidden", true)
           // .style("opacity", 0);
-        if (state.showing === 'states'){
+        if ((state.showing === 'states') && !isMobile){
           gDivisions.selectAll(".show-districts")
             .style("display", "none");
         }
@@ -1389,134 +1434,136 @@ Promise.all([
     moveToFront();
 
     // Division change division
-    let divisionChange = g.selectAll(".division").selectAll(".show-districts")
-      .data(function(d){
-        return [d];
-      })
+    if (!isMobile) {
+      let divisionChange = g.selectAll(".division").selectAll(".show-districts")
+        .data(function(d){
+          return [d];
+        })
 
-    divisionChange.enter().append("text")
-      .attr("class", "show-districts")
-      .style("display", function(){
-        if (state.showing === 'states') {
-          return "none";
-        } else {
-          return "block";
-        }
-      })
-      .attr("x", width + margin.left + marginRight)
-      .attr("y", lineHeight/4)
-      .style("text-anchor", "left")
-      .style("vertical-align", "middle")
-      .attr('fill', 'steelblue')
-      .text(function(d, i) {
-        if (state.showing === 'states') {
-          if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
-            return null;
+      divisionChange.enter().append("text")
+        .attr("class", "show-districts")
+        .style("display", function(){
+          if (state.showing === 'states') {
+            return "none";
           } else {
-            return "Show me districts in " + d[state.name];
+            return "block";
           }
-        } else {
-          if (d[state.name].includes('avg')){
-            return "Take me back to the state view"
+        })
+        .attr("x", width + margin.left + marginRight)
+        .attr("y", lineHeight/4)
+        .style("text-anchor", "left")
+        .style("vertical-align", "middle")
+        .attr('fill', 'steelblue')
+        .text(function(d, i) {
+          if (state.showing === 'states') {
+            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+              return null;
+            } else {
+              return "Show me districts in " + d[state.name];
+            }
           } else {
-            return null;
+            if (d[state.name].includes('avg')){
+              return "Take me back to the state view"
+            } else {
+              return null;
+            }
           }
-        }
-      })
-      .on("click", function(event, d){
-        if (state.showing === 'states') {
-          if (state.currentState !== d["NAME"]) {
-            state.currentState = d["NAME"];
-            state.myown = [];
-          }
-          state.sourceData = districts.filter(function(e){
-            return e["NAME"] === state.currentState;
-          });
-          state.name = "lea_name";
-          state.showing = 'districts';
-          let idx = statesMenu.indexOf(state.currentState);
-          // document.getElementById("state-menu").selectedIndex = idx;
-          d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
-          showDistrictDivs();
-          d3.selectAll(".district-view").style("display", "inline-block")
-            .classed("chosen", function(e){
-              return e === 'Largest districts';
+        })
+        .on("click", function(event, d){
+          if (state.showing === 'states') {
+            if (state.currentState !== d["NAME"]) {
+              state.currentState = d["NAME"];
+              state.myown = [];
+            }
+            state.sourceData = districts.filter(function(e){
+              return e["NAME"] === state.currentState;
             });
-          state.districtView = 'largest';
-          window.scrollTo(0, 1240);
-        } else {
-          state.sourceData = states;
-          state.name = "NAME";
-          state.showing = 'states';
-          hideDistrictDivs();
-          d3.select("#search").style("display", "none");
-          d3.select("#selected-districts").style("display", "none");
-        }
-        updateChart();
-      })
+            state.name = "lea_name";
+            state.showing = 'districts';
+            let idx = statesMenu.indexOf(state.currentState);
+            // document.getElementById("state-menu").selectedIndex = idx;
+            d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+            showDistrictDivs();
+            d3.selectAll(".district-view").style("display", "inline-block")
+              .classed("chosen", function(e){
+                return e === 'Largest districts';
+              });
+            state.districtView = 'largest';
+            window.scrollTo(0, 1240);
+          } else {
+            state.sourceData = states;
+            state.name = "NAME";
+            state.showing = 'states';
+            hideDistrictDivs();
+            d3.select("#search").style("display", "none");
+            d3.select("#selected-districts").style("display", "none");
+          }
+          updateChart();
+        })
 
-    divisionChange
-      .attr("class", "show-districts")
-      .style("display", function(){
-        if (state.showing === 'states') {
-          return "none";
-        } else {
-          return "block";
-        }
-      })
-      .attr("x", width + margin.left + marginRight)
-      .attr("y", lineHeight/4)
-      .style("text-anchor", "left")
-      .style("vertical-align", "middle")
-      .attr('fill', 'steelblue')
-      .text(function(d, i) {
-        if (state.showing === 'states') {
-          if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
-            return null;
+      divisionChange
+        .attr("class", "show-districts")
+        .style("display", function(){
+          if (state.showing === 'states') {
+            return "none";
           } else {
-            return "Show me districts in " + d[state.name];
+            return "block";
           }
-        } else {
-          if (d[state.name].includes('avg')){
-            return "Take me back to the state view"
+        })
+        .attr("x", width + margin.left + marginRight)
+        .attr("y", lineHeight/4)
+        .style("text-anchor", "left")
+        .style("vertical-align", "middle")
+        .attr('fill', 'steelblue')
+        .text(function(d, i) {
+          if (state.showing === 'states') {
+            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+              return null;
+            } else {
+              return "Show me districts in " + d[state.name];
+            }
           } else {
-            return null;
+            if (d[state.name].includes('avg')){
+              return "Take me back to the state view"
+            } else {
+              return null;
+            }
           }
-        }
-      })
-      .on("click", function(event, d){
-        if (state.showing === 'states') {
-          if (state.currentState !== d["NAME"]) {
-            state.currentState = d["NAME"];
-            state.myown = [];
-          }
-          state.sourceData = districts.filter(function(e){
-            return e["NAME"] === state.currentState;
-          });
-          state.name = "lea_name";
-          state.showing = 'districts';
-          let idx = statesMenu.indexOf(state.currentState);
-          // document.getElementById("state-menu").selectedIndex = idx;
-          d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
-          showDistrictDivs();
-          d3.selectAll(".district-view").style("display", "inline-block")
-            .classed("chosen", function(e){
-              return e === 'Largest districts';
+        })
+        .on("click", function(event, d){
+          if (state.showing === 'states') {
+            if (state.currentState !== d["NAME"]) {
+              state.currentState = d["NAME"];
+              state.myown = [];
+            }
+            state.sourceData = districts.filter(function(e){
+              return e["NAME"] === state.currentState;
             });
-          state.districtView = 'largest';
-          window.scrollTo(0, 1240);
-        } else {
-          state.sourceData = states;
-          state.name = "NAME";
-          state.showing = 'states';
-          hideDistrictDivs();
-          d3.select("#search").style("display", "none");
-          d3.select("#selected-districts").style("display", "none");
-        }
-        updateChart();
-      })
+            state.name = "lea_name";
+            state.showing = 'districts';
+            let idx = statesMenu.indexOf(state.currentState);
+            // document.getElementById("state-menu").selectedIndex = idx;
+            d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+            showDistrictDivs();
+            d3.selectAll(".district-view").style("display", "inline-block")
+              .classed("chosen", function(e){
+                return e === 'Largest districts';
+              });
+            state.districtView = 'largest';
+            window.scrollTo(0, 1240);
+          } else {
+            state.sourceData = states;
+            state.name = "NAME";
+            state.showing = 'states';
+            hideDistrictDivs();
+            d3.select("#search").style("display", "none");
+            d3.select("#selected-districts").style("display", "none");
+          }
+          updateChart();
+        })
 
-    divisionChange.exit().remove();
+      divisionChange.exit().remove();
+    }
 
     highlightFixed();
   }

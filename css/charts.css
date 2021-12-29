@@ -607,9 +607,9 @@ label.check-switch:after {
     width: 200px;
   }
 
-#explanation-text {
-  margin-bottom: 0px;
-}
+  #explanation-text {
+    margin-bottom: 0px;
+  }
 
   #toggle-gap, #toggle-scale {
     line-height: 21px;
@@ -628,6 +628,22 @@ label.check-switch:after {
     margin-left: 0px;
     margin-right: 0px;
     padding: 8px 7px;
+  }
+
+  #chart text {
+    font-size: 12px;
+  }
+
+  #sticky {
+    padding-left: 16px;
+    margin: 0px 16px 0px 0px;
+    left: 0px;
+    top: 49px;
+    background-color: white;
+  }
+
+  #sticky .dropdown {
+    width: 200px;
   }
 
 }
