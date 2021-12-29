@@ -709,4 +709,12 @@ label.check-switch:after {
     width: 200px;
   }
 
+  #search-box {
+    width: calc(100% - 28px);
+  }
+
+  #number-selected {
+    margin-left: -85px;
+  }
+
 }
