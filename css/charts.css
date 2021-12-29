@@ -603,9 +603,13 @@ label.check-switch:after {
     margin: 28px 0;
   }
 
-  .dropodown {
+  .dropdown {
     width: 200px;
   }
+
+#explanation-text {
+  margin-bottom: 0px;
+}
 
   #toggle-gap, #toggle-scale {
     line-height: 21px;
@@ -618,6 +622,12 @@ label.check-switch:after {
 
   .slider {
     transform: translateY(-2px);
+  }
+
+  .district-view {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 8px 7px;
   }
 
 }
