@@ -1178,7 +1178,7 @@ Promise.all([
           stateTooltip.style("display", "none");
         }
 
-        if (isMobile) {
+        if (isMobile && (state.showing === 'states')) {
           if (state.seeData) {
             d3.select("#see-data").style("display", "none");
 
