@@ -590,6 +590,32 @@ label.check-switch:after {
   width: 210px;
 }
 
+#see-data {
+  position: absolute;
+  margin-left: 16px;
+  margin-right: 16px;
+  padding: 14px 0;
+  background-color: white;
+}
+
+#see-data-button {
+  float: right;
+  display: inline-block;
+  width: 82px;
+  vertical-align: middle;
+}
+
+#see-data-text {
+  display: inline-block;
+  max-width: calc(100% - 125px);
+  vertical-align: middle;
+  font-style: italic;
+  color: #696969;
+  font-size: 16px;
+  line-height: 24px;
+  margin-right: 24px;
+}
+
 @media (max-width: 600px) {
 
   #container {

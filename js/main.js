@@ -104,6 +104,7 @@ var state = {
   sortByGap: true,
   expandScale: false,
   yRange: [],
+  seeData: false,
 }
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
@@ -1074,6 +1075,42 @@ Promise.all([
           })
     }
 
+    function updateDivisions(){
+      yScale = d3.scaleLinear()
+        .domain(d3.range(state.dataToPlot.length))
+        .rangeRound(state.yRange);
+
+      svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", state.height + margin.top + margin.bottom);
+
+      // axes
+      svg.selectAll(".axis-line").remove();
+
+      var gAxisTop = svg.selectAll(".top-axis");
+
+      gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
+        .call(g => g.selectAll(".tick line").clone()
+                  .attr("stroke-opacity", 0.05)
+                  .attr("class", "axis-line")
+                  .attr("y2", state.height - margin.top - lineHeight/2))
+        .call(g => g.selectAll(".domain").remove());
+
+      var gAxisBottom = svg.selectAll(".bottom-axis");
+
+      gAxisBottom.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
+        .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
+        .call(g => g.selectAll(".domain").remove());
+
+      g.selectAll(".division").attr("class", "division")
+        .classed("state-average", function(d, i){
+          return (state.showing === 'districts') && (i === 0);
+        })
+        .attr("transform", function (d, i) {
+          return "translate(0," + yScale(i) + ")";
+        });
+    }
+
     svg.on("touchmove mousemove", function(event) {
       let thisX = d3.pointer(event, this)[0],
           thisY = d3.pointer(event, this)[1],
@@ -1131,6 +1168,48 @@ Promise.all([
 
         } else {
           stateTooltip.style("display", "none");
+        }
+
+        if (isMobile) {
+          if (state.seeData) {
+            d3.select("#see-data").style("display", "none");
+
+            let dy = margin.top + lineHeight/2;
+            state.yRange = [dy];
+            state.dataToPlot.forEach(function(d, i){
+              dy += d.lines * lineHeight + linePadding ;
+              state.yRange.push(dy);
+            })
+            state.height = dy;
+            updateDivisions();
+          } else {
+            let seeData = d3.select("#see-data")
+              .style("top", event.pageY + 'px')
+              .style("left", 0)
+              .style("display", "block");
+            let seeDataHeight = seeData.node().getBoundingClientRect().height;
+
+            let dy = margin.top + lineHeight/2;
+            state.yRange = [dy];
+            state.dataToPlot.forEach(function(d, i){
+              if (i === index) {
+                let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
+                let seeData = d3.select("#see-data")
+                  // .style("top", (event.pageY + lineHeight/2) + 'px')
+                  .style("top", (window.scrollY + chartTop + dy + linePadding) + 'px')
+                  .style("left", 0)
+                  .style("display", "block");
+                let seeDataHeight = seeData.node().getBoundingClientRect().height;
+                dy += d.lines * lineHeight + linePadding + seeDataHeight;
+              } else {
+                dy += d.lines * lineHeight + linePadding ;
+              }
+              state.yRange.push(dy);
+            })
+            state.height = dy;
+            updateDivisions();
+          }
+          state.seeData = !state.seeData
         }
       } else {
         // gDivisions.classed("hidden", false)
