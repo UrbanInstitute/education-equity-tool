@@ -336,7 +336,6 @@ Promise.all([
   }
 
   window.addEventListener("scroll", function(event){
-    console.log(window.scrollY)
     if (state.showing === 'states') {
       let nodeSvg = svg.node().getBoundingClientRect();
       d3.select("#sticky")
@@ -855,6 +854,78 @@ Promise.all([
     });
   }
 
+  function updateDivisions(){
+    yScale = d3.scaleLinear()
+      .domain(d3.range(state.dataToPlot.length))
+      .rangeRound(state.yRange);
+
+    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", state.height + margin.top + margin.bottom);
+
+    // axes
+    svg.selectAll(".axis-line").remove();
+
+    var gAxisTop = svg.selectAll(".top-axis");
+
+    gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
+      .call(g => g.selectAll(".tick line").clone()
+                .attr("stroke-opacity", 0.05)
+                .attr("class", "axis-line")
+                .attr("y2", state.height - margin.top - lineHeight/2))
+      .call(g => g.selectAll(".domain").remove());
+
+    var gAxisBottom = svg.selectAll(".bottom-axis");
+
+    gAxisBottom.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
+      .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
+      .call(g => g.selectAll(".domain").remove());
+
+    g.selectAll(".division").attr("class", "division")
+      .classed("state-average", function(d, i){
+        return (state.showing === 'districts') && (i === 0);
+      })
+      .attr("transform", function (d, i) {
+        return "translate(0," + yScale(i) + ")";
+      });
+  }
+
+  function showDistricts(event, d){
+    if (state.showing === 'states') {
+      if (state.currentState !== d["NAME"]) {
+        state.currentState = d["NAME"];
+        state.myown = [];
+      }
+      state.sourceData = districts.filter(function(e){
+        return e["NAME"] === state.currentState;
+      });
+      state.name = "lea_name";
+      state.showing = 'districts';
+      let idx = statesMenu.indexOf(state.currentState);
+      // document.getElementById("state-menu").selectedIndex = idx;
+      d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+      showDistrictDivs();
+      d3.selectAll(".district-view").style("display", "inline-block")
+        .classed("chosen", function(e){
+          return e === 'Largest districts';
+        });
+      state.districtView = 'largest';
+      if (isMobile) {
+        window.scrollTo(0, 2050);
+      } else {
+        window.scrollTo(0, 1240);
+      }
+    } else {
+      state.sourceData = states;
+      state.name = "NAME";
+      state.showing = 'states';
+      hideDistrictDivs();
+      d3.select("#search").style("display", "none");
+      d3.select("#selected-districts").style("display", "none");
+    }
+    updateChart();
+  }
+
   function initChart(filteredData) {
 
     processData();
@@ -1045,78 +1116,6 @@ Promise.all([
             }
           })
           .on("click", showDistricts)
-    }
-
-    function updateDivisions(){
-      yScale = d3.scaleLinear()
-        .domain(d3.range(state.dataToPlot.length))
-        .rangeRound(state.yRange);
-
-      svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", state.height + margin.top + margin.bottom);
-
-      // axes
-      svg.selectAll(".axis-line").remove();
-
-      var gAxisTop = svg.selectAll(".top-axis");
-
-      gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
-        .call(g => g.selectAll(".tick line").clone()
-                  .attr("stroke-opacity", 0.05)
-                  .attr("class", "axis-line")
-                  .attr("y2", state.height - margin.top - lineHeight/2))
-        .call(g => g.selectAll(".domain").remove());
-
-      var gAxisBottom = svg.selectAll(".bottom-axis");
-
-      gAxisBottom.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
-        .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
-        .call(g => g.selectAll(".domain").remove());
-
-      g.selectAll(".division").attr("class", "division")
-        .classed("state-average", function(d, i){
-          return (state.showing === 'districts') && (i === 0);
-        })
-        .attr("transform", function (d, i) {
-          return "translate(0," + yScale(i) + ")";
-        });
-    }
-
-    function showDistricts(event, d){
-      if (state.showing === 'states') {
-        if (state.currentState !== d["NAME"]) {
-          state.currentState = d["NAME"];
-          state.myown = [];
-        }
-        state.sourceData = districts.filter(function(e){
-          return e["NAME"] === state.currentState;
-        });
-        state.name = "lea_name";
-        state.showing = 'districts';
-        let idx = statesMenu.indexOf(state.currentState);
-        // document.getElementById("state-menu").selectedIndex = idx;
-        d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
-        showDistrictDivs();
-        d3.selectAll(".district-view").style("display", "inline-block")
-          .classed("chosen", function(e){
-            return e === 'Largest districts';
-          });
-        state.districtView = 'largest';
-        if (isMobile) {
-          window.scrollTo(0, 2050);
-        } else {
-          window.scrollTo(0, 1240);
-        }
-      } else {
-        state.sourceData = states;
-        state.name = "NAME";
-        state.showing = 'states';
-        hideDistrictDivs();
-        d3.select("#search").style("display", "none");
-        d3.select("#selected-districts").style("display", "none");
-      }
-      updateChart();
     }
 
     svg.on("touchmove mousemove", function(event) {
