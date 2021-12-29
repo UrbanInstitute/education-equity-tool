@@ -368,12 +368,10 @@ body {
 #intro {
   position: relative;
   margin-top: 60px;
-  height: 200px;
-  margin-bottom: 5rem;
+  margin-bottom: 60px;
 }
 
 #introText {
-  position: absolute;
   text-align: center;
   width: 100%;
   /* top: 50%;
@@ -394,7 +392,7 @@ h1, h2 {
 }
 
 h1 {
-  color: #000000;
+  color: #353535;
   font-weight: 700;
   margin-bottom: 27px;
   font-size: 48px;
@@ -477,7 +475,7 @@ hr {
 p.general {
   max-width: 760px;
   margin: 28px auto;
-  line-height: 1.8rem;
+  line-height: 32.5px;
 }
 
 p.postScrolly {
@@ -658,7 +656,6 @@ p.footerLink > a {
   }
 
   #intro {
-    height: 96vh;
     margin-left: -10%;
     margin-right: -10%;
   }
@@ -669,7 +666,6 @@ p.footerLink > a {
 
   #introText {
     width: 90%;
-    top: 50%;
   }
 
   #topText {
@@ -699,10 +695,7 @@ p.footerLink > a {
   }
 
   #intro {
-    height: 94vh;
-    margin-left: -5%;
-    margin-right: -5%;
-    margin-bottom: 2.667rem;
+    margin: 40px 14px 24px 14px;
   }
 
   #introMap {
@@ -710,12 +703,12 @@ p.footerLink > a {
   }
 
   #introText {
-    width: 95%;
-    top: 53%;
+    width: 100%;
   }
 
   h1 {
-    font-size: 2.5rem;
+    font-size: 36px;
+    line-height: 45px;
   }
 
   h2 {
@@ -723,11 +716,23 @@ p.footerLink > a {
   }
 
   p#date {
-    padding-top: 80px;
+    margin-top: 6px;
+  }
+
+  hr {
+    margin: 24px 0;
+  }
+
+  #share-icons {
+    margin: 0;
   }
 
   #containerFeature {
-    margin: 0 5%;
+    margin: 0 18px;
+  }
+
+  p.general {
+    line-height: 27px;
   }
 
   p.postScrolly {

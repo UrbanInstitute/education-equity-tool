@@ -5,7 +5,6 @@
 }
 
 #container {
-  width: 100%;
   max-width: 760px;
   margin: 0 auto;
   padding-bottom: 0px;
@@ -60,7 +59,7 @@
 
 #metrics-text {
   font-size: 18px;
-  line-height: 150%;
+  line-height: 27px;
   margin: 16px auto 28px auto;
 }
 
@@ -72,6 +71,7 @@
   margin: 28px auto;
   font-weight: bold;
   font-size: 18px;
+  line-height: 27px;
 }
 
 #sticky {
@@ -588,4 +588,27 @@ label.check-switch:after {
 
 #sticky .dropdown {
   width: 210px;
+}
+
+@media (max-width: 600px) {
+
+  #container {
+    margin: 0 16px;
+  }
+
+  #forms {
+    font-size: 16px;
+    line-height: 24px;
+    width: 200px;
+    margin: 28px 0;
+  }
+
+  .dropodown {
+    width: 200px;
+  }
+
+  #toggle-gap, #toggle-scale {
+    line-height: 21px;
+  }
+
 }
