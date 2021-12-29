@@ -1218,6 +1218,7 @@ Promise.all([
             d3.select("#see-data-button").on("click", function(event){
               showDistricts(event, thisData);
               d3.select("#see-data").style("display", "none");
+              d3.select("#go-back").style("display", "block");
             })
             updateDivisions();
           }
@@ -1268,6 +1269,27 @@ Promise.all([
       }
     });
 
+    d3.select("#go-back").on("click", function(){
+      state.sourceData = states;
+      state.name = "NAME";
+      state.showing = 'states';
+      hideDistrictDivs();
+      d3.select("#search").style("display", "none");
+      d3.select("#selected-districts").style("display", "none");
+      d3.select("#see-data").style("display", "none");
+      d3.select(this).style("display", "none");
+      state.seeData = false;
+
+      let dy = margin.top + lineHeight/2;
+      state.yRange = [dy];
+      state.dataToPlot.forEach(function(d, i){
+        dy += d.lines * lineHeight + linePadding ;
+        state.yRange.push(dy);
+      })
+      state.height = dy;
+
+      updateChart();
+    })
   }
 
   function updateChart(){
