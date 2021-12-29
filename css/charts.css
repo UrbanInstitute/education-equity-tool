@@ -676,7 +676,7 @@ label.check-switch:after {
   #toggle-gap, #toggle-scale {
     line-height: 21px;
     display: block;
-    margin: 8px 0;
+    margin: 8px 0px 8px 10px;
     padding: 0;
     position: relative;
     float: right;
@@ -711,6 +711,10 @@ label.check-switch:after {
 
   #search-box {
     width: calc(100% - 28px);
+  }
+
+  #search-list {
+    width: calc(100% - 36px);
   }
 
   #number-selected {
