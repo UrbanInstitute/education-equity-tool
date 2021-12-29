@@ -609,6 +609,15 @@ label.check-switch:after {
 
   #toggle-gap, #toggle-scale {
     line-height: 21px;
+    display: block;
+    margin: 8px 0;
+    padding: 0;
+    position: relative;
+    float: right;
+  }
+
+  .slider {
+    transform: translateY(-2px);
   }
 
 }
