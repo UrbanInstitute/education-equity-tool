@@ -1204,12 +1204,12 @@ Promise.all([
 
         if (isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) || isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])){
           if (isMobile) {
-            d3.select("#mobile-tooltip-text")
-              .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>")
-            d3.select("#mobile-tooltip").style("display", "block");
-            d3.select("#mobile-tooltip-header-close").on("click", function(){
-              d3.select("#mobile-tooltip").style("display", "none");
-            })
+            // d3.select("#mobile-tooltip-text")
+            //   .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>")
+            // d3.select("#mobile-tooltip").style("display", "block");
+            // d3.select("#mobile-tooltip-header-close").on("click", function(){
+            //   d3.select("#mobile-tooltip").style("display", "none");
+            // })
           } else {
             let yOffset = dataTooltip.node().getBoundingClientRect().height / 2;
             dataTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
@@ -1235,14 +1235,7 @@ Promise.all([
         }
 
         if (isMobile && (state.showing === 'states')) {
-          if ((thisData[state.name] === 'Hawaii') || (thisData[state.name] === 'District of Columbia')) {
-            d3.select("#mobile-tooltip-text")
-              .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>")
-            d3.select("#mobile-tooltip").style("display", "block");
-            d3.select("#mobile-tooltip-header-close").on("click", function(){
-              d3.select("#mobile-tooltip").style("display", "none");
-            });
-          } else if (state.seeData === thisData[state.name]) {
+          if (state.seeData === thisData[state.name]) {
             d3.select("#see-data").style("display", "none");
 
             let dy = margin.top + lineHeight/2;
@@ -1259,6 +1252,18 @@ Promise.all([
               .style("top", event.pageY + 'px')
               .style("left", 0)
               .style("display", "block");
+
+            if ((thisData[state.name] === 'Hawaii') || (thisData[state.name] === 'District of Columbia')) {
+              d3.select("#see-data-button").style("display", "none");
+              d3.select("#see-data-text")
+                .style("max-width", "none")
+                .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
+            } else {
+              d3.select("#see-data-button").style("display", "inline-block");
+              d3.select("#see-data-text")
+                .style("max-width", ($(window).width() - 16 - 150) + "px")
+                .html("Want to see data for districts in this state?");
+            }
             let seeDataHeight = seeData.node().getBoundingClientRect().height;
 
             let dy = margin.top + lineHeight/2;
@@ -1268,7 +1273,7 @@ Promise.all([
                 let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
                 let seeData = d3.select("#see-data")
                   // .style("top", (event.pageY + lineHeight/2) + 'px')
-                  .style("top", (window.scrollY + chartTop + dy + linePadding) + 'px')
+                  .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
                   .style("left", 0)
                   .style("display", "block");
                 let seeDataHeight = seeData.node().getBoundingClientRect().height;
