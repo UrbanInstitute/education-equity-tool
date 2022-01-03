@@ -10,24 +10,7 @@ let offsetWidth, widthChart;
    widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
  }
 
-let svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
-let dataTooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("left", 0)
-    .style("top", 0)
-    .style("display", "none")
-    .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
-
-let stateTooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("left", 0)
-    .style("top", 0)
-    .style("display", "none")
-    .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
-
-const transitionTime = 500;
-
-let margin;
+let margin, svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
 
 if (isMobile){
   margin = {top: 20, right: offsetWidth, bottom: 20, left: 100};
@@ -35,9 +18,28 @@ if (isMobile){
   margin = {top: 20, right: offsetWidth, bottom: 20, left: 150};
 }
 
+let helpTooltipOffset = 25;
+
+let dataTooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("left", 0)
+    .style("top", 0)
+    .style("display", "none")
+    .style("max-width", margin.right + "px")
+    .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
+
+let stateTooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("left", 0)
+    .style("top", 0)
+    .style("display", "none")
+    .style("max-width", (margin.right - helpTooltipOffset - 16)+ "px")
+    .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
+
 let width = widthChart - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
+const transitionTime = 500;
 const lineHeight = 14;
 const linePadding = 10;
 const circleSize = 7;
@@ -1165,6 +1167,35 @@ Promise.all([
             }
           })
           .on("click", showDistricts)
+
+        gs.selectAll(".help-tooltip")
+          .data(function(d){
+            return [d];
+          })
+          .join('g')
+            .attr("class", "help-tooltip")
+            .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+            .style("text-anchor", "left")
+            .style("vertical-align", "middle")
+            .html(function(d, i) {
+              if (state.showing === 'states') {
+                if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
+                  return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+                } else {
+                  return null;
+                }
+              }
+            })
+            .on("mouseover", function(event, d){
+              let thisGPos = d3.select(this).node().getBoundingClientRect();
+              stateTooltip.style("display", "block");
+              let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+              stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
+                .style("top", (event.pageY - yOffset) + "px");
+            })
+            .on("mouseout", function(event, d){
+              stateTooltip.style("display", "none");
+            })
     }
 
     svg.on("touchmove mousemove", function(event) {
@@ -1224,17 +1255,17 @@ Promise.all([
           }
         }
 
-        if (!isMobile){
-          if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') || (thisData[state.name] === 'Hawaii'))) {
-            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-            stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
-              .style("top", (event.pageY - yOffset) + "px")
-              .style("display", "block");
-
-          } else {
-            stateTooltip.style("display", "none");
-          }
-        }
+        // if (!isMobile){
+        //   if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') || (thisData[state.name] === 'Hawaii'))) {
+        //     let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+        //     stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+        //       .style("top", (event.pageY - yOffset) + "px")
+        //       .style("display", "block");
+        //
+        //   } else {
+        //     stateTooltip.style("display", "none");
+        //   }
+        // }
 
         if (isMobile && (state.showing === 'states')) {
           if (state.seeData === thisData[state.name]) {
@@ -1688,6 +1719,64 @@ Promise.all([
         .on("click", showDistricts)
 
       divisionChange.exit().remove();
+
+
+      let helpTooltips = g.selectAll(".division").selectAll(".help-tooltip")
+        .data(function(d){
+          return [d];
+        })
+
+        helpTooltips.enter().append('g')
+          .attr("class", "help-tooltip")
+          .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+          .style("text-anchor", "left")
+          .style("vertical-align", "middle")
+          .html(function(d, i) {
+            if (state.showing === 'states') {
+              if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
+                return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+              } else {
+                return null;
+              }
+            }
+          })
+          .on("mouseover", function(event, d){
+            let thisGPos = d3.select(this).node().getBoundingClientRect();
+            stateTooltip.style("display", "block");
+            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+            stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
+              .style("top", (event.pageY - yOffset) + "px");
+          })
+          .on("mouseexit", function(event, d){
+            stateTooltip.style("display", "none");
+          });
+
+        helpTooltips
+          .attr("class", "help-tooltip")
+          .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+          .style("text-anchor", "left")
+          .style("vertical-align", "middle")
+          .html(function(d, i) {
+            if (state.showing === 'states') {
+              if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
+                return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+              } else {
+                return null;
+              }
+            }
+          })
+          .on("mouseover", function(event, d){
+            let thisGPos = d3.select(this).node().getBoundingClientRect();
+            stateTooltip.style("display", "block");
+            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+            stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
+              .style("top", (event.pageY - yOffset) + "px");
+          })
+          .on("mouseexit", function(event, d){
+            stateTooltip.style("display", "none");
+          })
+
+        helpTooltips.exit().remove();
     }
 
     highlightFixed();
