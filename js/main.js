@@ -387,7 +387,7 @@ Promise.all([
       d3.select(id).style("width", "auto");
       d3.select(id).select(".dropbtn").html(label);
       let prevWidth = d3.select(id).select(".dropbtn").node().getBoundingClientRect().width;
-      d3.select(id).style("width", (prevWidth + 25) + "px");
+      d3.select(id).style("width", (prevWidth + 35) + "px");
     } else {
       d3.select(id).select(".dropbtn").html(label);
     }

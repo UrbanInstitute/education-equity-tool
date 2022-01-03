@@ -275,7 +275,7 @@ input:checked + .slider:after {
   /* background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='28' viewBox='0 0 28 28' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>"); */
   background-image: url("../img/icon-dropdown.svg");
   background-repeat: no-repeat;
-  background-position-x: 95%;
+  background-position-x: calc(100% - 12px);
   background-position-y: 50%;
   background-size: 16px;
 }
