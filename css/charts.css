@@ -703,6 +703,12 @@ label.check-switch:after {
   color: #353535;
 }
 
+@media (max-width: 1270px) {
+  #sticky .dropdown {
+    width: 140px;
+  }
+}
+
 @media (max-width: 770px) {
 
   #container {
@@ -761,7 +767,7 @@ label.check-switch:after {
   }
 
   #sticky .dropdown {
-    width: 200px;
+    width: 196px;
   }
 
   #search-box {
