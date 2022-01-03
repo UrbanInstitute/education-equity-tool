@@ -1102,7 +1102,7 @@ Promise.all([
           .attr('fill', 'steelblue')
           .text(function(d, i) {
             if (state.showing === 'states') {
-              if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+              if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
                 return null;
               } else {
                 return "Show me districts in " + d[state.name];
@@ -1155,30 +1155,47 @@ Promise.all([
         let thisData = thisG.data()[0];
         let thisGPos = thisG.node().getBoundingClientRect();
 
-        if (isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) | isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])){
-          // dataTooltip.style("left", (event.pageX + 10) + "px")
-          //   .style("top", (event.pageY + lineHeight / 2 + 10) + "px")
-          //   .style("display", "block");
-          let yOffset = dataTooltip.node().getBoundingClientRect().height / 2;
-          dataTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
-            .style("top", (event.pageY - yOffset) + "px")
-            .style("display", "block");
+        if (isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) || isNaN(thisData[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])){
+          if (isMobile) {
+            d3.select("#mobile-tooltip-text")
+              .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>")
+            d3.select("#mobile-tooltip").style("display", "block");
+            d3.select("#mobile-tooltip-header-close").on("click", function(){
+              d3.select("#mobile-tooltip").style("display", "none");
+            })
+          } else {
+            let yOffset = dataTooltip.node().getBoundingClientRect().height / 2;
+            dataTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+              .style("top", (event.pageY - yOffset) + "px")
+              .style("display", "block");
+          }
         } else {
-          dataTooltip.style("display", "none");
+          if (!isMobile){
+            dataTooltip.style("display", "none");
+          }
         }
 
-        if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') | (thisData[state.name] === 'Hawaii'))) {
-          let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-          stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
-            .style("top", (event.pageY - yOffset) + "px")
-            .style("display", "block");
+        if (!isMobile){
+          if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') || (thisData[state.name] === 'Hawaii'))) {
+            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+            stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+              .style("top", (event.pageY - yOffset) + "px")
+              .style("display", "block");
 
-        } else {
-          stateTooltip.style("display", "none");
+          } else {
+            stateTooltip.style("display", "none");
+          }
         }
 
         if (isMobile && (state.showing === 'states')) {
-          if (state.seeData) {
+          if ((thisData[state.name] === 'Hawaii') || (thisData[state.name] === 'District of Columbia')) {
+            d3.select("#mobile-tooltip-text")
+              .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>")
+            d3.select("#mobile-tooltip").style("display", "block");
+            d3.select("#mobile-tooltip-header-close").on("click", function(){
+              d3.select("#mobile-tooltip").style("display", "none");
+            })
+          } else if (state.seeData) {
             d3.select("#see-data").style("display", "none");
 
             let dy = margin.top + lineHeight/2;
@@ -1218,6 +1235,7 @@ Promise.all([
               showDistricts(event, thisData);
               d3.select("#see-data").style("display", "none");
               d3.select("#go-back").style("display", "block");
+              state.seeData = false;
             })
             updateDivisions();
           }
@@ -1568,7 +1586,7 @@ Promise.all([
         .attr('fill', 'steelblue')
         .text(function(d, i) {
           if (state.showing === 'states') {
-            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+            if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
               return null;
             } else {
               return "Show me districts in " + d[state.name];
@@ -1599,7 +1617,7 @@ Promise.all([
         .attr('fill', 'steelblue')
         .text(function(d, i) {
           if (state.showing === 'states') {
-            if ((d[state.name] === 'Hawaii') | (d[state.name] === 'District of Columbia')) {
+            if ((d[state.name] === 'Hawaii') || (d[state.name] === 'District of Columbia')) {
               return null;
             } else {
               return "Show me districts in " + d[state.name];
