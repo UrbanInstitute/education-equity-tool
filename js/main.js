@@ -3,7 +3,7 @@ const isMobile = $(window).width() < 770;
 let offsetWidth, widthChart;
 
  if (isMobile){
-   offsetWidth = 16;
+   offsetWidth = 16 + 22;
    widthChart = document.getElementById("chart").offsetWidth;
  } else {
    offsetWidth = 280;
