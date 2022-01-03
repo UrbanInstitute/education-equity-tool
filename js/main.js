@@ -104,7 +104,7 @@ var state = {
   sortByGap: true,
   expandScale: false,
   yRange: [],
-  seeData: false,
+  seeData: null,
 }
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
@@ -1241,8 +1241,8 @@ Promise.all([
             d3.select("#mobile-tooltip").style("display", "block");
             d3.select("#mobile-tooltip-header-close").on("click", function(){
               d3.select("#mobile-tooltip").style("display", "none");
-            })
-          } else if (state.seeData) {
+            });
+          } else if (state.seeData === thisData[state.name]) {
             d3.select("#see-data").style("display", "none");
 
             let dy = margin.top + lineHeight/2;
@@ -1253,6 +1253,7 @@ Promise.all([
             })
             state.height = dy;
             updateDivisions();
+            state.seeData = null;
           } else {
             let seeData = d3.select("#see-data")
               .style("top", event.pageY + 'px')
@@ -1285,8 +1286,8 @@ Promise.all([
               state.seeData = false;
             })
             updateDivisions();
+            state.seeData = thisData[state.name];
           }
-          state.seeData = !state.seeData
         }
       } else {
         // gDivisions.classed("hidden", false)
