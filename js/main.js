@@ -935,9 +935,8 @@ Promise.all([
       state.name = "lea_name";
       state.showing = 'districts';
       let idx = statesMenu.indexOf(state.currentState);
-      // document.getElementById("state-menu").selectedIndex = idx;
-      d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
       showDistrictDivs();
+      updateDropdownHtml("#dropdown3", state.currentState);
       d3.selectAll(".district-view").style("display", "inline-block")
         .classed("chosen", function(e){
           return e === 'Largest districts';
