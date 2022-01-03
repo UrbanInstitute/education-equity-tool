@@ -591,6 +591,7 @@ label.check-switch:after {
 }
 
 #see-data {
+  width: calc(100% - 32px);
   position: absolute;
   margin-left: 16px;
   margin-right: 16px;
@@ -652,7 +653,7 @@ label.check-switch:after {
   font-weight: 400;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 770px) {
 
   #container {
     margin: 0 16px;

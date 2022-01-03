@@ -1,4 +1,4 @@
-const isMobile = $(window).width() < 830;
+const isMobile = $(window).width() < 770;
 
 let offsetWidth, widthChart;
 

@@ -649,7 +649,7 @@ p.footerLink > a {
   }
 }
 
-@media (max-width: 770px) {
+/* @media (max-width: 770px) {
 
   #containerFeature {
     margin: 0 8%;
@@ -681,9 +681,9 @@ p.footerLink > a {
     font-size: 1.7rem;
 
   }
-}
+} */
 
-@media (max-width: 600px) {
+@media (max-width: 770px) {
 
   * {
     font-size: 18px;
