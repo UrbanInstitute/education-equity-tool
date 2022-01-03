@@ -890,6 +890,19 @@ Promise.all([
       });
   }
 
+  function scrollToElement(id){
+    function findPos(obj) {
+        var curtop = 0;
+        if (obj.offsetParent) {
+            do {
+                curtop += obj.offsetTop;
+            } while (obj = obj.offsetParent);
+        return curtop;
+        }
+    }
+    window.scroll(0,findPos(document.getElementById(id)) - 50);
+  }
+
   function showDistricts(event, d){
     if (state.showing === 'states') {
       if (state.currentState !== d["NAME"]) {
@@ -911,9 +924,9 @@ Promise.all([
         });
       state.districtView = 'largest';
       if (isMobile) {
-        window.scrollTo(0, 2050);
+        scrollToElement("forms");
       } else {
-        window.scrollTo(0, 1240);
+        scrollToElement("container");
       }
     } else {
       state.sourceData = states;
