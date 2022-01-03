@@ -345,8 +345,16 @@ Promise.all([
           } else {
             return margin.left + 'px';
           }
-        })
-        .style("display", ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + 60)) ? "none" : "inline-block");
+        });
+
+      if ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + 60)) {
+        d3.select("#sticky").style("display", "none");
+      } else {
+        d3.select("#sticky").style("display", "inline-block");
+        updateDropdownHtml("#dropdown4", d3.select("#dropdown4").select(".dropbtn").html());
+        updateDropdownHtml("#dropdown5", d3.select("#dropdown5").select(".dropbtn").html());
+        updateDropdownHtml("#dropdown6", d3.select("#dropdown6").select(".dropbtn").html());
+      }
     }
   })
 
@@ -372,19 +380,31 @@ Promise.all([
       })
   }
 
+  function updateDropdownHtml(id, label) {
+    if (isMobile) {
+      d3.select(id).style("width", "auto");
+      d3.select(id).select(".dropbtn").html(label);
+      let prevWidth = d3.select(id).select(".dropbtn").node().getBoundingClientRect().width;
+      d3.select(id).style("width", (prevWidth + 25) + "px");
+    } else {
+      d3.select(id).select(".dropbtn").html(label);
+    }
+  }
+
   let raceEthOp1 = addOptions("raceEth1", raceEthsLabels);
   d3.select("#dropdown1")
     .on("click", function(d){
       document.getElementById("raceEth1").classList.toggle("show");
     });
-  d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+  updateDropdownHtml("#dropdown1", getCircleHtml(twoColors[0]) + state.raceEth1);
   raceEthOp1.selectAll("a").on("click", function(event, d){
     if (d !== state.raceEth2) {
       state.raceEth1 = d;
-      d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
-      d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      updateDropdownHtml("#dropdown1", getCircleHtml(twoColors[0]) + state.raceEth1);
+      updateDropdownHtml("#dropdown5", getCircleHtml(twoColors[0]) + state.raceEth1);
       greyOutRaceEth();
       updateOptionsCircles();
+
       updateChart();
     }
   })
@@ -394,12 +414,12 @@ Promise.all([
     .on("click", function(d){
       document.getElementById("raceEth2").classList.toggle("show");
     });
-  d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+  updateDropdownHtml("#dropdown2", getCircleHtml(twoColors[1]) + state.raceEth2);
   raceEthOp2.selectAll("a").on("click", function(event, d){
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
-      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
-      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+      updateDropdownHtml("#dropdown2", getCircleHtml(twoColors[1]) + state.raceEth2);
+      updateDropdownHtml("#dropdown6", getCircleHtml(twoColors[1]) + state.raceEth2);
       greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
@@ -411,13 +431,13 @@ Promise.all([
     .on("click", function(d){
       document.getElementById("metric-sticky").classList.toggle("show");
     });
-  d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
+  updateDropdownHtml("#dropdown4", metricLabels[state.metric]);
   metricOp.selectAll("a").on("click", function(event, d){
     if (d !== metricLabels[state.metric]) {
       state.metric = metrics.filter(function(m){
         return metricLabels[m] === d;
       })[0];
-      d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
+      updateDropdownHtml("#dropdown4", metricLabels[state.metric]);
       d3.selectAll(".metric")
         .classed("chosen", function(e){
           return e === state.metric;
@@ -439,12 +459,12 @@ Promise.all([
     .on("click", function(d){
       document.getElementById("raceEth1-sticky").classList.toggle("show");
     });
-  d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+  updateDropdownHtml("#dropdown5", getCircleHtml(twoColors[0]) + state.raceEth1);
   raceEthOp1Sticky.selectAll("a").on("click", function(event, d){
     if (d !== state.raceEth2) {
       state.raceEth1 = d;
-      d3.select("#dropdown1").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
-      d3.select("#dropdown5").select(".dropbtn").html(getCircleHtml(twoColors[0]) + state.raceEth1);
+      updateDropdownHtml("#dropdown1", getCircleHtml(twoColors[0]) + state.raceEth1);
+      updateDropdownHtml("#dropdown5", getCircleHtml(twoColors[0]) + state.raceEth1);
       greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
@@ -456,12 +476,12 @@ Promise.all([
     .on("click", function(d){
       document.getElementById("raceEth2-sticky").classList.toggle("show");
     });
-  d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+  updateDropdownHtml("#dropdown6", getCircleHtml(twoColors[1]) + state.raceEth2);
   raceEthOp2Sticky.selectAll("a").on("click", function(event, d){
     if (d !== state.raceEth1) {
       state.raceEth2 = d;
-      d3.select("#dropdown2").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
-      d3.select("#dropdown6").select(".dropbtn").html(getCircleHtml(twoColors[1]) + state.raceEth2);
+      updateDropdownHtml("#dropdown2", getCircleHtml(twoColors[1]) + state.raceEth2);
+      updateDropdownHtml("#dropdown6", getCircleHtml(twoColors[1]) + state.raceEth2);
       greyOutRaceEth();
       updateOptionsCircles();
       updateChart();
@@ -487,7 +507,7 @@ Promise.all([
         state.currentState = d;
         state.myown = [];
       }
-      d3.select("#dropdown3").select(".dropbtn").html(state.currentState);
+      updateDropdownHtml("#dropdown3", state.currentState);
       state.sourceData = districts.filter(function(e){
         return e["NAME"] === state.currentState;
       });
@@ -517,7 +537,7 @@ Promise.all([
       } else if (d === 'Counselors'){
         d3.select("#toggle-scale").style("display", "none");
       }
-      d3.select("#dropdown4").select(".dropbtn").html(metricLabels[state.metric]);
+      updateDropdownHtml("#dropdown4", metricLabels[state.metric]);
       updateMetricText();
       updateChart();
     })

@@ -716,12 +716,12 @@ label.check-switch:after {
   #forms {
     font-size: 16px;
     line-height: 24px;
-    width: 200px;
+    /* width: 200px; */
     margin: 28px 0;
   }
 
   .dropdown {
-    width: 200px;
+    width: auto;
   }
 
   #explanation-text {
