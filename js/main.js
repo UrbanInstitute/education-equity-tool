@@ -108,7 +108,7 @@ var state = {
 }
 
 let districtExplanation = '<p>Use the tabs below to explore the largest 10 districts in the selected state by number of students enrolled or to create your own comparison by adding up to 10 districts in the selected state.</p>';
-let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares between the first racial or ethnic group selected and the second racial or ethnic group selected. As such, states where the first group has a higher share of the selected measure will be displayed toward the top, and states where the second group has a higher share of the selected measure will be displayed toward the bottom.</p>'
+let stateExplanation = '<p>When sorting by gap, the tool organizes states by the difference in shares. States where the first racial  or ethnic group selected has a higher share will be displayed toward the top, and states where the second racial or ethnic group selected has a higher share will be displayed toward the bottom.</p>'
 let plusIcon = '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 0H26V48H23V0Z" fill="black"/><path d="M48 23V26L0 26L1.31135e-07 23L48 23Z" fill="black"/></svg>';
 
 function getUniquesMenu(df, thisVariable) {
