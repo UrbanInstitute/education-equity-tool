@@ -237,13 +237,15 @@ function zoomOutScale() {
 }
 
 function showDistrictDivs() {
-  d3.select("#state-div").style("display", "inline-block");
+  d3.select("#state-div").style("display", "inline");
+  d3.select("#dropdown3").style("display", "inline-block");
   d3.select("#explanation-text").html(districtExplanation);
   d3.select("#sticky").style("display", "none");
 }
 
 function hideDistrictDivs() {
   d3.select("#state-div").style("display", "none");
+  d3.select("#dropdown3").style("display", "none");
   d3.select("#explanation-text").html(stateExplanation);
   d3.selectAll(".district-view").style("display", "none");
 }

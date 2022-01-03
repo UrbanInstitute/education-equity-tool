@@ -726,6 +726,11 @@ label.check-switch:after {
     margin: 28px 0;
   }
 
+  #forms span {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
   .dropdown {
     width: auto;
   }
@@ -764,6 +769,7 @@ label.check-switch:after {
     top: 49px;
     background-color: white;
     z-index: 4;
+    font-size: 16px;
   }
 
   #sticky .dropdown {
