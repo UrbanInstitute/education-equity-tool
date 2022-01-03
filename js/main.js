@@ -590,6 +590,21 @@ Promise.all([
       return d;
     })
 
+  if ($(window).width() < 768) {
+    d3.select("#districts-views")
+      .selectAll("span")
+      .style("text-align", "center")
+      .style("white-space", "nowrap")
+      .style('width', function(d, i){
+        let spanMargin = ($(window).width() - 32 - 188 - 154 - 38) / 2;
+        if (i === 0) {
+          return (187 + spanMargin) + "px";
+        } else {
+          return (153 + spanMargin) + "px";
+        }
+      })
+  }
+
   d3.select("#explanation-text").html(stateExplanation);
 
   let toggleGap = d3.select("#toggle-gap").select(".slider");
