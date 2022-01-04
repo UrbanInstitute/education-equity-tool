@@ -838,19 +838,77 @@ Promise.all([
       state.dataToPlot = [thisState[0], ...sortedData];
     }
 
-    let dy = margin.top + lineHeight/2;
-    state.yRange = [dy];
-    state.dataToPlot.forEach(function(d, i){
-      if ((state.showing === 'districts') && (i === 0)) {
-        dy += d.lines * lineHeight + 2 * linePadding;
+    if (isMobile && (state.showing === 'states')){
+      if (state.seeData === null) {
+        d3.select("#see-data").style("display", "none");
+
+        let dy = margin.top + lineHeight/2;
+        state.yRange = [dy];
+        state.dataToPlot.forEach(function(d, i){
+          dy += d.lines * lineHeight + linePadding ;
+          state.yRange.push(dy);
+        })
+        state.height = dy;
       } else {
-        dy += d.lines * lineHeight + linePadding;
+        let seeData = d3.select("#see-data")
+          .style("top", event.pageY + 'px')
+          .style("left", 0)
+          .style("display", "block");
+
+        if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
+          d3.select("#see-data-button").style("display", "none");
+          d3.select("#see-data-text")
+            .style("max-width", "none")
+            .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
+        } else {
+          d3.select("#see-data-button").style("display", "inline-block");
+          d3.select("#see-data-text")
+            .style("max-width", ($(window).width() - 16 - 150) + "px")
+            .html("Want to see data for districts in this state?");
+        }
+        let seeDataHeight = seeData.node().getBoundingClientRect().height;
+
+        let dy = margin.top + lineHeight/2;
+        state.yRange = [dy];
+        state.dataToPlot.forEach(function(d, i){
+          if (d[state.name] === state.seeData) {
+            let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
+            let seeData = d3.select("#see-data")
+              // .style("top", (event.pageY + lineHeight/2) + 'px')
+              .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
+              .style("left", 0)
+              .style("display", "block");
+            let seeDataHeight = seeData.node().getBoundingClientRect().height;
+            dy += d.lines * lineHeight + linePadding + seeDataHeight;
+
+            d3.select("#see-data-button").on("click", function(event){
+              showDistricts(event, d);
+              d3.select("#see-data").style("display", "none");
+              d3.select("#go-back").style("display", "block");
+            })
+          } else {
+            dy += d.lines * lineHeight + linePadding ;
+          }
+          state.yRange.push(dy);
+        })
+        state.height = dy;
       }
-      if (i < state.dataToPlot.length - 1) {
-        state.yRange.push(dy);
-      }
-    })
-    state.height = state.yRange[state.yRange.length - 1];
+    } else {
+      let dy = margin.top + lineHeight/2;
+      state.yRange = [dy];
+      state.dataToPlot.forEach(function(d, i){
+        if ((state.showing === 'districts') && (i === 0)) {
+          dy += d.lines * lineHeight + 2 * linePadding;
+        } else {
+          dy += d.lines * lineHeight + linePadding;
+        }
+        if (i < state.dataToPlot.length - 1) {
+          state.yRange.push(dy);
+        }
+      })
+      state.height = state.yRange[state.yRange.length - 1];
+    }
+
   }
 
   function highlightFixed() {
@@ -910,42 +968,6 @@ Promise.all([
     });
   }
 
-  function updateDivisions(){
-    yScale = d3.scaleLinear()
-      .domain(d3.range(state.dataToPlot.length))
-      .rangeRound(state.yRange);
-
-    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", state.height + margin.top + margin.bottom);
-
-    // axes
-    svg.selectAll(".axis-line").remove();
-
-    var gAxisTop = svg.selectAll(".top-axis");
-
-    gAxisTop.call(d3.axisTop(xScale).tickValues(tickValues).tickFormat(formatPercent))
-      .call(g => g.selectAll(".tick line").clone()
-                .attr("stroke-opacity", 0.05)
-                .attr("class", "axis-line")
-                .attr("y2", state.height - margin.top - lineHeight/2))
-      .call(g => g.selectAll(".domain").remove());
-
-    var gAxisBottom = svg.selectAll(".bottom-axis");
-
-    gAxisBottom.attr("transform", "translate(0," + (state.height - lineHeight/2) + ")")
-      .call(d3.axisBottom(xScale).tickValues(tickValues).tickFormat(formatPercent))
-      .call(g => g.selectAll(".domain").remove());
-
-    g.selectAll(".division").attr("class", "division")
-      .classed("state-average", function(d, i){
-        return (state.showing === 'districts') && (i === 0);
-      })
-      .attr("transform", function (d, i) {
-        return "translate(0," + yScale(i) + ")";
-      });
-  }
-
   function scrollToElement(id){
     function findPos(obj) {
         var curtop = 0;
@@ -998,7 +1020,7 @@ Promise.all([
 
     processData();
 
-    // For mobile, we highlit the first element on load
+    // For mobile, we highlight the first element on load
     if (isMobile && (state.showing === 'states')) {
       state.seeData = state.dataToPlot[0][state.name];
 
@@ -1333,63 +1355,11 @@ Promise.all([
 
         if (isMobile && (state.showing === 'states')) {
           if (state.seeData === thisData[state.name]) {
-            d3.select("#see-data").style("display", "none");
-
-            let dy = margin.top + lineHeight/2;
-            state.yRange = [dy];
-            state.dataToPlot.forEach(function(d, i){
-              dy += d.lines * lineHeight + linePadding ;
-              state.yRange.push(dy);
-            })
-            state.height = dy;
-            updateDivisions();
             state.seeData = null;
           } else {
-            let seeData = d3.select("#see-data")
-              .style("top", event.pageY + 'px')
-              .style("left", 0)
-              .style("display", "block");
-
-            if ((thisData[state.name] === 'Hawaii') || (thisData[state.name] === 'District of Columbia')) {
-              d3.select("#see-data-button").style("display", "none");
-              d3.select("#see-data-text")
-                .style("max-width", "none")
-                .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
-            } else {
-              d3.select("#see-data-button").style("display", "inline-block");
-              d3.select("#see-data-text")
-                .style("max-width", ($(window).width() - 16 - 150) + "px")
-                .html("Want to see data for districts in this state?");
-            }
-            let seeDataHeight = seeData.node().getBoundingClientRect().height;
-
-            let dy = margin.top + lineHeight/2;
-            state.yRange = [dy];
-            state.dataToPlot.forEach(function(d, i){
-              if (i === index) {
-                let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
-                let seeData = d3.select("#see-data")
-                  // .style("top", (event.pageY + lineHeight/2) + 'px')
-                  .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
-                  .style("left", 0)
-                  .style("display", "block");
-                let seeDataHeight = seeData.node().getBoundingClientRect().height;
-                dy += d.lines * lineHeight + linePadding + seeDataHeight;
-              } else {
-                dy += d.lines * lineHeight + linePadding ;
-              }
-              state.yRange.push(dy);
-            })
-            state.height = dy;
-            d3.select("#see-data-button").on("click", function(event){
-              showDistricts(event, thisData);
-              d3.select("#see-data").style("display", "none");
-              d3.select("#go-back").style("display", "block");
-              state.seeData = false;
-            })
-            updateDivisions();
             state.seeData = thisData[state.name];
           }
+          updateChart();
         }
       } else {
         // gDivisions.classed("hidden", false)
