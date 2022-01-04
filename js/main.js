@@ -18,7 +18,26 @@ if (isMobile){
   margin = {top: 20, right: offsetWidth, bottom: 20, left: 150};
 }
 
-let helpTooltipOffset = 25;
+let width = widthChart - margin.left - margin.right,
+    height = 550 - margin.top - margin.bottom;
+
+const transitionTime = 500;
+const lineHeight = 14;
+const linePadding = 10;
+const circleSize = 7;
+const numberLabelLeftMargin = 25;
+const numberLabelRightMargin = 10;
+const marginRight = 40;
+const stateTooltipOffset = 10;
+const textWidth = margin.left - 15;
+// var margin, lineHeight;
+// if (mobile) {
+//   lineHeight = 10;
+//   margin = {top: 30, right: 20, bottom: 20, left: 100};
+// } else {
+//   lineHeight = 12;
+//   margin = {top: 60, right: 20, bottom: 80, left: 180};
+// }
 
 let dataTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -33,28 +52,8 @@ let stateTooltip = d3.select("body").append("div")
     .style("left", 0)
     .style("top", 0)
     .style("display", "none")
-    .style("max-width", (margin.right - helpTooltipOffset - 16)+ "px")
+    .style("max-width", (margin.right - marginRight - 16)+ "px")
     .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
-
-let width = widthChart - margin.left - margin.right,
-    height = 550 - margin.top - margin.bottom;
-
-const transitionTime = 500;
-const lineHeight = 14;
-const linePadding = 10;
-const circleSize = 7;
-const numberLabelLeftMargin = 25;
-const numberLabelRightMargin = 10;
-const marginRight = 40;
-const textWidth = margin.left - 15;
-// var margin, lineHeight;
-// if (mobile) {
-//   lineHeight = 10;
-//   margin = {top: 30, right: 20, bottom: 20, left: 100};
-// } else {
-//   lineHeight = 12;
-//   margin = {top: 60, right: 20, bottom: 80, left: 180};
-// }
 
 let raceEthsLabels = ['AIAN students', 'Asian students', 'Black students',
     'Hispanic students', 'NHPI students', 'Two or more', 'White students'];
@@ -1067,7 +1066,7 @@ Promise.all([
     updateChart();
   }
 
-  function showStateToolip(event, d){
+  function showStateTooltip(event, d){
     let label;
     if (d[state.name] === 'Hawaii') {
       label = d[state.name];
@@ -1077,7 +1076,7 @@ Promise.all([
     let thisGPos = d3.select(this).node().getBoundingClientRect();
     stateTooltip.style("display", "block");
     let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-    stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
+    stateTooltip.style("left", (thisGPos.left + marginRight - stateTooltipOffset) + "px")
       .style("top", (event.pageY - yOffset) + "px")
       .html("<p>Because " + label + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
   }
@@ -1277,7 +1276,7 @@ Promise.all([
           })
           .join('g')
             .attr("class", "help-tooltip")
-            .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+            .attr("transform", "translate("+(width + margin.left + stateTooltipOffset)+",-10)")
             .style("text-anchor", "left")
             .style("vertical-align", "middle")
             .html(function(d, i) {
@@ -1289,7 +1288,7 @@ Promise.all([
                 }
               }
             })
-            .on("mouseover", showStateToolip)
+            .on("mouseover", showStateTooltip)
             .on("mouseout", function(event, d){
               stateTooltip.style("display", "none");
             })
@@ -1781,7 +1780,7 @@ Promise.all([
               }
             }
           })
-          .on("mouseover", showStateToolip)
+          .on("mouseover", showStateTooltip)
           .on("mouseexit", function(event, d){
             stateTooltip.style("display", "none");
           });
@@ -1800,7 +1799,7 @@ Promise.all([
               }
             }
           })
-          .on("mouseover", showStateToolip)
+          .on("mouseover", showStateTooltip)
           .on("mouseexit", function(event, d){
             stateTooltip.style("display", "none");
           })
