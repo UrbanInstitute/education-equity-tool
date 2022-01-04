@@ -579,7 +579,7 @@ Promise.all([
         });
         state.name = "lea_name";
         state.showing = 'districts';
-        state.districtViews = 'largest';
+        state.districtView = 'largest';
         d3.select("#state-div").style("display", "inline-block");
         d3.select("#search").style("display", "none");
         d3.select("#selected-districts").style("display", "none");
@@ -822,42 +822,41 @@ Promise.all([
     if (state.showing === 'states') {
       state.dataToPlot = sortData(state.sourceData);
     } else {
-      let sortedData;
       if (state.districtView === 'largest'){
-        sortedData = sortData(state.sourceData.filter(function(n) {
+        state.dataToPlot = sortData(state.sourceData.filter(function(n) {
           return n.top10_flag === '1';
         }));
       } else {
-        sortedData = sortData(state.sourceData);
-      }
-      // add state average
-      let filteredState = states.filter(function(d){
-        return d['NAME'] === state.currentState;
-      });
-      let thisState = {...filteredState[0]};
-      thisState.lea_name = thisState['NAME'] + ' avg';
+        let sortedData = sortData(state.sourceData);
 
-      let dummySvg = d3.select("body").append("svg")
-        .attr("width", 0)
-        .attr("height", 0);
-      let text = dummySvg.append("text")
-        .style("font-size", "14px");
-      let words = thisState.lea_name.split(/\s+/).reverse(),
-          line = [words.pop()],
-          lineNumber = 1;
+        // add state average
+        let filteredState = states.filter(function(d){
+          return d['NAME'] === state.currentState;
+        });
+        let thisState = {...filteredState[0]};
+        thisState.lea_name = thisState['NAME'] + ' avg';
 
-      while (word = words.pop()) {
-        line.push(word);
-        text.text(line.join(" "));
-        if (text.node().getComputedTextLength() > textWidth) {
-          line = [word];
-          text.text(word);
-          lineNumber++;
+        let dummySvg = d3.select("body").append("svg")
+          .attr("width", 0)
+          .attr("height", 0);
+        let text = dummySvg.append("text")
+          .style("font-size", "14px");
+        let words = thisState.lea_name.split(/\s+/).reverse(),
+            line = [words.pop()],
+            lineNumber = 1;
+
+        while (word = words.pop()) {
+          line.push(word);
+          text.text(line.join(" "));
+          if (text.node().getComputedTextLength() > textWidth) {
+            line = [word];
+            text.text(word);
+            lineNumber++;
+          }
         }
+        thisState.lines = lineNumber;
+        state.dataToPlot = [thisState, ...sortedData];
       }
-      thisState.lines = lineNumber;
-      state.dataToPlot = [thisState, ...sortedData];
-      console.log(thisState, states)
     }
 
     // For mobile, we highlight the first element on load
@@ -924,7 +923,7 @@ Promise.all([
       let dy = margin.top + lineHeight/2;
       state.yRange = [dy];
       state.dataToPlot.forEach(function(d, i){
-        if ((state.showing === 'districts') && (i === 0)) {
+        if ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0)) {
           dy += d.lines * lineHeight + 2 * linePadding;
         } else {
           dy += d.lines * lineHeight + linePadding;
@@ -1486,7 +1485,7 @@ Promise.all([
     gDivisions.enter().append("g")
       .attr("class", "division")
       .classed("state-average", function(d, i){
-        return (state.showing === 'districts') && (i === 0);
+        return ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0));
       })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
@@ -1494,7 +1493,7 @@ Promise.all([
 
     gDivisions.attr("class", "division")
       .classed("state-average", function(d, i){
-        return (state.showing === 'districts') && (i === 0);
+        return ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0));
       })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
