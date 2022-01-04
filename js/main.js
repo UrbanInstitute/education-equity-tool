@@ -46,7 +46,7 @@ const circleSize = 7;
 const numberLabelLeftMargin = 25;
 const numberLabelRightMargin = 10;
 const marginRight = 40;
-const textWidth = margin.left;
+const textWidth = margin.left - 15;
 // var margin, lineHeight;
 // if (mobile) {
 //   lineHeight = 10;
@@ -995,6 +995,55 @@ Promise.all([
   function initChart(filteredData) {
 
     processData();
+
+    // For mobile, we highlit the first element on load
+    if (isMobile && (state.showing === 'states')) {
+      state.seeData = state.dataToPlot[0][state.name];
+
+      let seeData = d3.select("#see-data")
+        .style("top", $(window).height() + 'px')
+        .style("left", 0)
+        .style("display", "block");
+
+      if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
+        d3.select("#see-data-button").style("display", "none");
+        d3.select("#see-data-text")
+          .style("max-width", "none")
+          .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
+      } else {
+        d3.select("#see-data-button").style("display", "inline-block");
+        d3.select("#see-data-text")
+          .style("max-width", ($(window).width() - 16 - 150) + "px")
+          .html("Want to see data for districts in this state?");
+      }
+
+      let seeDataHeight = seeData.node().getBoundingClientRect().height;
+
+      let dy = margin.top + lineHeight/2;
+      state.yRange = [dy];
+      state.dataToPlot.forEach(function(d, i){
+        if (i === 0) {
+          let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
+          let seeData = d3.select("#see-data")
+            // .style("top", (event.pageY + lineHeight/2) + 'px')
+            .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
+            .style("left", 0)
+            .style("display", "block");
+          let seeDataHeight = seeData.node().getBoundingClientRect().height;
+          dy += d.lines * lineHeight + linePadding + seeDataHeight;
+        } else {
+          dy += d.lines * lineHeight + linePadding ;
+        }
+        state.yRange.push(dy);
+      })
+      state.height = dy;
+      d3.select("#see-data-button").on("click", function(event){
+        showDistricts(event, state.dataToPlot[0]);
+        d3.select("#see-data").style("display", "none");
+        d3.select("#go-back").style("display", "block");
+        state.seeData = null;
+      })
+    }
 
     // state.height = state.dataToPlot.length * lineHeight;
 
