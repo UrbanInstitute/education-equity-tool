@@ -1078,6 +1078,14 @@ Promise.all([
       .html("<p>Because " + label + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
   }
 
+  function showDataTooltip(event, d){
+    let thisGPos = d3.select(this).node().getBoundingClientRect();
+    dataTooltip.style("display", "block");
+    let yOffset = dataTooltip.node().getBoundingClientRect().height / 2;
+    dataTooltip.style("left", (thisGPos.left + marginRight - stateTooltipOffset) + "px")
+      .style("top", (event.pageY - yOffset) + "px");
+  }
+
   function initChart(filteredData) {
 
     processData(initial=isMobile);
@@ -1283,12 +1291,28 @@ Promise.all([
                 } else {
                   return null;
                 }
+              } else {
+                if (isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) || isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])) {
+                  return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+                } else {
+                  return null;
+                }
               }
             })
-            .on("mouseover", showStateTooltip)
-            .on("mouseout", function(event, d){
-              stateTooltip.style("display", "none");
-            })
+            // .on("mouseover", function(event, d) {
+            //   if (state.showing === 'states') {
+            //     showStateTooltip(event, d);
+            //   } else {
+            //     showDataTooltip(event, d);
+            //   }
+            // })
+            // .on("mouseout", function(event, d){
+            //   if (state.showing === 'states') {
+            //     stateTooltip.style("display", "none");
+            //   } else {
+            //     dataTooltip.style("display", "none");
+            //   }
+            // })
     }
 
     svg.on("mousemove touchmove", function(event) {
@@ -1778,7 +1802,7 @@ Promise.all([
 
         helpTooltips.enter().append('g')
           .attr("class", "help-tooltip")
-          .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+          .attr("transform", "translate("+(width + margin.left + stateTooltipOffset)+",-10)")
           .style("text-anchor", "left")
           .style("vertical-align", "middle")
           .html(function(d, i) {
@@ -1788,16 +1812,32 @@ Promise.all([
               } else {
                 return null;
               }
+            } else {
+              if (isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) || isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])) {
+                return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+              } else {
+                return null;
+              }
             }
           })
-          .on("mouseover", showStateTooltip)
-          .on("mouseexit", function(event, d){
-            stateTooltip.style("display", "none");
-          });
+          // .on("mouseover", function(event, d) {
+          //   if (state.showing === 'states') {
+          //     showStateTooltip(event, d);
+          //   } else {
+          //     showDataTooltip(event, d);
+          //   }
+          // })
+          // .on("mouseout", function(event, d){
+          //   if (state.showing === 'states') {
+          //     stateTooltip.style("display", "none");
+          //   } else {
+          //     dataTooltip.style("display", "none");
+          //   }
+          // })
 
         helpTooltips
           .attr("class", "help-tooltip")
-          .attr("transform", "translate("+(width + margin.left + marginRight)+",-10)")
+          .attr("transform", "translate("+(width + margin.left + stateTooltipOffset)+",-10)")
           .style("text-anchor", "left")
           .style("vertical-align", "middle")
           .html(function(d, i) {
@@ -1807,12 +1847,28 @@ Promise.all([
               } else {
                 return null;
               }
+            } else {
+              if (isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth1]]) || isNaN(d[metricCols[state.metric] + "_" + raceEths[state.raceEth2]])) {
+                return '<circle cx="10" cy="10" r="10" fill="white"/><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z" fill="#D2D2D2"/>';
+              } else {
+                return null;
+              }
             }
           })
-          .on("mouseover", showStateTooltip)
-          .on("mouseexit", function(event, d){
-            stateTooltip.style("display", "none");
-          })
+          // .on("mouseover", function(event, d) {
+          //   if (state.showing === 'states') {
+          //     showStateTooltip(event, d);
+          //   } else {
+          //     showDataTooltip(event, d);
+          //   }
+          // })
+          // .on("mouseout", function(event, d){
+          //   if (state.showing === 'states') {
+          //     stateTooltip.style("display", "none");
+          //   } else {
+          //     dataTooltip.style("display", "none");
+          //   }
+          // })
 
         helpTooltips.exit().remove();
     }
