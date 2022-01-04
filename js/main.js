@@ -890,7 +890,7 @@ Promise.all([
 
         if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
           let label;
-          if (d[state.name] === 'Hawaii') {
+          if (state.seeData === 'Hawaii') {
             label = state.seeData;
           } else {
             label = "the " + state.seeData;
