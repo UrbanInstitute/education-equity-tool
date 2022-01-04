@@ -1471,9 +1471,16 @@ Promise.all([
         .rangeRound(state.yRange);
     }
 
-    svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", state.height + margin.top + margin.bottom);
+    if (state.showing === 'states') {
+      svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top + margin.bottom])
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", state.height + margin.top + margin.bottom);
+    } else {
+      svg.attr("viewBox", [0, 0, width + margin.left + margin.right, state.height + margin.top])
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", state.height + margin.top);
+    }
+
 
     // Update scales
     if (metricCols[state.metric] === 'avg_exp_year_perc'){
