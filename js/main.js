@@ -893,6 +893,12 @@ Promise.all([
           .style("display", "block");
 
         if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
+          let label;
+          if (d[state.name] === 'Hawaii') {
+            label = state.seeData;
+          } else {
+            label = "the " + state.seeData;
+          }
           d3.select("#see-data-button").style("display", "none");
           d3.select("#see-data-text")
             .style("max-width", "none")
@@ -1059,6 +1065,21 @@ Promise.all([
       d3.select("#selected-districts").style("display", "none");
     }
     updateChart();
+  }
+
+  function showStateToolip(event, d){
+    let label;
+    if (d[state.name] === 'Hawaii') {
+      label = d[state.name];
+    } else {
+      label = "the " + d[state.name];
+    }
+    let thisGPos = d3.select(this).node().getBoundingClientRect();
+    stateTooltip.style("display", "block");
+    let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+    stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
+      .style("top", (event.pageY - yOffset) + "px")
+      .html("<p>Because " + label + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
   }
 
   function initChart(filteredData) {
@@ -1268,14 +1289,7 @@ Promise.all([
                 }
               }
             })
-            .on("mouseover", function(event, d){
-              let thisGPos = d3.select(this).node().getBoundingClientRect();
-              stateTooltip.style("display", "block");
-              let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-              stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
-                .style("top", (event.pageY - yOffset) + "px")
-                .html("<p>Because " + d[state.name] + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
-            })
+            .on("mouseover", showStateToolip)
             .on("mouseout", function(event, d){
               stateTooltip.style("display", "none");
             })
@@ -1767,13 +1781,7 @@ Promise.all([
               }
             }
           })
-          .on("mouseover", function(event, d){
-            let thisGPos = d3.select(this).node().getBoundingClientRect();
-            stateTooltip.style("display", "block");
-            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-            stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
-              .style("top", (event.pageY - yOffset) + "px");
-          })
+          .on("mouseover", showStateToolip)
           .on("mouseexit", function(event, d){
             stateTooltip.style("display", "none");
           });
@@ -1792,13 +1800,7 @@ Promise.all([
               }
             }
           })
-          .on("mouseover", function(event, d){
-            let thisGPos = d3.select(this).node().getBoundingClientRect();
-            stateTooltip.style("display", "block");
-            let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-            stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
-              .style("top", (event.pageY - yOffset) + "px");
-          })
+          .on("mouseover", showStateToolip)
           .on("mouseexit", function(event, d){
             stateTooltip.style("display", "none");
           })
