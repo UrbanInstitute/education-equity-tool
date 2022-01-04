@@ -1294,7 +1294,7 @@ Promise.all([
             })
     }
 
-    svg.on("mousemove", function(event) {
+    svg.on("mousemove touchmove", function(event) {
       if (!isMobile){
         let thisX = d3.pointer(event, this)[0],
             thisY = d3.pointer(event, this)[1],
@@ -1352,17 +1352,23 @@ Promise.all([
             }
           }
 
-          // if (!isMobile){
-          //   if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') || (thisData[state.name] === 'Hawaii'))) {
-          //     let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
-          //     stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
-          //       .style("top", (event.pageY - yOffset) + "px")
-          //       .style("display", "block");
-          //
-          //   } else {
-          //     stateTooltip.style("display", "none");
-          //   }
-          // }
+          if (!isMobile){
+            if ((state.showing === 'states') & ((thisData[state.name] === 'District of Columbia') || (thisData[state.name] === 'Hawaii'))) {
+              let label;
+              if (thisData[state.name] === 'Hawaii') {
+                label = thisData[state.name];
+              } else {
+                label = "the " + thisData[state.name];
+              }
+              stateTooltip.style("display", "block");
+              let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
+              stateTooltip.style("left", (thisGPos.left + width + margin.left + marginRight) + "px")
+                .style("top", (event.pageY - yOffset) + "px")
+                .html("<p>Because " + label + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
+            } else {
+              stateTooltip.style("display", "none");
+            }
+          }
 
           if (isMobile && (state.showing === 'states')) {
             if (state.seeData === thisData[state.name]) {
