@@ -510,15 +510,12 @@ Promise.all([
   stateOp.selectAll("a").classed("not-available", function(d){
     return ((d === 'Hawaii') || (d === 'District of Columbia'));
   })
-  console.log(stateOp, stateOp.selectAll("a"))
   stateOp.selectAll("a").on("click", function(event, d){
     if (state.showing === 'districts') {
-      console.log(state.currentState, d)
       if ((state.currentState !== d) && (d !== 'Hawaii') && (d !== 'District of Columbia')) {
         state.currentState = d;
         state.myown = [];
       }
-      console.log(state.currentState, state.myown)
       updateDropdownHtml("#dropdown3", state.currentState);
       state.sourceData = districts.filter(function(e){
         return e["NAME"] === state.currentState;
