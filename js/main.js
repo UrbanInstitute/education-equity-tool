@@ -511,12 +511,15 @@ Promise.all([
   stateOp.selectAll("a").classed("not-available", function(d){
     return ((d === 'Hawaii') || (d === 'District of Columbia'));
   })
+  console.log(stateOp, stateOp.selectAll("a"))
   stateOp.selectAll("a").on("click", function(event, d){
     if (state.showing === 'districts') {
+      console.log(state.currentState, d)
       if ((state.currentState !== d) && (d !== 'Hawaii') && (d !== 'District of Columbia')) {
         state.currentState = d;
         state.myown = [];
       }
+      console.log(state.currentState, state.myown)
       updateDropdownHtml("#dropdown3", state.currentState);
       state.sourceData = districts.filter(function(e){
         return e["NAME"] === state.currentState;
@@ -524,6 +527,7 @@ Promise.all([
       state.name = "lea_name";
       state.showing = 'districts';
       updateSearchBox();
+      updateDistrictsList();
     }
     updateChart();
   })
@@ -587,7 +591,7 @@ Promise.all([
         d3.select("#search").style("display", "block");
         d3.select("#selected-districts").style("display", "block");
         state.sourceData = districts.filter(function(e){
-          return ((e["NAME"] === state.currentState) && (state.myown.indexOf(e["lea_name"]) >= 0));
+          return (e["NAME"] === state.currentState);
         })
         state.name = "lea_name";
         state.showing = 'districts';
@@ -699,7 +703,10 @@ Promise.all([
 
   function updateDistrictsList() {
 
-    let selectedDistricts = districtsList.selectAll(".selected-district").data(state.sourceData);
+    let selectedDistricts = districtsList.selectAll(".selected-district")
+      .data(state.sourceData.filter(function(d){
+        return (state.myown.indexOf(d["lea_name"]) >= 0);
+      }));
 
     selectedDistricts.enter().append("div")
       .attr("class", "selected-district")
@@ -822,41 +829,45 @@ Promise.all([
     if (state.showing === 'states') {
       state.dataToPlot = sortData(state.sourceData);
     } else {
+      let sortedData;
+
       if (state.districtView === 'largest'){
-        state.dataToPlot = sortData(state.sourceData.filter(function(n) {
+        sortedData = sortData(state.sourceData.filter(function(n) {
           return n.top10_flag === '1';
         }));
       } else {
-        let sortedData = sortData(state.sourceData);
-
-        // add state average
-        let filteredState = states.filter(function(d){
-          return d['NAME'] === state.currentState;
-        });
-        let thisState = {...filteredState[0]};
-        thisState.lea_name = thisState['NAME'] + ' avg';
-
-        let dummySvg = d3.select("body").append("svg")
-          .attr("width", 0)
-          .attr("height", 0);
-        let text = dummySvg.append("text")
-          .style("font-size", "14px");
-        let words = thisState.lea_name.split(/\s+/).reverse(),
-            line = [words.pop()],
-            lineNumber = 1;
-
-        while (word = words.pop()) {
-          line.push(word);
-          text.text(line.join(" "));
-          if (text.node().getComputedTextLength() > textWidth) {
-            line = [word];
-            text.text(word);
-            lineNumber++;
-          }
-        }
-        thisState.lines = lineNumber;
-        state.dataToPlot = [thisState, ...sortedData];
+        sortedData = sortData(state.sourceData.filter(function(d){
+          return (state.myown.indexOf(d["lea_name"]) >= 0);
+        }));
       }
+
+      // add state average
+      let filteredState = states.filter(function(d){
+        return d['NAME'] === state.currentState;
+      });
+      let thisState = {...filteredState[0]};
+      thisState.lea_name = thisState['NAME'] + ' avg';
+
+      let dummySvg = d3.select("body").append("svg")
+        .attr("width", 0)
+        .attr("height", 0);
+      let text = dummySvg.append("text")
+        .style("font-size", "14px");
+      let words = thisState.lea_name.split(/\s+/).reverse(),
+          line = [words.pop()],
+          lineNumber = 1;
+
+      while (word = words.pop()) {
+        line.push(word);
+        text.text(line.join(" "));
+        if (text.node().getComputedTextLength() > textWidth) {
+          line = [word];
+          text.text(word);
+          lineNumber++;
+        }
+      }
+      thisState.lines = lineNumber;
+      state.dataToPlot = [thisState, ...sortedData];
     }
 
     // For mobile, we highlight the first element on load
@@ -923,7 +934,7 @@ Promise.all([
       let dy = margin.top + lineHeight/2;
       state.yRange = [dy];
       state.dataToPlot.forEach(function(d, i){
-        if ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0)) {
+        if ((state.showing === 'districts') && (i === 0)) {
           dy += d.lines * lineHeight + 2 * linePadding;
         } else {
           dy += d.lines * lineHeight + linePadding;
@@ -1486,7 +1497,7 @@ Promise.all([
     gDivisions.enter().append("g")
       .attr("class", "division")
       .classed("state-average", function(d, i){
-        return ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0));
+        return ((state.showing === 'districts') && (i === 0));
       })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
@@ -1494,7 +1505,7 @@ Promise.all([
 
     gDivisions.attr("class", "division")
       .classed("state-average", function(d, i){
-        return ((state.showing === 'districts') && (state.districtView === 'myown') && (i === 0));
+        return ((state.showing === 'districts') && (i === 0));
       })
       .attr("transform", function (d, i) {
         return "translate(0," + yScale(i) + ")";
