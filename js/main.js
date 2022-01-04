@@ -593,6 +593,7 @@ Promise.all([
         state.showing = 'districts';
         state.districtView = 'myown';
         updateSearchBox();
+        updateDistrictsList();
       }
       updateChart();
     })
