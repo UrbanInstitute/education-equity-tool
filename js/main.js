@@ -816,7 +816,7 @@ Promise.all([
     return d + "%";
   }
 
-  function processData() {
+  function processData(initial) {
 
     if (state.showing === 'states') {
       state.dataToPlot = sortData(state.sourceData);
@@ -830,12 +830,38 @@ Promise.all([
         sortedData = sortData(state.sourceData);
       }
       // add state average
-      let thisState = states.filter(function(d){
+      let filteredState = states.filter(function(d){
         return d['NAME'] === state.currentState;
-      })
-      thisState[0].lea_name = thisState[0]['NAME'] + ' avg';
-      thisState[0].lines = 1;
-      state.dataToPlot = [thisState[0], ...sortedData];
+      });
+      let thisState = {...filteredState[0]};
+      thisState.lea_name = thisState['NAME'] + ' avg';
+
+      let dummySvg = d3.select("body").append("svg")
+        .attr("width", 0)
+        .attr("height", 0);
+      let text = dummySvg.append("text")
+        .style("font-size", "14px");
+      let words = thisState.lea_name.split(/\s+/).reverse(),
+          line = [words.pop()],
+          lineNumber = 1;
+
+      while (word = words.pop()) {
+        line.push(word);
+        text.text(line.join(" "));
+        if (text.node().getComputedTextLength() > textWidth) {
+          line = [word];
+          text.text(word);
+          lineNumber++;
+        }
+      }
+      thisState.lines = lineNumber;
+      state.dataToPlot = [thisState, ...sortedData];
+      console.log(thisState, states)
+    }
+
+    // For mobile, we highlight the first element on load
+    if (initial) {
+      state.seeData = state.dataToPlot[0][state.name];
     }
 
     if (isMobile && (state.showing === 'states')){
@@ -1026,12 +1052,7 @@ Promise.all([
 
   function initChart(filteredData) {
 
-    // For mobile, we highlight the first element on load
-    if (isMobile && (state.showing === 'states')) {
-      state.seeData = state.dataToPlot[0][state.name];
-    }
-
-    processData();
+    processData(initial=isMobile);
 
     // state.height = state.dataToPlot.length * lineHeight;
 
@@ -1389,21 +1410,13 @@ Promise.all([
       d3.select("#see-data").style("display", "none");
       d3.select(this).style("display", "none");
 
-      let dy = margin.top + lineHeight/2;
-      state.yRange = [dy];
-      state.dataToPlot.forEach(function(d, i){
-        dy += d.lines * lineHeight + linePadding ;
-        state.yRange.push(dy);
-      })
-      state.height = dy;
-
       updateChart();
     })
   }
 
   function updateChart(){
 
-    processData();
+    processData(initial=false);
 
     // if (state.showing === 'states') {
     //   state.height = state.dataToPlot.length * lineHeight;
