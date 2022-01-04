@@ -767,8 +767,8 @@ Promise.all([
 
   let getDivisionName = function(d){
     let thisMetric = metricCols[state.metric];
-    if (isNaN(d[thisMetric + "_" + raceEths[state.raceEth1]]) || isNaN(d[thisMetric + "_" + raceEths[state.raceEth2]])) {
-      return d[state.name] + " *";
+    if (isMobile && (isNaN(d[thisMetric + "_" + raceEths[state.raceEth1]]) || isNaN(d[thisMetric + "_" + raceEths[state.raceEth2]]))) {
+      return d[state.name] + "*";
     } else {
       return d[state.name];
     }
@@ -846,9 +846,11 @@ Promise.all([
       } else {
         dy += d.lines * lineHeight + linePadding;
       }
-      state.yRange.push(dy);
+      if (i < state.dataToPlot.length - 1) {
+        state.yRange.push(dy);
+      }
     })
-    state.height = dy;
+    state.height = state.yRange[state.yRange.length - 1];
   }
 
   function highlightFixed() {
