@@ -703,6 +703,12 @@ label.check-switch:after {
   color: #353535;
 }
 
+#no-data-note {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+
 @media (max-width: 1270px) {
   #sticky .dropdown {
     width: 140px;

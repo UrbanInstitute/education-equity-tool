@@ -243,6 +243,9 @@ function showDistrictDivs() {
   d3.select("#dropdown3").style("display", "inline-block");
   d3.select("#explanation-text").html(districtExplanation);
   d3.select("#sticky").style("display", "none");
+  if (isMobile) {
+    d3.select("#no-data-note").style("display", "block");
+  }
 }
 
 function hideDistrictDivs() {
@@ -250,6 +253,9 @@ function hideDistrictDivs() {
   d3.select("#dropdown3").style("display", "none");
   d3.select("#explanation-text").html(stateExplanation);
   d3.selectAll(".district-view").style("display", "none");
+  if (isMobile) {
+    d3.select("#no-data-note").style("display", "none");
+  }
 }
 
 Promise.all([
@@ -759,6 +765,15 @@ Promise.all([
     }
   }
 
+  let getDivisionName = function(d){
+    let thisMetric = metricCols[state.metric];
+    if (isNaN(d[thisMetric + "_" + raceEths[state.raceEth1]]) || isNaN(d[thisMetric + "_" + raceEths[state.raceEth2]])) {
+      return d[state.name] + " *";
+    } else {
+      return d[state.name];
+    }
+  }
+
   let getCircleFill = function(d, i) {
     if (!isNaN(d.value)) {
       if (d.raceEth === state.raceEth1) {
@@ -1127,9 +1142,7 @@ Promise.all([
         .style("text-anchor", "right")
         .style("vertical-align", "middle")
         .attr('fill', 'black')
-        .text(function(d){
-          return d[state.name]
-        })
+        .text(getDivisionName)
         .call(wrap, textWidth)
 
     if (!isMobile) {
@@ -1523,9 +1536,7 @@ Promise.all([
       .style("text-anchor", "right")
       .style("vertical-align", "middle")
       .attr('fill', 'black')
-      .text(function(d){
-        return d[state.name]
-      })
+      .text(getDivisionName)
       .call(wrap, textWidth);
 
     divisionNames
@@ -1535,9 +1546,7 @@ Promise.all([
       .style("text-anchor", "right")
       .style("vertical-align", "middle")
       .attr('fill', 'black')
-      .text(function(d){
-        return d[state.name]
-      })
+      .text(getDivisionName)
       .call(wrap, textWidth)
 
     divisionNames.exit().remove();
