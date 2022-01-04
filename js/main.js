@@ -885,7 +885,7 @@ Promise.all([
           d3.select("#see-data-button").style("display", "none");
           d3.select("#see-data-text")
             .style("max-width", "none")
-            .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
+            .html("Because " + state.seeData + " has only one traditional public school district, we do not include district-specific breakdowns.");
         } else {
           d3.select("#see-data-button").style("display", "inline-block");
           d3.select("#see-data-text")
@@ -1262,7 +1262,8 @@ Promise.all([
               stateTooltip.style("display", "block");
               let yOffset = stateTooltip.node().getBoundingClientRect().height / 2;
               stateTooltip.style("left", (thisGPos.left + helpTooltipOffset) + "px")
-                .style("top", (event.pageY - yOffset) + "px");
+                .style("top", (event.pageY - yOffset) + "px")
+                .html("<p>Because " + d[state.name] + " has only one traditional public school district, we do not include district-specific breakdowns.</p>");
             })
             .on("mouseout", function(event, d){
               stateTooltip.style("display", "none");
