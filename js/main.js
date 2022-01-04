@@ -838,78 +838,77 @@ Promise.all([
       state.dataToPlot = [thisState[0], ...sortedData];
     }
 
-    if (isMobile) {
-      if (state.showing === 'states'){
-        if (state.seeData === null) {
-          d3.select("#see-data").style("display", "none");
+    if (isMobile && (state.showing === 'states')){
+      if (state.seeData === null) {
+        d3.select("#see-data").style("display", "none");
 
-          let dy = margin.top + lineHeight/2;
-          state.yRange = [dy];
-          state.dataToPlot.forEach(function(d, i){
-            dy += d.lines * lineHeight + linePadding ;
-            state.yRange.push(dy);
-          })
-          state.height = dy;
-        } else {
-          let seeData = d3.select("#see-data")
-            .style("top", $(window).height() + 'px')
-            .style("left", 0)
-            .style("display", "block");
-
-          if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
-            d3.select("#see-data-button").style("display", "none");
-            d3.select("#see-data-text")
-              .style("max-width", "none")
-              .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
-          } else {
-            d3.select("#see-data-button").style("display", "inline-block");
-            d3.select("#see-data-text")
-              .style("max-width", ($(window).width() - 16 - 150) + "px")
-              .html("Want to see data for districts in this state?");
-          }
-          let seeDataHeight = seeData.node().getBoundingClientRect().height;
-
-          let dy = margin.top + lineHeight/2;
-          state.yRange = [dy];
-          state.dataToPlot.forEach(function(d, i){
-            if (d[state.name] === state.seeData) {
-              let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
-              let seeData = d3.select("#see-data")
-                // .style("top", (event.pageY + lineHeight/2) + 'px')
-                .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
-                .style("left", 0)
-                .style("display", "block");
-              let seeDataHeight = seeData.node().getBoundingClientRect().height;
-              dy += d.lines * lineHeight + linePadding + seeDataHeight;
-
-              d3.select("#see-data-button").on("click", function(event){
-                showDistricts(event, d);
-                d3.select("#see-data").style("display", "none");
-                d3.select("#go-back").style("display", "block");
-              })
-            } else {
-              dy += d.lines * lineHeight + linePadding ;
-            }
-            state.yRange.push(dy);
-          })
-          state.height = dy;
-        }
-      } else {
         let dy = margin.top + lineHeight/2;
         state.yRange = [dy];
         state.dataToPlot.forEach(function(d, i){
-          if ((state.showing === 'districts') && (i === 0)) {
-            dy += d.lines * lineHeight + 2 * linePadding;
-          } else {
-            dy += d.lines * lineHeight + linePadding;
-          }
-          if (i < state.dataToPlot.length - 1) {
-            state.yRange.push(dy);
-          }
+          dy += d.lines * lineHeight + linePadding ;
+          state.yRange.push(dy);
         })
-        state.height = state.yRange[state.yRange.length - 1];
+        state.height = dy;
+      } else {
+        let seeData = d3.select("#see-data")
+          .style("top", $(window).height() + 'px')
+          .style("left", 0)
+          .style("display", "block");
+
+        if ((state.seeData === 'Hawaii') || (state.seeData === 'District of Columbia')) {
+          d3.select("#see-data-button").style("display", "none");
+          d3.select("#see-data-text")
+            .style("max-width", "none")
+            .html("Because this state has only one traditional public school district, we do not include district-specific breakdowns.");
+        } else {
+          d3.select("#see-data-button").style("display", "inline-block");
+          d3.select("#see-data-text")
+            .style("max-width", ($(window).width() - 16 - 150) + "px")
+            .html("Want to see data for districts in this state?");
+        }
+        let seeDataHeight = seeData.node().getBoundingClientRect().height;
+
+        let dy = margin.top + lineHeight/2;
+        state.yRange = [dy];
+        state.dataToPlot.forEach(function(d, i){
+          if (d[state.name] === state.seeData) {
+            let chartTop = d3.select("#chart").node().getBoundingClientRect().top;
+            let seeData = d3.select("#see-data")
+              // .style("top", (event.pageY + lineHeight/2) + 'px')
+              .style("top", (window.scrollY + chartTop + dy + linePadding + lineHeight * (d.lines - 1)) + 'px')
+              .style("left", 0)
+              .style("display", "block");
+            let seeDataHeight = seeData.node().getBoundingClientRect().height;
+            dy += d.lines * lineHeight + linePadding + seeDataHeight;
+
+            d3.select("#see-data-button").on("click", function(event){
+              showDistricts(event, d);
+              d3.select("#see-data").style("display", "none");
+              d3.select("#go-back").style("display", "block");
+            })
+          } else {
+            dy += d.lines * lineHeight + linePadding ;
+          }
+          state.yRange.push(dy);
+        })
+        state.height = dy;
       }
+    } else {
+      let dy = margin.top + lineHeight/2;
+      state.yRange = [dy];
+      state.dataToPlot.forEach(function(d, i){
+        if ((state.showing === 'districts') && (i === 0)) {
+          dy += d.lines * lineHeight + 2 * linePadding;
+        } else {
+          dy += d.lines * lineHeight + linePadding;
+        }
+        if (i < state.dataToPlot.length - 1) {
+          state.yRange.push(dy);
+        }
+      })
+      state.height = state.yRange[state.yRange.length - 1];
     }
+
   }
 
   function highlightFixed() {
@@ -1250,7 +1249,6 @@ Promise.all([
     }
 
     svg.on("mousemove", function(event) {
-      console.log("move", event)
       if (!isMobile){
         let thisX = d3.pointer(event, this)[0],
             thisY = d3.pointer(event, this)[1],
@@ -1377,9 +1375,7 @@ Promise.all([
           }
           updateChart();
         }
-
         highlightFixed();
-        console.log(state.stateFixed, state.districtFixed, state.seeData)
       }
     });
 
