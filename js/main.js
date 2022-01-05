@@ -514,6 +514,7 @@ Promise.all([
     if (state.showing === 'districts') {
       if ((state.currentState !== d) && (d !== 'Hawaii') && (d !== 'District of Columbia')) {
         state.currentState = d;
+        state.seeData = d;
         state.myown = [];
       }
       updateDropdownHtml("#dropdown3", state.currentState);
