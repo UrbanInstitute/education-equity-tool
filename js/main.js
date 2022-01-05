@@ -1204,9 +1204,23 @@ Promise.all([
     gs.selectAll(".number-label")
       .data(function(d){
         let thisMetric = metricCols[state.metric];
-        let d1 = Math.min(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
-        let d2 = Math.max(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
-        return [d1, d2];
+        let d1 = d[thisMetric + "_" + raceEths[state.raceEth1]];
+        let d2 = d[thisMetric + "_" + raceEths[state.raceEth2]];
+        let dmin, dmax;
+        if (isNaN(d1) && isNaN(d2)){
+          dmin = NaN;
+          dmax = NaN;
+        } else if (!isNaN(d1) && isNaN(d2)) {
+          dmin = d1;
+          dmax = NaN;
+        } else if (isNaN(d1) && !isNaN(d2)) {
+          dmin = d2;
+          dmax = NaN;
+        } else {
+          dmin = Math.min(d1, d2);
+          dmax = Math.max(d1, d2);
+        }
+        return [dmin, dmax];
       })
       .join("text")
         .attr("class", "number-label hidden")
@@ -1223,7 +1237,11 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return Math.floor(d);
+          if (!isNaN(d)) {
+            return Math.floor(d);
+          } else {
+            return null;
+          }
         })
 
     gs.selectAll(".division-name")
@@ -1677,9 +1695,23 @@ Promise.all([
     let divisionNumberLabels = g.selectAll(".division").selectAll(".number-label")
       .data(function(d){
         let thisMetric = metricCols[state.metric];
-        let d1 = Math.min(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
-        let d2 = Math.max(d[thisMetric + "_" + raceEths[state.raceEth1]], d[thisMetric + "_" + raceEths[state.raceEth2]]);
-        return [d1, d2];
+        let d1 = d[thisMetric + "_" + raceEths[state.raceEth1]];
+        let d2 = d[thisMetric + "_" + raceEths[state.raceEth2]];
+        let dmin, dmax;
+        if (isNaN(d1) && isNaN(d2)){
+          dmin = NaN;
+          dmax = NaN;
+        } else if (!isNaN(d1) && isNaN(d2)) {
+          dmin = d1;
+          dmax = NaN;
+        } else if (isNaN(d1) && !isNaN(d2)) {
+          dmin = d2;
+          dmax = NaN;
+        } else {
+          dmin = Math.min(d1, d2);
+          dmax = Math.max(d1, d2);
+        }
+        return [dmin, dmax];
       })
 
     divisionNumberLabels.enter().append("text")
@@ -1698,7 +1730,11 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return Math.floor(d);
+          if (!isNaN(d)) {
+            return Math.floor(d);
+          } else {
+            return null;
+          }
         })
 
     divisionNumberLabels
@@ -1717,7 +1753,11 @@ Promise.all([
         .attr("y", lineHeight/4)
         .attr("fill", getNumberLabelFill)
         .text(function(d){
-          return Math.floor(d);
+          if (!isNaN(d)) {
+            return Math.floor(d);
+          } else {
+            return null;
+          }
         })
 
     divisionNumberLabels.exit().remove();
