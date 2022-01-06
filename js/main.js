@@ -1347,7 +1347,7 @@ Promise.all([
           return i !== index;
         });
         if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
-            0 < thisX  && thisX < width + margin.right){
+            -margin.left < thisX  && thisX < width + margin.right){
           // gDivisions.classed("hidden", function(d, i){
           //   return i !== index;
           // })
@@ -1442,7 +1442,7 @@ Promise.all([
         return i === index;
       });
       if (yScale(0) - lineHeight/2 < thisY && thisY < yScale(state.dataToPlot.length) - lineHeight/2 &&
-          margin.left < thisX  && thisX < width){
+          -margin.left < thisX  && thisX < width){
         let thisData = thisG.data()[0];
 
         if (state.showing === 'states'){
