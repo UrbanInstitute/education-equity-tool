@@ -870,6 +870,7 @@ Promise.all([
     // For mobile, we highlight the first element on load
     if (initial) {
       state.seeData = state.dataToPlot[0][state.name];
+      state.stateFixed = state.dataToPlot[0][state.name];
     }
 
     if (isMobile && (state.showing === 'states')){
@@ -1339,7 +1340,7 @@ Promise.all([
       if (!isMobile){
         let thisX = d3.pointer(event, this)[0],
             thisY = d3.pointer(event, this)[1],
-            index = Math.floor(yScale.invert(thisY + lineHeight/2));
+            index = Math.floor(yScale.invert(thisY + lineHeight/2 + linePadding/2));
         let gDivisions = g.selectAll(".division");
         let thisG = gDivisions.filter(function(d,i){
           return i === index;
@@ -1437,7 +1438,7 @@ Promise.all([
     .on("click", function(event){
       let thisX = d3.pointer(event, this)[0],
           thisY = d3.pointer(event, this)[1],
-          index = Math.floor(yScale.invert(thisY + lineHeight/2));
+          index = Math.floor(yScale.invert(thisY + lineHeight/2 + linePadding/2));
       let gDivisions = g.selectAll(".division");
       let thisG = gDivisions.filter(function(d,i){
         return i === index;
@@ -1484,6 +1485,8 @@ Promise.all([
 
       updateChart();
     })
+
+    highlightFixed();
   }
 
   function updateChart(){
