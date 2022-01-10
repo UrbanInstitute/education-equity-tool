@@ -1300,6 +1300,16 @@ Promise.all([
             }
           }
         })
+        .on("click", function(event, d){
+          if (isMobile && (state.showing === 'states')) {
+            if (state.seeData === d[state.name]) {
+              state.seeData = null;
+            } else {
+              state.seeData = d[state.name];
+            }
+            updateChart();
+          }
+        })
         // .on("mouseover", function(event, d) {
         //   if (state.showing === 'states') {
         //     showStateTooltip(event, d);
@@ -1804,6 +1814,16 @@ Promise.all([
             }
           }
         })
+        .on("click", function(event, d){
+          if (isMobile && (state.showing === 'states')) {
+            if (state.seeData === d[state.name]) {
+              state.seeData = null;
+            } else {
+              state.seeData = d[state.name];
+            }
+            updateChart();
+          }
+        })
         // .on("mouseover", function(event, d) {
         //   if (state.showing === 'states') {
         //     showStateTooltip(event, d);
@@ -1837,6 +1857,16 @@ Promise.all([
             } else {
               return null;
             }
+          }
+        })
+        .on("click", function(event, d){
+          if (isMobile && (state.showing === 'states')) {
+            if (state.seeData === d[state.name]) {
+              state.seeData = null;
+            } else {
+              state.seeData = d[state.name];
+            }
+            updateChart();
           }
         })
         // .on("mouseover", function(event, d) {
