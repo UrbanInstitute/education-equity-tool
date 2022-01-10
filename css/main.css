@@ -589,7 +589,7 @@ footer h3.job {
   font-size: 20px;
   font-weight: 700;
   color: #000000;
-  display: inline-block;
+  display: inline;
   margin-right: 8px;
 }
 
@@ -634,7 +634,11 @@ p.creditsWho {
   font-weight: 400;
   color: #353535;
   margin: 0;
-  display: inline-block;
+  display: inline;
+}
+
+.credits-item {
+  margin-top: 20px;
 }
 
 p.creditsWho > a {
