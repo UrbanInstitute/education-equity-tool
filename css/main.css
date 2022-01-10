@@ -411,7 +411,7 @@ h2 {
 }
 
 h3 {
-  width: 95%;
+  /* width: 95%; */
   line-height: 31px;
   max-width: 760px;
   font-weight: 700;
@@ -581,9 +581,22 @@ footer h2 {
 }
 
 footer h3, footer h4{
-  width: 100%;
    font-weight: 700;
    margin-top: 60px;
+}
+
+footer h3.job {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+footer h4 {
+  font-weight: 200;
+  font-size: 30px;
+  color: #000000;
 }
 
 .credits {
@@ -597,6 +610,7 @@ footer h3, footer h4{
     font-size: 16px;
     margin-bottom: 4px;
     margin-top: 20px;
+    text-transform: uppercase;
 }
 
 .urbanstatement {
@@ -616,12 +630,17 @@ footer h3, footer h4{
 }
 
 p.creditsWho {
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: 400;
+  color: #353535;
   margin: 0;
+  display: inline-block;
 }
 
 p.creditsWho > a {
-  font-size: 16px;
+  /* font-size: 16px; */
+  font-weight: 700;
+  color: #1696d2;
 }
 
 p.footerLink > a {
