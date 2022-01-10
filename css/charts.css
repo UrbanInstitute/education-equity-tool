@@ -147,7 +147,8 @@
 
 #state-back {
   float: right;
-  padding-top: 10px;
+  padding-top: 12px;
+  font-size: 16px !important;
 }
 
 .state-average .division-name tspan {
