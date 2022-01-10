@@ -240,6 +240,7 @@ function zoomOutScale() {
 function showDistrictDivs() {
   d3.select("#state-div").style("display", "inline");
   d3.select("#dropdown3").style("display", "inline-block");
+  d3.select("#state-back").style("display", "inline");
   d3.select("#explanation-text").html(districtExplanation);
   d3.select("#sticky").style("display", "none");
   if (isMobile) {
@@ -250,6 +251,7 @@ function showDistrictDivs() {
 function hideDistrictDivs() {
   d3.select("#state-div").style("display", "none");
   d3.select("#dropdown3").style("display", "none");
+  d3.select("#state-back").style("display", "none");
   d3.select("#explanation-text").html(stateExplanation);
   d3.selectAll(".district-view").style("display", "none");
   if (isMobile) {
@@ -528,6 +530,19 @@ Promise.all([
     }
     updateChart();
   })
+
+  d3.select("#state-back")
+    .on("click", function(){
+      if (state.showing === 'districts') {
+        state.sourceData = states;
+        state.name = "NAME";
+        state.showing = 'states';
+        hideDistrictDivs();
+        d3.select("#search").style("display", "none");
+        d3.select("#selected-districts").style("display", "none");
+        updateChart();
+      }
+    })
 
   let spans = d3.select("#metrics")
     .selectAll("span")
@@ -1325,11 +1340,7 @@ Promise.all([
                 return "Show me districts in " + d[state.name];
               }
             } else {
-              if (d[state.name].includes('avg')){
-                return "Take me back to the state view"
-              } else {
-                return null;
-              }
+              return null;
             }
           })
           .on("click", showDistricts)
@@ -1874,11 +1885,7 @@ Promise.all([
               return "Show me districts in " + d[state.name];
             }
           } else {
-            if (d[state.name].includes('avg')){
-              return "Take me back to the state view"
-            } else {
-              return null;
-            }
+            return null;
           }
         })
         .on("click", showDistricts)
@@ -1905,11 +1912,7 @@ Promise.all([
               return "Show me districts in " + d[state.name];
             }
           } else {
-            if (d[state.name].includes('avg')){
-              return "Take me back to the state view"
-            } else {
-              return null;
-            }
+            return null;
           }
         })
         .on("click", showDistricts)
