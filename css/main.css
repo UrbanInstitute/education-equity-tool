@@ -629,6 +629,10 @@ footer h4 {
   margin: 1rem 0;
 }
 
+p.footerLink > a {
+  font-size: 16px;
+}
+
 p.creditsWho {
   font-size: 20px;
   font-weight: 400;
@@ -642,13 +646,9 @@ p.creditsWho {
 }
 
 p.creditsWho > a {
-  /* font-size: 16px; */
+  font-size: 20px;
   font-weight: 700;
   color: #1696d2;
-}
-
-p.footerLink > a {
-  font-size: 16px;
 }
 
 
