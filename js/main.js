@@ -240,22 +240,24 @@ function zoomOutScale() {
 function showDistrictDivs() {
   d3.select("#state-div").style("display", "inline");
   d3.select("#dropdown3").style("display", "inline-block");
-  d3.select("#state-back").style("display", "inline");
   d3.select("#explanation-text").html(districtExplanation);
   d3.select("#sticky").style("display", "none");
   if (isMobile) {
     d3.select("#no-data-note").style("display", "block");
+  } else {
+    d3.select("#state-back").style("display", "inline");
   }
 }
 
 function hideDistrictDivs() {
   d3.select("#state-div").style("display", "none");
   d3.select("#dropdown3").style("display", "none");
-  d3.select("#state-back").style("display", "none");
   d3.select("#explanation-text").html(stateExplanation);
   d3.selectAll(".district-view").style("display", "none");
   if (isMobile) {
     d3.select("#no-data-note").style("display", "none");
+  } else {
+    d3.select("#state-back").style("display", "none");
   }
 }
 
