@@ -145,6 +145,11 @@
   color: #1696D2;
 }
 
+#state-back {
+  float: right;
+  padding-top: 10px;
+}
+
 .state-average .division-name tspan {
   font-weight: 700;
 }
