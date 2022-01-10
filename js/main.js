@@ -281,7 +281,11 @@ Promise.all([
       for (let m = 0; m < metrics.length; m++ ) {
         for (let r = 0; r < raceEthsLabels.length; r++ ) {
           let col = metricCols[metrics[m]] + "_" + raceEths[raceEthsLabels[r]];
-          d[col] = +d[col] * 100;
+          if (d[col] === '') {
+            d[col] = NaN;
+          } else {
+            d[col] = +d[col] * 100;
+          }
         }
       }
 
