@@ -67,6 +67,12 @@
   font-size: 18px;
 }
 
+#metrics-text span,  #metrics-text span a{
+  font-size: 18px;
+  line-height: 27px;
+  font-weight: bold;
+}
+
 #forms, #sticky {
   margin: 28px auto;
   font-weight: bold;
