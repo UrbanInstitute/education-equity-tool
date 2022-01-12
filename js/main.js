@@ -102,8 +102,8 @@ var state = {
   stateFixed: null,
   districtFixed: null,
   myown: [],
-  sortByGap: true,
-  expandScale: false,
+  sortByGap: false,
+  expandScale: true,
   yRange: [],
   seeData: null,
 }
@@ -1132,10 +1132,21 @@ Promise.all([
       .domain(d3.range(filteredData.length))
       .rangeRound(state.yRange);
 
-    if (isMobile) {
-      tickValues = d3.range(0, 100.01, 20);
+    // if (isMobile) {
+    //   tickValues = d3.range(0, 100.01, 20);
+    // } else {
+    //   tickValues = d3.range(0, 100.01, 10);
+    // }
+
+    // Update scales
+    if (metricCols[state.metric] === 'avg_exp_year_perc'){
+      if (state.expandScale) {
+        zoomInScale();
+      } else {
+        zoomOutScale();
+      }
     } else {
-      tickValues = d3.range(0, 100.01, 10);
+      zoomOutScale();
     }
 
     var xAxis = function(g) {
