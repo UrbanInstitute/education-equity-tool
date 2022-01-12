@@ -74,13 +74,17 @@
 }
 
 #forms, #sticky {
-  margin: 28px auto;
   font-weight: bold;
   font-size: 18px;
   line-height: 27px;
 }
 
+#forms {
+  margin: 32px auto;
+}
+
 #sticky {
+  margin: 28px auto;
   margin-left: 26px;
   margin-right: 26px;
 }
@@ -103,6 +107,9 @@
 
 #districts-views, #toggle {
   display: inline-block;
+}
+
+#district-views {
   margin-top: 20px;
 }
 
@@ -344,7 +351,7 @@ input:checked + .slider:after {
 }
 
 #explanation-text {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   font-style: italic;
 }
 
@@ -358,8 +365,7 @@ input:checked + .slider:after {
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  margin: 14px 14px 14px 0px;
-  transform: translateY(10px);
+  margin: 0px 14px 0px 0px;
 }
 
 #chart {
@@ -806,6 +812,10 @@ label.check-switch:after {
     margin-left: 0px;
     margin-right: 0px;
     padding: 8px 7px;
+  }
+
+  #explanation-text {
+    margin-bottom: 28px;
   }
 
   #chart .tick text {
