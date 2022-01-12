@@ -87,6 +87,7 @@
   margin: 28px auto;
   margin-left: 26px;
   margin-right: 26px;
+  z-index: 4;
 }
 
 #sticky span {
@@ -832,7 +833,6 @@ label.check-switch:after {
     left: 0px;
     top: 49px;
     background-color: white;
-    z-index: 4;
     font-size: 16px;
   }
 
