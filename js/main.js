@@ -10,7 +10,7 @@ let offsetWidth, widthChart;
    widthChart = document.getElementById("chart").offsetWidth + offsetWidth;
  }
 
-let margin, svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange;
+let margin, svg, g, gs, xScale, yScale, tickValues, totalHeight, yRange, stickyHeight;
 
 if (isMobile){
   margin = {top: 20, right: offsetWidth, bottom: 20, left: 100};
@@ -372,10 +372,11 @@ Promise.all([
           }
         });
 
-      if ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + 60)) {
+      if ((nodeSvg.top > 340) || (nodeSvg.top < -nodeSvg.height + stickyHeight)) {
         d3.select("#sticky").style("display", "none");
       } else {
         d3.select("#sticky").style("display", "inline-block");
+        stickyHeight = d3.select("#sticky").node().getBoundingClientRect().height;
         updateDropdownHtml("#dropdown4", d3.select("#dropdown4").select(".dropbtn").html());
         updateDropdownHtml("#dropdown5", d3.select("#dropdown5").select(".dropbtn").html());
         updateDropdownHtml("#dropdown6", d3.select("#dropdown6").select(".dropbtn").html());
