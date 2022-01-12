@@ -251,7 +251,8 @@ function showDistrictDivs() {
   if (isMobile) {
     d3.select("#no-data-note").style("display", "block");
   } else {
-    d3.select("#state-back").style("display", "inline");
+    // d3.select("#state-back").style("display", "inline");
+    d3.select("#go-back-big").style("display", "inline-block");
   }
 }
 
@@ -263,7 +264,8 @@ function hideDistrictDivs() {
   if (isMobile) {
     d3.select("#no-data-note").style("display", "none");
   } else {
-    d3.select("#state-back").style("display", "none");
+    // d3.select("#state-back").style("display", "none");
+    d3.select("#go-back-big").style("display", "none");
   }
 }
 
@@ -543,7 +545,20 @@ Promise.all([
     updateChart();
   })
 
-  d3.select("#state-back")
+  // d3.select("#state-back")
+  //   .on("click", function(){
+  //     if (state.showing === 'districts') {
+  //       state.sourceData = states;
+  //       state.name = "NAME";
+  //       state.showing = 'states';
+  //       hideDistrictDivs();
+  //       d3.select("#search").style("display", "none");
+  //       d3.select("#selected-districts").style("display", "none");
+  //       updateChart();
+  //     }
+  //   })
+
+  d3.select("#go-back-big")
     .on("click", function(){
       if (state.showing === 'districts') {
         state.sourceData = states;

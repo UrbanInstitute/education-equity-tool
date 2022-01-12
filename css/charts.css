@@ -656,9 +656,26 @@ label.check-switch:after {
   z-index: 10;
 }
 
-#go-back-arrow, #go-back-text {
+#go-back-big {
+  float: right;
+  cursor: pointer;
+}
+
+#go-back-arrow, #go-back-text, #go-back-arrow-big, #go-back-text-big {
   display: inline-block;
   vertical-align: middle;
+}
+
+#go-back-arrow-big {
+  padding-top: 8px;
+}
+
+#go-back-text-big {
+  margin-left: 8px;
+  color: #1696D2;
+  font-size: 18px;
+  line-height: 50px;
+  font-weight: 700;
 }
 
 #go-back-text {
