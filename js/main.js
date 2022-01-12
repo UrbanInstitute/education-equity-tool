@@ -312,6 +312,8 @@ Promise.all([
       d.lines = lineNumber;
     })
 
+    dummySvg.remove();
+
   }
 
   convertStringToNumbers(states, "NAME");
@@ -908,6 +910,8 @@ Promise.all([
       }
       thisState.lines = lineNumber;
       state.dataToPlot = [thisState, ...sortedData];
+
+      dummySvg.remove();
     }
 
     // For mobile, we highlight the first element on load
