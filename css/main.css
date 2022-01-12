@@ -776,8 +776,12 @@ p.creditsWho > a {
   }
 
   p.footerLink > a {
-    font-size: 18px;©
+    font-size: 18px;
   }
+
+  p.creditsWho > a {
+    font-size: 18px;
+}
 }
 
 @media (max-width: 350px) {
