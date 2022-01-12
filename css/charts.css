@@ -106,6 +106,10 @@
   margin-top: 20px;
 }
 
+#districts-views {
+  margin-right: 10px;
+}
+
 #toggle {
   float: right;
   padding: 5px 0px;
@@ -120,8 +124,8 @@
 
 .district-view {
   padding: 5px 10px;
-  margin-right: 10px;
-  font-size: 18px;
+  /* margin-right: 10px; */
+  font-size: 16px;
   text-transform: uppercase;
   background-color: white;
   color: #353535;

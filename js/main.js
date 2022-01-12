@@ -582,7 +582,7 @@ Promise.all([
 
   updateMetricText();
 
-  let districtViews = ['Largest districts', 'Build my own']
+  let districtViews = ['Largest districts', 'Select districts']
   let viewSpans = d3.select("#districts-views")
     .selectAll("span")
     .data(districtViews);
@@ -629,11 +629,11 @@ Promise.all([
       .style("text-align", "center")
       .style("white-space", "nowrap")
       .style('width', function(d, i){
-        let spanMargin = ($(window).width() - 32 - 188 - 154 - 38) / 2;
+        let spanMargin = ($(window).width() - 32 - 169 - 157 - 38) / 2;
         if (i === 0) {
-          return (187 + spanMargin) + "px";
+          return (168 + spanMargin) + "px";
         } else {
-          return (153 + spanMargin) + "px";
+          return (156 + spanMargin) + "px";
         }
       })
   }
