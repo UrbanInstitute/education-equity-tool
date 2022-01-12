@@ -55,6 +55,9 @@ let stateTooltip = d3.select("body").append("div")
     .style("max-width", (margin.right - marginRight - 16)+ "px")
     .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
 
+d3.select("#chart-title")
+  .style("width", (d3.select("#container").node().getBoundingClientRect().width - d3.select("#toggle").node().getBoundingClientRect().width - 14) + "px");
+
 let raceEthsLabels = ['AIAN students', 'Asian students', 'Black students',
     'Hispanic students', 'NHPI students', 'Two or more', 'White students'];
 let raceEths = {
@@ -76,6 +79,11 @@ let metricLabels = {
   'Teachers': 'experienced teachers',
   'Classes': 'access to AP classes',
   'Counselors': 'adequate counselors'
+}
+let metricTitles = {
+  'Teachers': 'Average share of teachers with more than two years of experience',
+  'Classes': 'Share of students with access to both AP math and AP science',
+  'Counselors': 'Share of students with access to adequate school counselors'
 }
 let colors = {
   'Black students': "#1696D2",
@@ -170,6 +178,10 @@ function updateMetricText() {
   } else if (state.metric === 'Counselors'){
     metricText.html('School counselors can have an <a href="http://exclusive.multibriefs.com/content/beyond-teachers-estimating-individual-school-counselors-effects-on-educatio/education" target="_blank">outsized impact on a student’s life</a>, leading to increased high school graduation and college enrollment and completion. <span>Below, we display the share of high school students who have access to adequate school counselors, defined as schools with at least <a href="https://www.schoolcounselor.org/Standards-Positions/Position-Statements/ASCA-Position-Statements/The-Professional-Counselor-and-Use-of-Support-Staf" target="_blank">one counselor for every 250 students</a>.</span></p>')
   }
+
+  let metricTitle = d3.select("#chart-title");
+  metricTitle.html(metricTitles[state.metric]);
+    // .style("width", (d3.select("#container").node().getBoundingClientRect().width - d3.select("#toggle").node().getBoundingClientRect().width - 14) + "px");
 }
 
 function sortData(data) {
@@ -658,6 +670,19 @@ Promise.all([
           return (168 + spanMargin) + "px";
         } else {
           return (156 + spanMargin) + "px";
+        }
+      })
+  } else {
+    d3.select("#districts-views")
+      .selectAll("span")
+      .style("text-align", "center")
+      .style("white-space", "nowrap")
+      .style('width', function(d, i){
+        let spanMargin = ($("#container").width() - 32 - 176 - 163 - 14) / 2;
+        if (i === 0) {
+          return (175 + spanMargin) + "px";
+        } else {
+          return (162 + spanMargin) + "px";
         }
       })
   }
