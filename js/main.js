@@ -1214,7 +1214,8 @@ Promise.all([
 
     gs.selectAll(".raceeth")
       .data(function(d){
-        return raceEthsLabels.map(function(r){
+        // return raceEthsLabels.map(function(r){
+        return [state.raceEth1, state.raceEth2].map(function(r){
           let obj = {};
           obj.value = d[metricCols[state.metric] + "_" + raceEths[r]];
           obj.raceEth = r;
@@ -1711,7 +1712,8 @@ Promise.all([
 
     let divisionCircles = g.selectAll(".division").selectAll(".raceeth")
       .data(function(d){
-        return raceEthsLabels.map(function(r){
+        // return raceEthsLabels.map(function(r){
+        return [state.raceEth1, state.raceEth2].map(function(r){
           let obj = {};
           obj.value = d[metricCols[state.metric] + "_" + raceEths[r]];
           obj.raceEth = r;
