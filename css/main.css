@@ -60,7 +60,7 @@ body{
 #header-pinned .title {
     font-size: 14px;
     line-height: 49px;
-    margin: 0 65px 0 55px;
+    margin: 0 10px 0 55px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
