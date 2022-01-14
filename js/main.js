@@ -172,7 +172,7 @@ function updateOptionsCircles() {
 function updateMetricText() {
   let metricText = d3.select("#metrics-text");
   if (state.metric === 'Teachers'){
-    metricText.html('Research has shown that experienced teachers are more effective than inexperienced teachers, and <a href="https://edtrust.org/resource/5-things-to-advance-equity-in-access-to-strong-and-diverse-educators/" target="_blank">addressing these inequities</a> can improve reading and math test scores. <span>Below, we display the share of teachers who have more than two years of experience.</span></p>')
+    metricText.html("Research has shown that experienced teachers are more effective than inexperienced teachers, and <a href='https://edtrust.org/resource/5-things-to-advance-equity-in-access-to-strong-and-diverse-educators/' target='_blank'>addressing these inequities</a> can improve reading and math test scores. <span>Below, we display the share of teachers who have more than two years of experience in students' schools.</span></p>")
   } else if (state.metric === 'Classes'){
     metricText.html('By engaging with advanced coursework, students are more likely to graduate from high school and get a head start on postsecondary education. But students of color, including Black and Latino students, continue to <a href="https://edtrust.org/resource/inequities-in-advanced-coursework/" target="_blank">lack access to advanced classes</a>. <span>Below, we display the share of high school students who have access to both an AP math class and an AP science class.</span></p>')
   } else if (state.metric === 'Counselors'){
