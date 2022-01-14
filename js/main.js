@@ -45,7 +45,7 @@ let dataTooltip = d3.select("body").append("div")
     .style("top", 0)
     .style("display", "none")
     .style("max-width", margin.right + "px")
-    .html("<p>In states or districts where fewer than 50 students belong to a certain racial or ethnic group, the group is not displayed.</p>");
+    .html("<p>We do not display data for districts with fewer than two non-charter schools or where fewer than 50 students belong to a specific race and ethnicity group.</p>");
 
 let stateTooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -82,8 +82,8 @@ let metricLabels = {
 }
 let metricTitles = {
   'Teachers': 'Average share of teachers with more than two years of experience',
-  'Classes': 'Share of students with access to both AP math and AP science',
-  'Counselors': 'Share of students with access to adequate school counselors'
+  'Classes': 'Share of high school students with access to both AP math and AP science',
+  'Counselors': 'Share of high school students with access to adequate school counselors'
 }
 let colors = {
   'Black students': "#1696D2",

@@ -574,6 +574,10 @@ footer p, footer a {
     font-size: 20px;
 }
 
+footer p {
+  margin-bottom: 1rem;
+}
+
 footer h2 {
   text-transform: uppercase;
   font-weight: 700;
