@@ -827,6 +827,10 @@ label.check-switch:after {
     font-size: 12px;
   }
 
+  #chart {
+    margin-top: 12px;
+  }
+
   #sticky {
     padding-left: 16px;
     margin: 0px 16px 0px 0px;
