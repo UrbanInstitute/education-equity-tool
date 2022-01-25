@@ -44,8 +44,8 @@
   padding-right: 32px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 24px;
   margin: 28px auto;
 }
 
@@ -58,19 +58,24 @@
 }
 
 #metrics-text {
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 20px;
+  line-height: 30px;
   margin: 16px auto 28px auto;
 }
 
 #metrics-text a {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 #metrics-text span,  #metrics-text span a{
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 20px;
+  line-height: 30px;
   font-weight: bold;
+  margin-top: 28px;
+}
+
+#metrics-text span {
+  display: inline-block;
 }
 
 #forms, #sticky, #sticky span {
@@ -777,6 +782,22 @@ label.check-switch:after {
 
   #metrics span {
     padding-right: 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  #metrics-text {
+    font-size: 18px;
+    line-height: 27px;
+  }
+
+  #metrics-text a {
+    font-size: 18px;
+  }
+
+  #metrics-text span,  #metrics-text span a {
+    font-size: 18px;
+    line-height: 27px;
   }
 
   #forms {
