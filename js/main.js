@@ -55,8 +55,13 @@ let stateTooltip = d3.select("body").append("div")
     .style("max-width", (margin.right - marginRight - 16)+ "px")
     .html("<p>Because this state has only one traditional public school district, we do not include district-specific breakdowns.</p>");
 
-d3.select("#chart-title")
-  .style("width", (d3.select("#container").node().getBoundingClientRect().width - d3.select("#toggle").node().getBoundingClientRect().width - 14) + "px");
+if (isMobile){
+  d3.select("#chart-title")
+    .style("width", "100%");
+} else {
+  d3.select("#chart-title")
+    .style("width", (d3.select("#container").node().getBoundingClientRect().width - d3.select("#toggle").node().getBoundingClientRect().width - 14) + "px");
+}
 
 let raceEthsLabels = ['AIAN students', 'Asian students', 'Black students',
     'Hispanic students', 'NHPI students', 'Two or more', 'White students'];
